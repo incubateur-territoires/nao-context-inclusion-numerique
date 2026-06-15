@@ -1,0 +1,98 @@
+project_name: inclusion-numerique
+databases:
+  - name: postgres-inclusion-numerique
+    type: postgres
+    host: "{{ env('POSTGRES_HOST') }}"
+    port: 5432
+    database: "{{ env('POSTGRES_DB') }}"
+    user: "{{ env('NAO_READONLY_USER') }}"
+    password: "{{ env('NAO_READONLY_PASSWORD') }}"
+    include:
+      - admin.*
+      - reference.*
+      - analytics.*
+      - main.subvention
+      - main.lieu_inclusion_structure_administrative
+      - min.departement
+      - min.region
+      - min.groupement
+      - min.enveloppe_financement
+      - min.departement_enveloppe
+    exclude:
+      # Tier 1 — PII direct
+      - main.personne
+      - main.contact
+      - main.contact_structure_administrative
+      - min.utilisateur
+      - min.contact_membre_gouvernance
+      - min.membre
+      - min.personne_enrichie
+      # Tier 2 — ré-identification
+      # - main.personne_affectations
+      # - main.personne_affectations_emploi
+      # - main.personne_affectations_lieu
+      # - main.formation
+      # - main.contrat
+      # - main.coordination_mediation
+      # - main.poste
+      # - main.activites_coop
+      # - min.postes_conseiller_numerique_synthese
+      # - min.beneficiaire_subvention
+      # - min.co_financement
+      # - min.porteur_action
+      # - min.demande_de_subvention
+      # - min.action
+      # - min.comite
+      # - min.feuille_de_route
+      # - min.gouvernance
+      # # Tier 3 — sources brutes (vues analytics.* à la place)
+      # - main.structure
+      # - main.structure_administrative
+      # - main.lieu_inclusion
+      # - main.adresse
+      # - min.structure
+      # Technique
+      - min._prisma_migrations
+    templates:
+      - columns
+      - how_to_use
+    profiling:
+      refresh_policy: once
+repos:
+  - name: data-space-scripts
+    url: https://gitlab.com/incubateur-territoires/startups/data-space-societe-numerique/scripts.git
+    branch: main
+    include:
+      - "etl/**"
+      - "dag.py"
+      - "README.md"
+      - "geocoding.py"
+      - "CHANGELOG.md"
+      - "CONTRIBUTING.md"
+    exclude:
+      - "**/__pycache__/**"
+      - "**/*.pyc"
+      - "**/.pytest_cache/**"
+  - name: suite-gestionnaire-numerique
+    url: https://github.com/anct-cnum/suite-gestionnaire-numerique.git
+    branch: main
+    include:
+      - "docs/**"
+      - "prisma/schema.prisma"
+      - "prisma/views/**"
+      - "README.md"
+      - "CONTRIBUTING.md"
+      - "scripts/sync-dataspace-migration.sh"
+      - "src/domain/**"
+      - "src/gateways/**"
+      - "src/use-cases/**"
+    exclude:
+      - "**/.env*"
+      - "prisma/migrations/**"
+      - "src/components/**"
+      - "src/stories/**"
+      - "src/app/**"
+      - "**/node_modules/**"
+notion: null
+llm: null
+slack: null
