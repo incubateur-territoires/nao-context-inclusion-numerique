@@ -2,11 +2,11 @@ project_name: inclusion-numerique
 databases:
   - name: postgres-inclusion-numerique
     type: postgres
-    host: "{{ env('POSTGRES_HOST') }}"
+    host: "{{ env('NAO_DB_HOST') }}"
     port: 5432
-    database: "{{ env('POSTGRES_DB') }}"
-    user: "{{ env('NAO_READONLY_USER') }}"
-    password: "{{ env('NAO_READONLY_PASSWORD') }}"
+    database: "{{ env('NAO_DB_NAME') }}"
+    user: "{{ env('NAO_DB_USER') }}"
+    password: "{{ env('NAO_DB_PASSWORD') }}"
     include:
       - admin.*
       - reference.*
