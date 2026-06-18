@@ -1,31 +1,36 @@
-# Décision Tier 3 — Vues analytics (option B)
+# Décision Tier 3 — Vues analytics (complément llm.*)
 
 **Date :** 2026-06-15  
-**Statut :** Retenu
+**Statut :** Retenu (mis à jour)
 
 ## Contexte
 
-Les tables Tier 3 (`main.structure`, `main.structure_administrative`, `main.lieu_inclusion`, `main.adresse`, `min.structure`) contiennent des données utiles à l'analytics territorial et structurel, mais aussi des colonnes sensibles (contact JSONB, adresses précises, référents nommés).
+Les tables Tier 3 contiennent des données utiles à l'analytics territorial et structurel, mais aussi des colonnes sensibles (contact JSONB, adresses précises, référents nommés).
 
-## Options évaluées
+Depuis juin 2026, les entités personne et structure passent par le schéma **`llm.*`** (voir [`database/sql/00_llm_views.sql`](../sql/00_llm_views.sql)). Le schéma **`analytics.*`** reste pour les lieux, adresses communales et KPI agrégés.
 
-| Option | Description | Impact analytics |
-|--------|-------------|------------------|
-| **A — Exclusion totale** | Ne pas exposer ces tables à Nao | Perte des analyses sur lieux, structures et géolocalisation |
-| **B — Vues anonymisées** | Exposer uniquement des vues `analytics.*` sans PII | Conserve les KPI structurels/territoriaux sans contact ni adresse nominative |
+## Répartition des responsabilités
 
-## Décision
+| Besoin | Schéma | Exemples |
+|--------|--------|----------|
+| Entités sans PII (même grain) | `llm.*` | `llm.personne`, `llm.structure_administrative`, `llm.utilisateur` |
+| Lieux et adresses | `analytics.*` | `analytics.lieu_inclusion_publique`, `analytics.adresse_publique` |
+| Comptages agrégés | `analytics.*` | `analytics.mediateurs_par_structure`, `analytics.postes_synthese` |
 
-**Option B retenue.** Les tables sources Tier 3 restent exclues du contexte Nao et du rôle `nao_readonly`. Seules les vues du schéma `analytics` sont exposées.
+## Tables sans remplaçant
 
-## Colonnes exclues des vues
+- `main.structure` — legacy en voie de disparition, accès coupé
+- `min.contact_membre_gouvernance` — 100 % PII, vue supprimée en V103
+
+## Colonnes exclues des vues analytics
 
 - `contact` (jsonb)
 - `edited_by`, `deleted_by`
 - Adresse précise : `numero_voie`, `nom_voie`, `repetition`, `geom`, `clef_interop`, `code_ban`
 - `import_warnings` (peut contenir des données sources brutes)
-- `adresse` texte et `contact` sur `min.structure`
 
 ## Implémentation
 
-Voir [`database/sql/01_analytics_views.sql`](../sql/01_analytics_views.sql) et [`database/sql/02_nao_readonly_role.sql`](../sql/02_nao_readonly_role.sql).
+1. [`database/sql/00_llm_views.sql`](../sql/00_llm_views.sql)
+2. [`database/sql/01_analytics_views.sql`](../sql/01_analytics_views.sql)
+3. [`database/sql/02_nao_readonly_role.sql`](../sql/02_nao_readonly_role.sql) — rôle `nao_ro`

@@ -35,7 +35,8 @@ Avant d'analyser, clarifier si nécessaire :
 ## Data Access
 
 - Utiliser uniquement les tables et vues listées dans `agent/semantics/privacy.md`
-- Privilégier le schéma `analytics` pour structures, lieux et adresses
+- Privilégier le schéma `llm` pour personnes, contacts, structures et utilisateurs
+- Utiliser le schéma `analytics` pour lieux, adresses communales et KPI agrégés
 - Agrégats par défaut ; pas de listes nominatives
 - Maximum 10 000 lignes par requête
 

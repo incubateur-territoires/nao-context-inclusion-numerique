@@ -10,6 +10,7 @@ databases:
     include:
       - admin.*
       - reference.*
+      - llm.*
       - analytics.*
       - main.subvention
       - main.lieu_inclusion_structure_administrative
@@ -19,7 +20,7 @@ databases:
       - min.enveloppe_financement
       - min.departement_enveloppe
     exclude:
-      # Tier 1 — PII direct
+      # Tier 1 — PII direct (vues llm.* à la place)
       - main.personne
       - main.contact
       - main.contact_structure_administrative
@@ -28,29 +29,29 @@ databases:
       - min.membre
       - min.personne_enrichie
       # Tier 2 — ré-identification
-      # - main.personne_affectations
-      # - main.personne_affectations_emploi
-      # - main.personne_affectations_lieu
-      # - main.formation
-      # - main.contrat
-      # - main.coordination_mediation
-      # - main.poste
-      # - main.activites_coop
-      # - min.postes_conseiller_numerique_synthese
-      # - min.beneficiaire_subvention
-      # - min.co_financement
-      # - min.porteur_action
-      # - min.demande_de_subvention
-      # - min.action
-      # - min.comite
-      # - min.feuille_de_route
-      # - min.gouvernance
-      # # Tier 3 — sources brutes (vues analytics.* à la place)
-      # - main.structure
-      # - main.structure_administrative
-      # - main.lieu_inclusion
-      # - main.adresse
-      # - min.structure
+      - main.personne_affectations
+      - main.personne_affectations_emploi
+      - main.personne_affectations_lieu
+      - main.formation
+      - main.contrat
+      - main.coordination_mediation
+      - main.poste
+      - main.activites_coop
+      - min.postes_conseiller_numerique_synthese
+      - min.beneficiaire_subvention
+      - min.co_financement
+      - min.porteur_action
+      - min.demande_de_subvention
+      - min.action
+      - min.comite
+      - min.feuille_de_route
+      - min.gouvernance
+      # Tier 3 — sources brutes (vues llm.* ou analytics.* à la place)
+      - main.structure
+      - main.structure_administrative
+      - main.lieu_inclusion
+      - main.adresse
+      - min.structure
       # Technique
       - min._prisma_migrations
     templates:
