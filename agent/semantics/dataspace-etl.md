@@ -41,7 +41,7 @@ Orchestration : **Airflow** via `dag.py` à la racine du dépôt. La CI/CD dépl
 | `admin` | Référentiels territoriaux (communes, IFN, zonages) |
 | `min` | Application gouvernance |
 | `reference` | Nomenclatures (NAF, catégories juridiques) |
-| `analytics` | Vues anonymisées pour Nao (sans PII) |
+| `llm` | Vues anonymisées pour Nao (sans PII) |
 
 ## Sources connues
 
@@ -61,7 +61,7 @@ Pour l'agent Nao :
 
 - Consulter ce dépôt pour comprendre **comment** les données arrivent en `main.*`
 - Ne jamais requêter les tables sources brutes contenant des PII (voir `agent/semantics/privacy.md`)
-- Privilégier les vues `analytics.*` pour les analyses
+- Privilégier les vues `llm.*` pour les analyses (voir `agent/semantics/privacy.md`)
 
 ## Référentiels géographiques
 

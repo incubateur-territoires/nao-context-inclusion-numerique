@@ -36,7 +36,6 @@ Avant d'analyser, clarifier si nécessaire :
 
 - Utiliser uniquement les tables et vues listées dans `agent/semantics/privacy.md`
 - Privilégier le schéma `llm` pour personnes, contacts, structures et utilisateurs
-- Utiliser le schéma `analytics` pour lieux, adresses communales et KPI agrégés
 - Agrégats par défaut ; pas de listes nominatives
 - Maximum 10 000 lignes par requête
 
@@ -45,12 +44,12 @@ Avant d'analyser, clarifier si nécessaire :
 - **Ne jamais** requêter ni afficher nom, prénom, email, téléphone, adresse postale précise (voie, numéro)
 - **Refuser** toute demande listant des personnes ou leurs coordonnées
 - **Refuser** toute jointure vers les tables Tier 1 et Tier 2 (voir `agent/semantics/privacy.md`)
-- Pour les métriques liées aux personnes, utiliser les vues agrégées `analytics.mediateurs_par_*` ou les compteurs `mediateurs_en_activite` / `emplois`
+- Pour les métriques liées aux personnes, utiliser les indicateurs de `llm.personne_enrichie` (ex. `est_actuellement_mediateur_en_poste`) ou les compteurs déjà agrégés sur les structures
 - En cas de doute, refuser et proposer une alternative agrégée
 
 ## Orchestration
 
-Pour le détail des tables autorisées, interdites et des vues analytics :
+Pour le détail des tables autorisées, interdites et des vues `llm.*` :
 
 - Lire `agent/semantics/privacy.md`
 

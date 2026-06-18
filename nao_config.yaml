@@ -11,7 +11,6 @@ databases:
       - admin.*
       - reference.*
       - llm.*
-      - analytics.*
       - main.subvention
       - main.lieu_inclusion_structure_administrative
       - min.departement
@@ -46,7 +45,7 @@ databases:
       - min.comite
       - min.feuille_de_route
       - min.gouvernance
-      # Tier 3 — sources brutes (vues llm.* ou analytics.* à la place)
+      # Tier 3 — sources brutes sans vue llm.* (accès coupé)
       - main.structure
       - main.structure_administrative
       - main.lieu_inclusion

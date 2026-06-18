@@ -1,10 +1,8 @@
 # Privacy & accès aux données — Inclusion numérique
 
-Ce document définit les tables autorisées et interdites pour l'agent analytics Nao. Il complète la configuration [`nao_config.yaml`](../../nao_config.yaml) et le rôle Postgres `nao_ro`.
+Ce document définit les tables autorisées et interdites pour l'agent analytics Nao. Il complète la configuration [`nao_config.yaml`](../../nao_config.yaml).
 
-**Décisions :**
-- Vues `llm.*` — même grain que les tables sources, colonnes PII retirées. Voir [`database/sql/00_llm_views.sql`](../../database/sql/00_llm_views.sql).
-- Vues `analytics.*` — lieux, adresses communales et KPI agrégés. Voir [`database/decisions/tier3-analytics-views.md`](../../database/decisions/tier3-analytics-views.md).
+Les vues `llm.*` et le rôle Postgres `nao_ro` sont déployés dans la base (migrations applicatives) — ce dépôt de contexte n'y a accès qu'en lecture seule.
 
 ## Principes
 
@@ -31,6 +29,8 @@ Ce document définit les tables autorisées et interdites pour l'agent analytics
 | `main.structure` | Table legacy en voie de disparition |
 | `min.contact_membre_gouvernance` | Table 100 % PII (vue supprimée en V103) |
 | `main.contact_structure_administrative` | Liaison vers `main.contact` |
+| `main.lieu_inclusion` | Contient contact et données nominatives — pas de vue `llm.*` |
+| `main.adresse` | Adresse précise (voie, géométrie) — pas de vue `llm.*` |
 
 ## Tier 2 — Interdit (ré-identification)
 
@@ -43,18 +43,7 @@ Tables avec `personne_id`, `membre_id` ou liens vers utilisateurs :
 | `min` | `postes_conseiller_numerique_synthese`, `beneficiaire_subvention`, `co_financement`, `porteur_action` |
 | `min` | `demande_de_subvention`, `action`, `comite`, `feuille_de_route`, `gouvernance` |
 
-**Alternative agrégée :** utiliser `analytics.mediateurs_par_structure`, `analytics.mediateurs_par_lieu`, `analytics.postes_synthese`.
-
-## Tier 3 — Sources brutes interdites, vues analytics autorisées
-
-Pour les lieux et adresses (pas de vue `llm.*` équivalente) :
-
-| Source interdite | Vue autorisée |
-|------------------|---------------|
-| `main.lieu_inclusion` | `analytics.lieu_inclusion_publique` |
-| `main.adresse` | `analytics.adresse_publique` |
-
-Colonnes absentes des vues analytics : `contact`, `edited_by`, `deleted_by`, adresse précise (`numero_voie`, `nom_voie`, `geom`), `import_warnings`.
+Pour les métriques liées aux personnes, utiliser les indicateurs agrégés de `llm.personne_enrichie` (ex. `est_actuellement_mediateur_en_poste`) ou les compteurs déjà présents sur les structures.
 
 ## Tier 4 — Autorisé
 
@@ -76,20 +65,19 @@ Colonnes absentes des vues analytics : `contact`, `edited_by`, `deleted_by`, adr
 - `departement`, `region`, `groupement`
 - `enveloppe_financement`, `departement_enveloppe`
 
-### Schémas `llm` et `analytics`
+### Schéma `llm`
 
-Toutes les vues définies dans [`database/sql/00_llm_views.sql`](../../database/sql/00_llm_views.sql) et [`database/sql/01_analytics_views.sql`](../../database/sql/01_analytics_views.sql).
+Toutes les vues listées dans le mapping ci-dessus.
 
 ## Exemples de requêtes
 
 ### Autorisé
 
 ```sql
--- Structures administratives par département (via adresse communale)
-SELECT a.departement, COUNT(*) AS nb_structures
-FROM llm.structure_administrative sa
-JOIN analytics.adresse_publique a ON a.id = sa.adresse_id
-GROUP BY a.departement
+-- Structures MIN par département
+SELECT departement_code, COUNT(*) AS nb_structures
+FROM llm.structure
+GROUP BY departement_code
 ORDER BY nb_structures DESC
 LIMIT 20;
 ```
@@ -130,10 +118,7 @@ JOIN main.personne_affectations_emploi pae ON pae.personne_id = p.id
 JOIN llm.structure_administrative sa ON sa.id = pae.structure_administrative_id;
 ```
 
-## Déploiement base de données
+## Synchronisation du contexte
 
-1. Exécuter `database/sql/00_llm_views.sql`
-2. Exécuter `database/sql/01_analytics_views.sql`
-3. Exécuter `database/sql/02_nao_readonly_role.sql` (changer le mot de passe)
-4. Configurer les variables d'environnement `NAO_DB_USER` / `NAO_DB_PASSWORD`
-5. Lancer `nao sync`
+1. Configurer les variables d'environnement `NAO_DB_USER` / `NAO_DB_PASSWORD` (rôle `nao_ro`)
+2. Lancer `nao sync`

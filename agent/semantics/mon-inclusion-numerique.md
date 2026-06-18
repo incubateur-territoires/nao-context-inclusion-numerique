@@ -62,7 +62,7 @@ Tables métier gouvernance — plusieurs contiennent des **PII** (voir `agent/se
 | `min.feuille_de_route`, `min.comite` | Feuilles de route, comités | Tier 2 — interdit |
 | `min.departement`, `min.region`, `min.groupement` | Référentiels territoriaux | Tier 4 — autorisé |
 | `min.enveloppe_financement`, `min.departement_enveloppe` | Enveloppes budgétaires | Tier 4 — autorisé |
-| `min.structure` | Structures côté MIN | Tier 3 — vue `analytics.min_structure_publique` |
+| `min.structure` | Structures côté MIN | Tier 3 — vue `llm.structure` |
 | `min.personne_enrichie` | Vue enrichie médiateurs | Tier 1 — interdit |
 
 ### Schéma `main` (lecture MIN, écriture Data Space)
@@ -79,7 +79,7 @@ Documentation détaillée des mappings : `docs/couche-anticorruption-statistique
 
 MIN consomme `main.poste`, `main.subvention` et la vue `min.postes_conseiller_numerique_synthese`. Voir `docs/postes-conseiller-numerique.md`.
 
-Pour Nao : utiliser `analytics.postes_synthese` (sans `personne_id`) et `main.subvention`.
+Pour Nao : utiliser `main.subvention` et les vues `llm.*` (pas d'accès aux tables sources Tier 2).
 
 ## Couche anticorruption statistiques
 
