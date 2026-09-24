@@ -1,0 +1,116 @@
+# Manifeste des gardes — règles du cycle de vie des lieux et des personnes.
+#
+# Matérialise le lien code ↔ règles documentées : chaque entrée relie une
+# assertion des docs `cycle-de-vie-lieux-personnes*.md` (ids de la matrice de
+# preuve) aux éléments de code qui la portent. Consommé par le job CI
+# `docs-guard` (scripts/docs_guard.py) : une MR qui touche un porteur sans
+# toucher aucun des documents du trio (ni ce manifeste) échoue — en warning
+# pour l'instant (SEPT #1948).
+#
+# Deux types de porteurs :
+#   fichiers : globs de chemins (fnmatch) — DAGs, ETL, tests.
+#   objets   : chaînes cherchées dans le CONTENU des migrations modifiées ou
+#              nouvelles (database/migrations/*.sql) — car une nouvelle
+#              migration V1xx qui redéfinit une vue gardée ne matche aucun
+#              glob de nom de fichier.
+#
+# Périmètre : repo dataspace uniquement. Les porteurs côté MIN (loaders
+# personnes) et côté coop (double écriture, difftool — assertions 🤝 de la
+# matrice) ne sont pas gardables d'ici.
+
+documents:
+  - docs/cycle-de-vie-lieux-personnes.md
+  - docs/cycle-de-vie-lieux-personnes-support.md
+  - docs/cycle-de-vie-lieux-personnes-preuves.md
+  - docs/cycle-de-vie.gardes.yml
+
+assertions:
+  T-02:
+    regle: "Le plus frais gagne, à dates honnêtes (garde de fraîcheur des upserts)"
+    fichiers:
+      - aidants-connect-dag.py
+      - etl/load/aidants_connect.py
+  T-03:
+    regle: "Une valeur bat un vide ; un NULL externe n'écrase jamais (COALESCE id-poste, contact combiné)"
+    fichiers:
+      - schema-idPoste.py
+      - etl/load/registre_lieux_coop.py
+  T-05:
+    regle: "Réconciliation par comparaison de valeurs, jamais par date (filet)"
+    fichiers:
+      - etl/load/registre_lieux_coop.py
+      - tests-unitaires/coop/test_registre_lieux_coop.py
+  T-08:
+    regle: "Fusion de personnes : seules exceptions au « rien n'est supprimé », journalisées ; orphelins de suppression coop retirés par le filet (SEPT #1950)"
+    fichiers:
+      - personne-reconciliation-dag.py
+      - etl/load/registre_lieux_coop.py
+      - tests/coop/test_filet_registre_lieux.py
+    objets:
+      - audit.personne_merge_log
+  L-01:
+    regle: "Double écriture coop = chemin nominal ; le filet n'insère que les manquants"
+    fichiers:
+      - etl/load/registre_lieux_coop.py
+    objets:
+      - lieu_inclusion_registre
+  L-04:
+    regle: "Listes vides : {} et NULL équivalents dans tous les comparateurs"
+    fichiers:
+      - etl/load/registre_lieux_coop.py
+    objets:
+      - lieu_divergences_coop
+  L-05:
+    regle: "Critères d'affichage carte d'un lieu : référencé + visible + non supprimé (toutes origines, V167)"
+    fichiers:
+      - tests/carto/cas_cycle_de_vie_lieux.yml
+      - tests/carto/test_cycle_de_vie_lieux.py
+    objets:
+      - api.carto
+  L-06:
+    regle: "Le fichier national ne pilote l'état que des lignes externes (ni coop, ni touchées par MIN) et ne rallume jamais un lieu supprimé"
+    fichiers:
+      - carto-dag-import.py
+      - etl/load/carto_integration_lieux.py
+      - tests/carto/cas_cycle_de_vie_lieux.yml
+      - tests/carto/test_cycle_de_vie_lieux.py
+  L-07:
+    regle: "Filtre de publication opendata des lieux"
+    objets:
+      - opendata.
+  L-09:
+    regle: "Fraîcheur mednum : pas d'expiration globale, mergeOldLieux ~6 mois (documentée dans le docstring)"
+    fichiers:
+      - carto-dag-import.py
+  P-02:
+    regle: "Visibilité carte d'une personne : expose = lieu_actif ∧ compte_coop_actif ∧ visible_coop ∧ emploi_autorise (deleted_at NON retenu, V171) ; adresse publiée = COALESCE(coop.users.email, mail_pro), jamais mail_perso"
+    fichiers:
+      - tests/carto/cas_visibilite.yml
+      - tests/carto/test_visibilite_api_carto.py
+    objets:
+      - personne_visibilite_carto
+  P-03:
+    regle: "est_active idposte pilotée par les contrats (date_rupture)"
+    fichiers:
+      - schema-idPoste.py
+  P-05:
+    regle: "Fusion automatique de personnes sous gardes strictes"
+    fichiers:
+      - personne-reconciliation-dag.py
+  P-14:
+    regle: "Affectations personne ↔ lieu = vue temps réel sur la coop"
+    objets:
+      - personne_affectations_lieu
+  C-01:
+    regle: "Coordonnées carte lues en direct du compte coop, repli idposte, téléphone normalisé E.164"
+    objets:
+      - normaliser_telephone
+      - api.carto
+  C-02:
+    regle: "contact->'coop' et is_visible de main.personne : copies gelées, plus aucun écrivain"
+    objets:
+      - personne_enrichie
+  C-03:
+    regle: "L'opendata ne publie aucune coordonnée personnelle (contacts du lieu uniquement)"
+    objets:
+      - opendata.

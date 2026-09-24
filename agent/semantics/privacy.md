@@ -1,124 +1,76 @@
-# Privacy & accès aux données — Inclusion numérique
+# Confidentialité et périmètre d'accès — Inclusion numérique
 
-Ce document définit les tables autorisées et interdites pour l'agent analytics Nao. Il complète la configuration [`nao_config.yaml`](../../nao_config.yaml).
+## Principe : la base décide
 
-Les vues `llm.*` et le rôle Postgres `nao_ro` sont déployés dans la base (migrations applicatives) — ce dépôt de contexte n'y a accès qu'en lecture seule.
+La protection des données personnelles est appliquée **dans Postgres**, pas dans ce
+dépôt :
 
-## Principes
+- le rôle `nao_ro` ne lit **aucune** table portant un nom, un prénom, un courriel ou un
+  téléphone de personne physique ; à leur place, des vues `llm.*` purgées de ces
+  colonnes (migrations V102, V103, V172, V173 du dépôt dataspace) ;
+- les journaux (fusions, modifications MIN) sont servis à travers `llm.purger_pii()`,
+  qui retire récursivement les clés nominatives des instantanés JSON ;
+- les textes libres conservés passent par `llm.masquer_coordonnees()` (courriels et
+  téléphones remplacés par un libellé neutre).
 
-1. Le rôle `nao_ro` n'a pas accès aux tables sources contenant des PII.
-2. Le contexte Nao (`nao sync`) n'inclut pas `preview` ni `profiling` sur les tables sensibles.
-3. L'agent doit refuser toute requête visant à identifier ou lister des personnes physiques.
+Conséquence pour l'agent : **tout ce qui est lisible est utilisable**. La liste
+`include` de `nao_config.yaml` reproduit le périmètre de `nao_ro` et
+`allow_listed_only` en fait une frontière dure à l'exécution.
 
-## Mapping source → vue `llm.*`
+## Ce que l'agent ne fait pas
 
-| Source (accès révoqué) | Vue autorisée | Colonnes PII retirées |
-|------------------------|---------------|------------------------|
-| `main.personne` | `llm.personne` | prenom, nom, contact jsonb, edited_by, deleted_by |
-| `main.contact` | `llm.contact` | nom, prenom, email, telephone |
-| `main.structure_administrative` | `llm.structure_administrative` | nom/prenom/courriels du jsonb contact (garde site_web + telephone org) |
-| `min.utilisateur` | `llm.utilisateur` | nom, prenom, email_de_contact, sso_email, sso_id, telephone |
-| `min.structure` | `llm.structure` | contact jsonb (référent nommé), adresse postale |
-| `min.membre` | `llm.membre` | contact, contact_technique (emails perso) |
-| `min.personne_enrichie` | `llm.personne_enrichie` | prenom, nom, contact jsonb, edited_by, deleted_by |
+- Reconstituer l'identité d'une personne (croisement d'indices, recherche d'un nom dans
+  un texte libre, déduction depuis un identifiant externe).
+- Présenter un identifiant technique comme une identité (« la personne 4512 est … »).
 
-### Accès coupé (pas de remplaçant)
+Ce sont les deux seules règles de comportement. Pas de refus sur les membres,
+structures, lieux, utilisateurs, postes ou contrats : ce ne sont pas des personnes
+identifiables.
 
-| Table | Raison |
-|-------|--------|
-| `main.structure` | Table legacy en voie de disparition |
-| `min.contact_membre_gouvernance` | Table 100 % PII (vue supprimée en V103) |
-| `main.contact_structure_administrative` | Liaison vers `main.contact` |
-| `main.lieu_inclusion` | Contient contact et données nominatives — pas de vue `llm.*` |
-| `main.adresse` | Adresse précise (voie, géométrie) — pas de vue `llm.*` |
+## Périmètre lu par `nao_ro`
 
-## Tier 2 — Interdit (ré-identification)
+### Schéma `llm` — vues curées (15)
 
-Tables avec `personne_id`, `membre_id` ou liens vers utilisateurs :
+| Vue | Source | Ce qui est retiré |
+|-----|--------|-------------------|
+| `llm.personne` | `main.personne` | prénom, nom, `contact`, `edited_by`, `deleted_by` ; `profession_ac` mis à NULL s'il contient un courriel |
+| `llm.personne_enrichie` | `min.personne_enrichie` | idem + garde les drapeaux d'activité |
+| `llm.contact` | `main.contact` | nom, prénom, email, téléphone (reste `fonction`) |
+| `llm.structure_administrative` | `main.structure_administrative` | nom / prénom / courriels du `contact` (garde site web + téléphone d'organisation) |
+| `llm.lieu_inclusion` | `main.lieu_inclusion` | courriels de gestionnaire / référent, `presentation_*`, `import_warnings` ; `nom`, `horaires`, `prise_rdv`, `complement_adresse` masqués (garde site web, téléphone, courriel générique du lieu) |
+| `llm.lieu_appariement` | `main.lieu_appariement` | `decide_par` (courriel du décideur) |
+| `llm.adresse` | `main.adresse` | `nom_voie` mis à NULL quand la valeur importée n'était pas un nom de voie (bloc d'adresse brut avec nom / courriel) |
+| `llm.activites_coop` | `main.activites_coop` | `precisions_demarche` (texte libre saisi par les médiateurs) |
+| `llm.utilisateur` | `min.utilisateur` | nom, prénom, courriels, `sso_id`, téléphone |
+| `llm.membre` | `min.membre` | `contact`, `contact_technique` |
+| `llm.structure` | `min.structure` (dépréciée) | `contact` |
+| `llm.gouvernance` | `min.gouvernance` | `note_privee`, son éditeur ; `note_de_contexte` masquée |
+| `llm.structure_merge_log` | `audit.structure_merge_log` | clés nominatives des instantanés |
+| `llm.personne_merge_log` | `audit.personne_merge_log` | idem |
+| `llm.evenement` | `source.min__evenements` | idem, `donnee` éclatée en colonnes |
 
-| Schéma | Table / vue |
-|--------|-------------|
-| `main` | `personne_affectations`, `personne_affectations_emploi`, `personne_affectations_lieu` |
-| `main` | `formation`, `contrat`, `coordination_mediation`, `poste`, `activites_coop` |
-| `min` | `postes_conseiller_numerique_synthese`, `beneficiaire_subvention`, `co_financement`, `porteur_action` |
-| `min` | `demande_de_subvention`, `action`, `comite`, `feuille_de_route`, `gouvernance` |
+### Tables en accès direct (pseudonymisées : identifiants, jamais de nominatif)
 
-Pour les métriques liées aux personnes, utiliser les indicateurs agrégés de `llm.personne_enrichie` (ex. `est_actuellement_mediateur_en_poste`) ou les compteurs déjà présents sur les structures.
+- `main` : `poste`, `contrat`, `formation`, `subvention`,
+  `personne_affectations_emploi`, `personne_affectations_lieu`,
+  `contact_structure_administrative`.
+- `min` : `action`, `beneficiaire_subvention`, `co_financement`, `comite`,
+  `demande_de_subvention`, `feuille_de_route`, `porteur_action`,
+  `postes_conseiller_numerique_synthese`, `departement`, `region`, `groupement`,
+  `enveloppe_financement`, `departement_enveloppe`.
+- `admin.*` et `reference.*` en entier (référentiels territoriaux, nomenclatures).
 
-## Tier 4 — Autorisé
+### Sans accès (et sans remplaçant)
 
-### Schéma `admin` (intégralité)
+`main.personne`, `main.contact`, `main.structure`, `main.structure_administrative`,
+`main.lieu_inclusion`, `main.lieu_appariement`, `main.adresse`, `main.activites_coop`, `min.utilisateur`, `min.membre`,
+`min.structure`, `min.personne_enrichie`, `min.contact_membre_gouvernance`,
+`min.gouvernance`, `min._prisma_migrations`, et tous les schémas `source`, `staging`,
+`audit`, `coop`, `import`, `api`, `dataviz`.
 
-`commune`, `departement`, `region`, `epci`, `commune_epci`, `coll_terr`, `icp_departement`, `ifn_commune`, `ifn_departement`, `insee_cp`, `insee_historique`, `zonage`
+## Faire évoluer le périmètre
 
-### Schéma `reference` (intégralité)
-
-`categories_juridiques`, `naf`
-
-### Schéma `main`
-
-- `subvention` — montants et dates de financement (sans noms)
-- `lieu_inclusion_structure_administrative` — liaison N:N lieu / structure
-
-### Schéma `min`
-
-- `departement`, `region`, `groupement`
-- `enveloppe_financement`, `departement_enveloppe`
-
-### Schéma `llm`
-
-Toutes les vues listées dans le mapping ci-dessus.
-
-## Exemples de requêtes
-
-### Autorisé
-
-```sql
--- Structures MIN par département
-SELECT departement_code, COUNT(*) AS nb_structures
-FROM llm.structure
-GROUP BY departement_code
-ORDER BY nb_structures DESC
-LIMIT 20;
-```
-
-```sql
--- Médiateurs en poste par structure (sans identité)
-SELECT sa.denomination_sirene, COUNT(*) AS nb_mediateurs
-FROM llm.personne_enrichie pe
-JOIN llm.structure_administrative sa ON sa.id = pe.structure_employeuse_id
-WHERE pe.est_actuellement_mediateur_en_poste
-GROUP BY sa.denomination_sirene
-ORDER BY nb_mediateurs DESC
-LIMIT 20;
-```
-
-```sql
--- Montant cumulé des subventions V2
-SELECT SUM(montant_subvention_v2) AS total_v2
-FROM main.subvention;
-```
-
-### Refusé
-
-```sql
--- INTERDIT : table source avec PII
-SELECT prenom, nom, contact FROM main.personne LIMIT 10;
-
--- INTERDIT : email des utilisateurs MIN
-SELECT email_de_contact FROM min.utilisateur;
-
--- INTERDIT : table legacy sans remplaçant
-SELECT nom, contact FROM main.structure;
-
--- INTERDIT : jointure Tier 2 vers identité
-SELECT p.nom, sa.denomination_sirene
-FROM main.personne p
-JOIN main.personne_affectations_emploi pae ON pae.personne_id = p.id
-JOIN llm.structure_administrative sa ON sa.id = pae.structure_administrative_id;
-```
-
-## Synchronisation du contexte
-
-1. Configurer les variables d'environnement `NAO_DB_USER` / `NAO_DB_PASSWORD` (rôle `nao_ro`)
-2. Lancer `nao sync`
+1. Migration Flyway côté dataspace (vue `llm.*` ou `GRANT`/`REVOKE` sur `nao_ro`).
+2. Reporter la table dans `include` de `nao_config.yaml`.
+3. `nao sync`, commit, « Pull latest » côté Nao.
+4. `python3 scripts/verify-privacy-config.py` vérifie la cohérence des deux.

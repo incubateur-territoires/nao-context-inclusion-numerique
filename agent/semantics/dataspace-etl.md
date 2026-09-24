@@ -1,87 +1,65 @@
-# Data Space — ETL et orchestration
+# Data Space — pipeline de données
 
-Contexte métier sur le pipeline de données de l'inclusion numérique. Code source : [scripts GitLab](https://gitlab.com/incubateur-territoires/startups/data-space-societe-numerique/scripts).
+Contexte sur le pipeline qui alimente l'entrepôt. Code source synchronisé dans
+`repos/data-space-scripts/` (GitLab :
+[scripts](https://gitlab.com/incubateur-territoires/startups/data-space-societe-numerique/scripts)).
 
-## Architecture ETL
+## Architecture (médaillon)
 
 ```mermaid
 flowchart LR
-  subgraph extract [1. Extract]
-    Sources[Sources externes]
-    ImportSchema["schéma import.*"]
-  end
-  subgraph transform [2. Transform]
-    Ingest[ingest]
-    Reconciliate[reconciliate]
-  end
-  subgraph load [3. Load]
-    MainSchema["schéma main.*"]
-  end
-  Sources --> ImportSchema
-  ImportSchema --> Ingest
-  Ingest --> Reconciliate
-  Reconciliate --> MainSchema
+  Sources[Sources externes] --> Source["source.* (bronze, brut, append-only)"]
+  Source --> Staging["staging.* (silver, typé, par source)"]
+  Staging --> Main["main.* (gold, réconcilié)"]
+  Main --> Llm["llm.* (vues sans PII pour l'agent)"]
+  Main --> Api["api.* (PostgREST)"]
+  Main --> Dataviz["dataviz.* (Metabase)"]
 ```
 
-| Étape | Dossier | Rôle |
-|-------|---------|------|
-| Extract | `etl/extract` | Copie brute des sources vers `import.{source}__{table}` |
-| Transform — ingest | `etl/transform/ingest` | Nettoyage, renommage, UUID par source |
-| Transform — reconciliate | `etl/transform/reconciliate` | Fusion, déduplication (adresses, personnes, structures) |
-| Load | `etl/load` | Écriture finale dans le schéma `main` |
+| Étape | Schéma | Rôle |
+|-------|--------|------|
+| Capture brute | `source.{flux}` | Charge utile brute de chaque appel, une table par flux |
+| Silver | `staging.{source}__{table}` | Tables typées, rechargées à chaque run ; caches SIRENE et géocodage ; `staging.rejets` (quarantaine qualité) |
+| Transform | code Python `etl/core/` | Règles métier pures, testées unitairement |
+| Load | `main.*` | Upserts dans le modèle final (structures, lieux, personnes, postes, contrats) |
 
-Orchestration : **Airflow** via `dag.py` à la racine du dépôt. La CI/CD déploie sur `main`.
+Orchestration : **Airflow**, un DAG par source à la racine du dépôt (`coop-dag.py`,
+`aidants-connect-dag.py`, `carto-dag-import.py`, `schema-idPoste.py`,
+`personne-reconciliation-dag.py`, `lieu-appariement-dag.py`, `zonage-*-dag.py`,
+`sirene-backfill-dag.py`, `opendata.py`). Migrations de schéma : **Flyway**
+(`database/migrations/V<num>_<date>__<sujet>.sql`), dont les en-têtes commentés sont la
+meilleure documentation des règles métier.
 
-## Schémas Postgres
+L'agent ne lit pas `source.*` ni `staging.*` : seules `main.*` (tables pseudonymisées),
+`llm.*`, `admin.*`, `reference.*` et une partie de `min.*` lui sont ouvertes (voir
+`privacy.md`).
 
-| Schéma | Usage |
-|--------|-------|
-| `import` | Données brutes par source (`{produit}__{table}`) |
-| `main` | Données finales (structures, personnes, lieux, etc.) |
-| `admin` | Référentiels territoriaux (communes, IFN, zonages) |
-| `min` | Application gouvernance |
-| `reference` | Nomenclatures (NAF, catégories juridiques) |
-| `llm` | Vues anonymisées pour Nao (sans PII) |
+## Sources
 
-## Sources connues
+| Source | Ce qu'elle apporte | DAG |
+|--------|--------------------|-----|
+| Coop de la médiation numérique | médiateurs, structures employeuses, lieux d'activité, activités | `coop-dag.py` (lecture d'une réplique `coop.*`) |
+| Aidants Connect | aidants habilités, structures, accompagnements | `aidants-connect-dag.py` |
+| idposte / Conseillers numériques | postes, contrats, subventions, formations | `schema-idPoste.py` |
+| Cartographie nationale (fichier national) | lieux d'inclusion publics | `carto-dag-import.py` |
+| SIRENE (INSEE) | dénomination, état, NAF, catégorie juridique | enrichissement en cache |
+| BAN / IGN | géocodage des adresses | enrichissement en cache |
+| IGN / INSEE | référentiels `admin.*` (communes, EPCI, zonages) | `init_ref_data.py`, `zonage-*-dag.py` |
+| Mon inclusion numérique | gouvernances, membres, journal des modifications | écriture directe dans `min.*`, journal capté dans `source.min__evenements` |
 
-Les connecteurs sont dans `etl/extract/connectors/`. Les sources alimentent notamment :
+## Réconciliation
 
-- Coop numérique (activités, utilisateurs)
-- Aidants Connect
-- idposte / Conseillers numériques
-- Cartographie nationale (mednum-cli)
-- SIRENE
+- **Personnes** : une même personne peut venir de plusieurs sources ; les doublons sont
+  fusionnés (`personne-reconciliation-dag.py`), trace dans `llm.personne_merge_log`.
+- **Structures** : fusion par similarité ou manuelle depuis l'admin MIN, trace dans
+  `llm.structure_merge_log` ; la perdante reçoit `deleted_at`.
+- **Lieux** : rapprochement Coop ↔ cartographie nationale scoré (nom, adresse,
+  distance), mémoire dans `llm.lieu_appariement`, décisions humaines conservées.
 
-## Privacy — tables sensibles dans le pipeline
+## Questions types
 
-Les étapes **reconciliate** fusionnent explicitement les **personnes**, **adresses** et **structures** (`merge.py`, `deduplicate.py`). Ces scripts manipulent des PII en base mais le code ETL lui-même ne contient pas de données personnelles.
-
-Pour l'agent Nao :
-
-- Consulter ce dépôt pour comprendre **comment** les données arrivent en `main.*`
-- Ne jamais requêter les tables sources brutes contenant des PII (voir `agent/semantics/privacy.md`)
-- Privilégier les vues `llm.*` pour les analyses (voir `agent/semantics/privacy.md`)
-
-## Référentiels géographiques
-
-Le DAG `init_ref_data` alimente `admin.*` (communes, départements, régions, codes postaux). Dépendances serveur : `7zip`, `postgis`.
-
-## API exposée
-
-Une API REST **PostgREST** expose des vues du schéma `api`. Les tokens sont liés à des rôles Postgres dédiés (`postgrest_{entité}_{usage}`). Voir la section API du README du dépôt scripts.
-
-## Connexions Airflow
-
-Identifiants de connexion DB courants : `sonum-test-db`, `sonum-dev-db`, `sonum-prod-db`.
-
-## Questions types que l'agent peut traiter
-
-- « D'où viennent les données de `main.lieu_inclusion` ? » → trace via ingest + reconciliate
-- « Quelle est la convention de nommage des tables `import` ? » → `{source}__{table}`
-- « Comment sont dédupliquées les structures ? » → `etl/transform/reconciliate/deduplicate.py`
-
-## Liens
-
-- Application MIN : `agent/semantics/mon-inclusion-numerique.md`
-- Privacy : `agent/semantics/privacy.md`
+- « D'où vient telle colonne de `main.poste` ? » → `schema-idPoste.py`, `etl/load/`.
+- « Pourquoi une structure a-t-elle deux lignes ? » → siège + antenne, ou recréation
+  après fusion (voir `modele-donnees.md`).
+- « Quelle règle définit un contrat actif ? » → `date_rupture IS NULL`
+  (`CHANGELOG.md` du dépôt, entrée du 2026-09-14).
