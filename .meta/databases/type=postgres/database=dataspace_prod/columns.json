@@ -1036,52 +1036,6 @@
           "type": "string"
         }
       ],
-      "structure": [
-        {
-          "name": "id",
-          "type": "int32"
-        },
-        {
-          "name": "nom",
-          "type": "unknown(DataType(this=DType.USERDEFINED, kind=min.citext))"
-        },
-        {
-          "name": "type",
-          "type": "string"
-        },
-        {
-          "name": "statut",
-          "type": "string"
-        },
-        {
-          "name": "categorie_juridique",
-          "type": "string(4)"
-        },
-        {
-          "name": "identifiant_etablissement",
-          "type": "string"
-        },
-        {
-          "name": "id_mongo",
-          "type": "string"
-        },
-        {
-          "name": "adresse",
-          "type": "string"
-        },
-        {
-          "name": "code_postal",
-          "type": "string"
-        },
-        {
-          "name": "commune",
-          "type": "string"
-        },
-        {
-          "name": "departement_code",
-          "type": "string"
-        }
-      ],
       "structure_administrative": [
         {
           "name": "id",
