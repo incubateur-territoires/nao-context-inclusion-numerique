@@ -50,28 +50,29 @@ En production, MIN ne joue **pas** les migrations Prisma sur les schémas non-`m
 
 ### Schéma `min` (écriture MIN)
 
-Tables métier gouvernance — plusieurs contiennent des **PII** (voir `agent/semantics/privacy.md`) :
+Tables métier gouvernance et ce que l'agent en voit (détail dans `agent/semantics/privacy.md`) :
 
-| Table | Usage | Privacy |
-|-------|-------|---------|
-| `min.utilisateur` | Comptes gestionnaires territoriaux | Tier 1 — interdit |
-| `min.membre` | Membres de gouvernance | Tier 1 — interdit |
-| `min.contact_membre_gouvernance` | Contacts gouvernance | Tier 1 — interdit |
-| `min.gouvernance` | Notes de contexte par département | Tier 2 — interdit |
-| `min.action`, `min.demande_de_subvention` | Pilotage FNE | Tier 2 — interdit |
-| `min.feuille_de_route`, `min.comite` | Feuilles de route, comités | Tier 2 — interdit |
-| `min.departement`, `min.region`, `min.groupement` | Référentiels territoriaux | Tier 4 — autorisé |
-| `min.enveloppe_financement`, `min.departement_enveloppe` | Enveloppes budgétaires | Tier 4 — autorisé |
-| `min.structure` | Structures côté MIN | Tier 3 — vue `llm.structure` |
-| `min.personne_enrichie` | Vue enrichie médiateurs | Tier 1 — interdit |
+| Table | Usage | Pour l'agent |
+|-------|-------|--------------|
+| `min.utilisateur` | Comptes gestionnaires territoriaux | `llm.utilisateur` (rôle, territoire, dates ; identité masquée) |
+| `min.membre` | Membres de gouvernance = **organisations** (EPCI, communes, préfectures, associations…) | `llm.membre` (sans les courriels de contact) |
+| `min.contact_membre_gouvernance` | Personnes de contact des membres | non exposée (100 % nominative) |
+| `min.gouvernance` | Note de contexte et note privée par département | `llm.gouvernance` (note de contexte avec coordonnées masquées, sans note privée) |
+| `min.action`, `min.demande_de_subvention`, `min.co_financement`, `min.beneficiaire_subvention`, `min.porteur_action` | Pilotage FNE | accès direct |
+| `min.feuille_de_route`, `min.comite` | Feuilles de route, comités | accès direct |
+| `min.departement`, `min.region`, `min.groupement` | Référentiels territoriaux | accès direct |
+| `min.enveloppe_financement`, `min.departement_enveloppe` | Enveloppes budgétaires | accès direct |
+| `min.postes_conseiller_numerique_synthese` | Synthèse postes CN (subventions, versements) | accès direct |
+| `min.structure` | Ancien référentiel de structures, **déprécié** (les `structure_id` pointent `main.structure_administrative`) | `llm.structure`, à ne plus utiliser |
+| `min.personne_enrichie` | Vue enrichie médiateurs | `llm.personne_enrichie` (drapeaux d'activité, identité masquée) |
 
 ### Schéma `main` (lecture MIN, écriture Data Space)
 
 MIN **lit** intensivement `main.*` pour les statistiques et la cartographie, notamment :
 
 - `main.activites_coop` — activités Coop numérique (statistiques médiateurs)
-- `main.personne`, `min.personne_enrichie` — résolution des filtres médiateurs (usage interne app, **interdit pour Nao**)
-- `main.structure`, `main.adresse` — lieux et structures
+- `main.personne`, `min.personne_enrichie` — résolution des filtres médiateurs (l'agent passe par `llm.personne` / `llm.personne_enrichie`)
+- `main.structure_administrative`, `main.lieu_inclusion`, `main.adresse` — structures, lieux, adresses (l'agent passe par `llm.structure_administrative`, `llm.lieu_inclusion`, `main.adresse`)
 
 Documentation détaillée des mappings : `docs/couche-anticorruption-statistiques.md` dans le repo.
 
@@ -79,7 +80,7 @@ Documentation détaillée des mappings : `docs/couche-anticorruption-statistique
 
 MIN consomme `main.poste`, `main.subvention` et la vue `min.postes_conseiller_numerique_synthese`. Voir `docs/postes-conseiller-numerique.md`.
 
-Pour Nao : utiliser `main.subvention` et les vues `llm.*` (pas d'accès aux tables sources Tier 2).
+Pour l'agent : `main.poste`, `main.contrat`, `main.subvention` et `min.postes_conseiller_numerique_synthese` sont en accès direct ; le titulaire d'un poste se lit dans `llm.personne` (identité masquée).
 
 ## Couche anticorruption statistiques
 
@@ -115,7 +116,8 @@ Script : `scripts/sync-dataspace-migration.sh`
 - « Qui possède le schéma `min` ? » → MIN via Prisma
 - « Comment MIN filtre les statistiques par département ? » → `lieu_code_insee` + règles DOM-TOM dans `PrismaStatistiquesLoader`
 - « Quelle table pour les enveloppes budgétaires ? » → `min.enveloppe_financement`
-- « Peut-on lister les emails des gestionnaires ? » → **Refus** (`min.utilisateur` Tier 1)
+- « Peut-on lister les emails des gestionnaires ? » → impossible, la base ne les expose pas ; proposer le décompte par rôle et département (`llm.utilisateur`)
+- « Que s'est-il passé pour le membre epci-200068641-31 ? » → `llm.membre` (statut, date de suppression, `structure_id`), puis `llm.evenement` (`entity_id` = cet id texte) et `llm.structure_merge_log` sur la structure rattachée
 
 ## Liens
 

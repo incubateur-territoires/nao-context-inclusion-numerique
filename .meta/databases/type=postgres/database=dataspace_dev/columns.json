@@ -1,0 +1,2095 @@
+{
+  "version": 1,
+  "schemas": {
+    "admin": {
+      "commune": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "geom",
+          "type": "multipolygon:geometry;4326 NOT NULL"
+        },
+        {
+          "name": "departement_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "statut",
+          "type": "string(24)"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string(50) NOT NULL"
+        },
+        {
+          "name": "population",
+          "type": "int32"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "code_insee_cr",
+          "type": "string(5)"
+        }
+      ],
+      "commune_epci": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "commune_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "epci_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "departement": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "geom",
+          "type": "multipolygon:geometry;4326 NOT NULL"
+        },
+        {
+          "name": "region_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code",
+          "type": "string(3) NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string(30) NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "epci": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "geom",
+          "type": "multipolygon:geometry;4326 NOT NULL"
+        },
+        {
+          "name": "code",
+          "type": "string(9) NOT NULL"
+        },
+        {
+          "name": "type",
+          "type": "string(32) NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string(90) NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "departement_id",
+          "type": "int32"
+        }
+      ],
+      "icp_departement": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code",
+          "type": "string(3) NOT NULL"
+        },
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "ifn_commune": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "score",
+          "type": "decimal NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "ifn_departement": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code",
+          "type": "string(3) NOT NULL"
+        },
+        {
+          "name": "score",
+          "type": "decimal NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "insee_cp": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "code_postal",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "insee_historique": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code_insee_ancien",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "code_insee_nouveau",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "region": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "geom",
+          "type": "multipolygon:geometry;4326 NOT NULL"
+        },
+        {
+          "name": "code",
+          "type": "string(2) NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string(35) NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "zonage": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "geom",
+          "type": "multipolygon:geometry;4326"
+        },
+        {
+          "name": "code",
+          "type": "string(8)"
+        },
+        {
+          "name": "libelle",
+          "type": "string(255)"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "type",
+          "type": "string(3) NOT NULL"
+        },
+        {
+          "name": "commentaire",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ]
+    },
+    "llm": {
+      "contact": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "fonction",
+          "type": "string(255)"
+        },
+        {
+          "name": "est_referent_fne",
+          "type": "boolean"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "evenement": [
+        {
+          "name": "id",
+          "type": "int64"
+        },
+        {
+          "name": "ingested_at",
+          "type": "timestamp('UTC', 6)"
+        },
+        {
+          "name": "source_key",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "entity_id",
+          "type": "string"
+        },
+        {
+          "name": "user_id",
+          "type": "int64"
+        },
+        {
+          "name": "valeur_avant",
+          "type": "jsonb"
+        },
+        {
+          "name": "valeur_apres",
+          "type": "jsonb"
+        }
+      ],
+      "gouvernance": [
+        {
+          "name": "departement_code",
+          "type": "string"
+        },
+        {
+          "name": "note_de_contexte",
+          "type": "string"
+        },
+        {
+          "name": "derniere_edition_note_de_contexte",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "editeur_note_de_contexte_id",
+          "type": "int32"
+        }
+      ],
+      "lieu_appariement": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "carto_segment",
+          "type": "string"
+        },
+        {
+          "name": "lieu_id",
+          "type": "int32"
+        },
+        {
+          "name": "carto_record_id",
+          "type": "string"
+        },
+        {
+          "name": "source",
+          "type": "string"
+        },
+        {
+          "name": "methode",
+          "type": "string(20)"
+        },
+        {
+          "name": "statut",
+          "type": "string(20)"
+        },
+        {
+          "name": "score_nom",
+          "type": "int16"
+        },
+        {
+          "name": "score_adresse",
+          "type": "int16"
+        },
+        {
+          "name": "score_distance",
+          "type": "int16"
+        },
+        {
+          "name": "score_global",
+          "type": "int16"
+        },
+        {
+          "name": "distance_m",
+          "type": "int32"
+        },
+        {
+          "name": "carto_nom",
+          "type": "string"
+        },
+        {
+          "name": "carto_adresse",
+          "type": "string"
+        },
+        {
+          "name": "carto_commune",
+          "type": "string"
+        },
+        {
+          "name": "premiere_detection",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "derniere_detection",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "decide_le",
+          "type": "timestamp(6)"
+        }
+      ],
+      "lieu_inclusion": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "old_main_structure_id",
+          "type": "int32"
+        },
+        {
+          "name": "nom",
+          "type": "string(255)"
+        },
+        {
+          "name": "nom_usage",
+          "type": "string(255)"
+        },
+        {
+          "name": "adresse_id",
+          "type": "int32"
+        },
+        {
+          "name": "complement_adresse",
+          "type": "string"
+        },
+        {
+          "name": "structure_cartographie_nationale_id",
+          "type": "string"
+        },
+        {
+          "name": "structure_coop_id",
+          "type": "uuid"
+        },
+        {
+          "name": "siret_a_l_enrichissement",
+          "type": "string(14)"
+        },
+        {
+          "name": "visible_pour_cartographie_nationale",
+          "type": "boolean"
+        },
+        {
+          "name": "fiche_acces_libre",
+          "type": "string"
+        },
+        {
+          "name": "horaires",
+          "type": "string"
+        },
+        {
+          "name": "prise_rdv",
+          "type": "string"
+        },
+        {
+          "name": "itinerance",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.itinerance[]))"
+        },
+        {
+          "name": "services",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.service[]))"
+        },
+        {
+          "name": "modalites_acces",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.modalite_acces[]))"
+        },
+        {
+          "name": "modalites_accompagnement",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.modalite_accompagnement[]))"
+        },
+        {
+          "name": "publics_specifiquement_adresses",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.public_specifiquement_adresse[]))"
+        },
+        {
+          "name": "prise_en_charge_specifique",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.prise_en_charge_specifique[]))"
+        },
+        {
+          "name": "frais_a_charge",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.frais_a_charge[]))"
+        },
+        {
+          "name": "formations_labels",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.formation_label[]))"
+        },
+        {
+          "name": "autres_formations_labels",
+          "type": "array<string>"
+        },
+        {
+          "name": "dispositif_programmes_nationaux",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.dispositif_programme_national[]))"
+        },
+        {
+          "name": "typologies",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=main.typologie[]))"
+        },
+        {
+          "name": "mediateurs_en_activite",
+          "type": "int32"
+        },
+        {
+          "name": "emplois",
+          "type": "int32"
+        },
+        {
+          "name": "contact_site_web",
+          "type": "string"
+        },
+        {
+          "name": "contact_telephone",
+          "type": "string"
+        },
+        {
+          "name": "contact_email",
+          "type": "string"
+        },
+        {
+          "name": "source",
+          "type": "string"
+        },
+        {
+          "name": "edited_by",
+          "type": "string(50)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_carto",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_coop",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_min",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "membre": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "gouvernance_departement_code",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "statut",
+          "type": "string"
+        },
+        {
+          "name": "categorie_membre",
+          "type": "string"
+        },
+        {
+          "name": "is_coporteur",
+          "type": "boolean"
+        },
+        {
+          "name": "nom",
+          "type": "string"
+        },
+        {
+          "name": "siret_ridet",
+          "type": "string"
+        },
+        {
+          "name": "old_uuid",
+          "type": "uuid"
+        },
+        {
+          "name": "old_structure_id",
+          "type": "int32"
+        },
+        {
+          "name": "structure_id",
+          "type": "int32"
+        },
+        {
+          "name": "date_suppression",
+          "type": "timestamp(3)"
+        }
+      ],
+      "personne": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "aidant_connect_id",
+          "type": "int32"
+        },
+        {
+          "name": "conseiller_numerique_id",
+          "type": "string(50)"
+        },
+        {
+          "name": "cn_pg_id",
+          "type": "int32"
+        },
+        {
+          "name": "coop_id",
+          "type": "uuid"
+        },
+        {
+          "name": "is_coordinateur",
+          "type": "boolean"
+        },
+        {
+          "name": "is_mediateur",
+          "type": "boolean"
+        },
+        {
+          "name": "formation_fne_ac",
+          "type": "boolean"
+        },
+        {
+          "name": "profession_ac",
+          "type": "string"
+        },
+        {
+          "name": "nb_accompagnements_ac",
+          "type": "int32"
+        },
+        {
+          "name": "is_referent_ac",
+          "type": "boolean"
+        },
+        {
+          "name": "is_visible",
+          "type": "boolean"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_ac",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_coop",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_idposte",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "personne_enrichie": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "aidant_connect_id",
+          "type": "int32"
+        },
+        {
+          "name": "conseiller_numerique_id",
+          "type": "string(50)"
+        },
+        {
+          "name": "cn_pg_id",
+          "type": "int32"
+        },
+        {
+          "name": "coop_id",
+          "type": "uuid"
+        },
+        {
+          "name": "is_coordinateur",
+          "type": "boolean"
+        },
+        {
+          "name": "is_mediateur",
+          "type": "boolean"
+        },
+        {
+          "name": "formation_fne_ac",
+          "type": "boolean"
+        },
+        {
+          "name": "profession_ac",
+          "type": "string"
+        },
+        {
+          "name": "nb_accompagnements_ac",
+          "type": "int32"
+        },
+        {
+          "name": "type_accompagnateur",
+          "type": "string"
+        },
+        {
+          "name": "labellisation_aidant_connect",
+          "type": "boolean"
+        },
+        {
+          "name": "est_actuellement_mediateur_en_poste",
+          "type": "boolean"
+        },
+        {
+          "name": "est_actuellement_aidant_numerique_en_poste",
+          "type": "boolean"
+        },
+        {
+          "name": "est_actuellement_conseiller_numerique",
+          "type": "boolean"
+        },
+        {
+          "name": "est_actuellement_coordo_actif",
+          "type": "boolean"
+        },
+        {
+          "name": "structure_employeuse_id",
+          "type": "int32"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "personne_merge_log": [
+        {
+          "name": "id",
+          "type": "int64"
+        },
+        {
+          "name": "merged_at",
+          "type": "timestamp('UTC', 6)"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "dag_id",
+          "type": "string"
+        },
+        {
+          "name": "run_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "map_index",
+          "type": "int32"
+        },
+        {
+          "name": "try_number",
+          "type": "int32"
+        },
+        {
+          "name": "match_type",
+          "type": "string"
+        },
+        {
+          "name": "winner_id",
+          "type": "int32"
+        },
+        {
+          "name": "loser_id",
+          "type": "int32"
+        },
+        {
+          "name": "similarity_score",
+          "type": "decimal"
+        },
+        {
+          "name": "similarity_threshold",
+          "type": "decimal"
+        },
+        {
+          "name": "winner_before",
+          "type": "jsonb"
+        },
+        {
+          "name": "loser_before",
+          "type": "jsonb"
+        },
+        {
+          "name": "winner_after",
+          "type": "jsonb"
+        },
+        {
+          "name": "moved_identifiers",
+          "type": "jsonb"
+        },
+        {
+          "name": "error_message",
+          "type": "string"
+        }
+      ],
+      "structure": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "nom",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=min.citext))"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "statut",
+          "type": "string"
+        },
+        {
+          "name": "categorie_juridique",
+          "type": "string(4)"
+        },
+        {
+          "name": "identifiant_etablissement",
+          "type": "string"
+        },
+        {
+          "name": "id_mongo",
+          "type": "string"
+        },
+        {
+          "name": "adresse",
+          "type": "string"
+        },
+        {
+          "name": "code_postal",
+          "type": "string"
+        },
+        {
+          "name": "commune",
+          "type": "string"
+        },
+        {
+          "name": "departement_code",
+          "type": "string"
+        }
+      ],
+      "structure_administrative": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "old_main_structure_id",
+          "type": "int32"
+        },
+        {
+          "name": "siret",
+          "type": "string(14)"
+        },
+        {
+          "name": "ridet",
+          "type": "string(10)"
+        },
+        {
+          "name": "denomination_sirene",
+          "type": "string"
+        },
+        {
+          "name": "rna",
+          "type": "string(10)"
+        },
+        {
+          "name": "denomination_antenne",
+          "type": "string(255)"
+        },
+        {
+          "name": "adresse_id",
+          "type": "int32"
+        },
+        {
+          "name": "structure_coop_id",
+          "type": "uuid"
+        },
+        {
+          "name": "structure_tp_id",
+          "type": "int32"
+        },
+        {
+          "name": "structure_ac_id",
+          "type": "uuid"
+        },
+        {
+          "name": "etat_administratif",
+          "type": "string"
+        },
+        {
+          "name": "code_activite_principale",
+          "type": "string(6)"
+        },
+        {
+          "name": "categorie_juridique",
+          "type": "string(4)"
+        },
+        {
+          "name": "publique",
+          "type": "boolean"
+        },
+        {
+          "name": "nb_mandats_ac",
+          "type": "int32"
+        },
+        {
+          "name": "contact_site_web",
+          "type": "string"
+        },
+        {
+          "name": "contact_telephone",
+          "type": "string"
+        },
+        {
+          "name": "last_sirene_enrich_at",
+          "type": "date"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_coop",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_idposte",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at_ac",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "structure_merge_log": [
+        {
+          "name": "id",
+          "type": "int64"
+        },
+        {
+          "name": "merged_at",
+          "type": "timestamp('UTC', 6)"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "dag_id",
+          "type": "string"
+        },
+        {
+          "name": "run_id",
+          "type": "string"
+        },
+        {
+          "name": "task_id",
+          "type": "string"
+        },
+        {
+          "name": "map_index",
+          "type": "int32"
+        },
+        {
+          "name": "try_number",
+          "type": "int32"
+        },
+        {
+          "name": "winner_id",
+          "type": "int32"
+        },
+        {
+          "name": "loser_id",
+          "type": "int32"
+        },
+        {
+          "name": "similarity_score",
+          "type": "decimal"
+        },
+        {
+          "name": "similarity_threshold",
+          "type": "decimal"
+        },
+        {
+          "name": "winner_before",
+          "type": "jsonb"
+        },
+        {
+          "name": "loser_before",
+          "type": "jsonb"
+        },
+        {
+          "name": "winner_after",
+          "type": "jsonb"
+        },
+        {
+          "name": "moved_identifiers",
+          "type": "jsonb"
+        },
+        {
+          "name": "error_message",
+          "type": "string"
+        }
+      ],
+      "utilisateur": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "role",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=min.\"Role\"))"
+        },
+        {
+          "name": "date_de_creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "derniere_connexion",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "invite_le",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "is_super_admin",
+          "type": "boolean"
+        },
+        {
+          "name": "is_supprime",
+          "type": "boolean"
+        },
+        {
+          "name": "departement_code",
+          "type": "string"
+        },
+        {
+          "name": "region_code",
+          "type": "string"
+        },
+        {
+          "name": "groupement_id",
+          "type": "int32"
+        },
+        {
+          "name": "structure_id",
+          "type": "int32"
+        },
+        {
+          "name": "old_structure_id",
+          "type": "int32"
+        }
+      ]
+    },
+    "main": {
+      "activites_coop": [
+        {
+          "name": "coop_id",
+          "type": "uuid"
+        },
+        {
+          "name": "lieu_id",
+          "type": "int32"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "date"
+        },
+        {
+          "name": "duree",
+          "type": "int32"
+        },
+        {
+          "name": "lieu_code_insee",
+          "type": "string"
+        },
+        {
+          "name": "type_lieu",
+          "type": "string"
+        },
+        {
+          "name": "autonomie",
+          "type": "string"
+        },
+        {
+          "name": "structure_de_redirection",
+          "type": "string"
+        },
+        {
+          "name": "oriente_vers_structure",
+          "type": "boolean"
+        },
+        {
+          "name": "precisions_demarche",
+          "type": "string"
+        },
+        {
+          "name": "degre_de_finalisation_demarche",
+          "type": "string(50)"
+        },
+        {
+          "name": "titre_atelier",
+          "type": "string"
+        },
+        {
+          "name": "niveau_atelier",
+          "type": "string"
+        },
+        {
+          "name": "accompagnements",
+          "type": "int32"
+        },
+        {
+          "name": "thematiques",
+          "type": "array<string>"
+        },
+        {
+          "name": "materiels",
+          "type": "array<string>"
+        },
+        {
+          "name": "thematiques_demarche_administrative",
+          "type": "array<string>"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "periode",
+          "type": "date"
+        },
+        {
+          "name": "created_at_coop",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "updated_at_coop",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "beneficiaires",
+          "type": "jsonb"
+        }
+      ],
+      "adresse": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "geom",
+          "type": "point:geometry;4326"
+        },
+        {
+          "name": "clef_interop",
+          "type": "string(50)"
+        },
+        {
+          "name": "code_ban",
+          "type": "uuid"
+        },
+        {
+          "name": "code_postal",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5) NOT NULL"
+        },
+        {
+          "name": "nom_commune",
+          "type": "string(255) NOT NULL"
+        },
+        {
+          "name": "nom_voie",
+          "type": "string(255)"
+        },
+        {
+          "name": "repetition",
+          "type": "string(10)"
+        },
+        {
+          "name": "numero_voie",
+          "type": "int16"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "departement",
+          "type": "string(3)"
+        }
+      ],
+      "contact_structure_administrative": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "structure_administrative_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "contact_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "contrat": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "date_debut",
+          "type": "date"
+        },
+        {
+          "name": "date_fin",
+          "type": "date"
+        },
+        {
+          "name": "date_rupture",
+          "type": "date"
+        },
+        {
+          "name": "type",
+          "type": "string(3)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "structure_id",
+          "type": "int32"
+        }
+      ],
+      "formation": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "label",
+          "type": "string(11)"
+        },
+        {
+          "name": "parcours",
+          "type": "string(4)"
+        },
+        {
+          "name": "lot",
+          "type": "int16"
+        },
+        {
+          "name": "marche_formation",
+          "type": "string(8)"
+        },
+        {
+          "name": "lieu",
+          "type": "string(255)"
+        },
+        {
+          "name": "date_debut",
+          "type": "date"
+        },
+        {
+          "name": "date_fin",
+          "type": "date"
+        },
+        {
+          "name": "pix",
+          "type": "boolean"
+        },
+        {
+          "name": "remn",
+          "type": "boolean"
+        },
+        {
+          "name": "observations",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "personne_affectations_emploi": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "structure_administrative_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "source",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "est_active",
+          "type": "boolean NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "personne_affectations_lieu": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32"
+        },
+        {
+          "name": "lieu_id",
+          "type": "int32"
+        },
+        {
+          "name": "source",
+          "type": "string"
+        },
+        {
+          "name": "est_active",
+          "type": "boolean"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "poste": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "poste_conum_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "structure_id",
+          "type": "int32"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32"
+        },
+        {
+          "name": "typologie",
+          "type": "string(6)"
+        },
+        {
+          "name": "date_attribution",
+          "type": "date NOT NULL"
+        },
+        {
+          "name": "date_rendu_poste",
+          "type": "date"
+        },
+        {
+          "name": "poste_renouvele",
+          "type": "boolean"
+        },
+        {
+          "name": "action_coselec",
+          "type": "string(255)"
+        },
+        {
+          "name": "origine_transfert",
+          "type": "int32"
+        },
+        {
+          "name": "etat",
+          "type": "string(6)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "etat_instruction_v1",
+          "type": "string"
+        },
+        {
+          "name": "etat_instruction_v2",
+          "type": "string"
+        }
+      ],
+      "subvention": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "poste_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "date_debut_convention_dgcl",
+          "type": "date"
+        },
+        {
+          "name": "date_debut_financement_dgcl",
+          "type": "date"
+        },
+        {
+          "name": "date_fin_convention_dgcl",
+          "type": "date"
+        },
+        {
+          "name": "date_fin_financement_dgcl",
+          "type": "date"
+        },
+        {
+          "name": "mois_utilises_periode_financement_dgcl",
+          "type": "int16"
+        },
+        {
+          "name": "date_debut_convention_ditp",
+          "type": "date"
+        },
+        {
+          "name": "date_debut_financement_ditp",
+          "type": "date"
+        },
+        {
+          "name": "date_fin_convention_ditp",
+          "type": "date"
+        },
+        {
+          "name": "date_fin_financement_ditp",
+          "type": "date"
+        },
+        {
+          "name": "mois_utilises_periode_financement_ditp",
+          "type": "int16"
+        },
+        {
+          "name": "date_debut_convention_dge",
+          "type": "date"
+        },
+        {
+          "name": "date_debut_financement_dge",
+          "type": "date"
+        },
+        {
+          "name": "date_fin_convention_dge",
+          "type": "date"
+        },
+        {
+          "name": "date_fin_financement_dge",
+          "type": "date"
+        },
+        {
+          "name": "mois_utilises_periode_financement_dge",
+          "type": "int16"
+        },
+        {
+          "name": "montant_subvention_v1",
+          "type": "int64"
+        },
+        {
+          "name": "montant_versement_v1",
+          "type": "int64"
+        },
+        {
+          "name": "montant_avoir_v1",
+          "type": "int64"
+        },
+        {
+          "name": "montant_bonification_v2",
+          "type": "int64"
+        },
+        {
+          "name": "montant_subvention_v2",
+          "type": "int64"
+        },
+        {
+          "name": "montant_avoir_v2",
+          "type": "int64"
+        },
+        {
+          "name": "versement_1_v2",
+          "type": "int64"
+        },
+        {
+          "name": "versement_2_v2",
+          "type": "int64"
+        },
+        {
+          "name": "versement_3_v2",
+          "type": "int64"
+        },
+        {
+          "name": "date_versement_1_v2",
+          "type": "date"
+        },
+        {
+          "name": "date_versement_2_v2",
+          "type": "date"
+        },
+        {
+          "name": "date_versement_3_v2",
+          "type": "date"
+        }
+      ]
+    },
+    "min": {
+      "action": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "besoins",
+          "type": "array<string>"
+        },
+        {
+          "name": "createur_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "contexte",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "description",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "budget_global",
+          "type": "float64 NOT NULL"
+        },
+        {
+          "name": "feuille_de_route_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "date_de_debut",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "date_de_fin",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "derniere_modification",
+          "type": "timestamp(3) NOT NULL"
+        }
+      ],
+      "beneficiaire_subvention": [
+        {
+          "name": "demande_de_subvention_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "membre_id",
+          "type": "string NOT NULL"
+        }
+      ],
+      "co_financement": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "id_action",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "id_membre",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "montant",
+          "type": "float64 NOT NULL"
+        }
+      ],
+      "comite": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "gouvernance_departement_code",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "derniere_edition",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "type",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "frequence",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "commentaire",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "editeur_utilisateur_id",
+          "type": "int32 NOT NULL"
+        }
+      ],
+      "demande_de_subvention": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "createur_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "statut",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "subvention_demandee",
+          "type": "float64 NOT NULL"
+        },
+        {
+          "name": "subvention_etp",
+          "type": "float64"
+        },
+        {
+          "name": "subvention_prestation",
+          "type": "float64"
+        },
+        {
+          "name": "action_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "enveloppe_financement_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "derniere_modification",
+          "type": "timestamp(3) NOT NULL"
+        }
+      ],
+      "departement": [
+        {
+          "name": "code",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "region_code",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string NOT NULL"
+        }
+      ],
+      "departement_enveloppe": [
+        {
+          "name": "departement_code",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "enveloppe_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "plafond",
+          "type": "float64 NOT NULL"
+        }
+      ],
+      "enveloppe_financement": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "libelle",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "date_debut",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "date_fin",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "montant",
+          "type": "float64 NOT NULL"
+        }
+      ],
+      "feuille_de_route": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "gouvernance_departement_code",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "porteur_id",
+          "type": "string"
+        },
+        {
+          "name": "old_uuid",
+          "type": "uuid"
+        },
+        {
+          "name": "derniere_edition",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "perimetre_geographique",
+          "type": "string"
+        },
+        {
+          "name": "note_de_contextualisation",
+          "type": "string"
+        },
+        {
+          "name": "editeur_utilisateur_id",
+          "type": "int32"
+        }
+      ],
+      "groupement": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string NOT NULL"
+        }
+      ],
+      "porteur_action": [
+        {
+          "name": "action_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "membre_id",
+          "type": "string NOT NULL"
+        }
+      ],
+      "postes_conseiller_numerique_synthese": [
+        {
+          "name": "poste_conum_id",
+          "type": "int32"
+        },
+        {
+          "name": "poste_id",
+          "type": "int32"
+        },
+        {
+          "name": "structure_id",
+          "type": "int32"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32"
+        },
+        {
+          "name": "etat",
+          "type": "string(6)"
+        },
+        {
+          "name": "typologie",
+          "type": "string(6)"
+        },
+        {
+          "name": "est_coordinateur",
+          "type": "boolean"
+        },
+        {
+          "name": "enveloppes",
+          "type": "string"
+        },
+        {
+          "name": "date_fin_convention",
+          "type": "date"
+        },
+        {
+          "name": "date_fin_contrat",
+          "type": "date"
+        },
+        {
+          "name": "bonification",
+          "type": "boolean"
+        },
+        {
+          "name": "montant_subvention_cumule",
+          "type": "int64"
+        },
+        {
+          "name": "montant_versement_cumule",
+          "type": "int64"
+        },
+        {
+          "name": "subvention_v1",
+          "type": "int64"
+        },
+        {
+          "name": "bonification_v1",
+          "type": "int32"
+        },
+        {
+          "name": "versement_cumule_v1",
+          "type": "int64"
+        },
+        {
+          "name": "subvention_v2",
+          "type": "int64"
+        },
+        {
+          "name": "bonification_v2",
+          "type": "int64"
+        },
+        {
+          "name": "versement_cumule_v2",
+          "type": "int64"
+        },
+        {
+          "name": "nb_contrats_en_cours",
+          "type": "int64"
+        }
+      ],
+      "region": [
+        {
+          "name": "code",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string NOT NULL"
+        }
+      ]
+    },
+    "reference": {
+      "categories_juridiques": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code",
+          "type": "string(4) NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string(150) NOT NULL"
+        },
+        {
+          "name": "niveau",
+          "type": "int16 NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
+      "naf": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "code",
+          "type": "string(6) NOT NULL"
+        },
+        {
+          "name": "intitule_long",
+          "type": "string(150) NOT NULL"
+        },
+        {
+          "name": "intitule_court",
+          "type": "string(65) NOT NULL"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ]
+    }
+  }
+}
