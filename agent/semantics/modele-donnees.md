@@ -31,8 +31,10 @@ Les colonnes exactes sont dans `databases/…/columns.md` ; ici, le sens et les 
   (1353 existe des deux côtés et ne désigne pas la même chose). Toujours qualifier.
 - `llm.evenement.entity_id` est du **texte** : id numérique de structure ou id texte de
   membre selon `source_key`. Caster avant de joindre.
-- `min.membre.old_structure_id` / `min.utilisateur.old_structure_id` pointent
-  `llm.structure` (`min.structure`, dépréciée). Les `structure_id` courants pointent
+- `llm.membre.old_structure_id` / `llm.utilisateur.old_structure_id` renvoient à l'ancien
+  référentiel `min.structure`, **hors contexte** (déprécié, id en collision avec les
+  structures administratives). Ne jamais nommer une structure autrement que par
+  `llm.structure_administrative.denomination_sirene`. Les `structure_id` courants pointent
   `llm.structure_administrative`.
 
 ## Relations utiles
@@ -56,6 +58,21 @@ llm.gouvernance.departement_code ───────► llm.membre.gouvernance
 supprimée en V123). Pour rattacher un lieu à un employeur : lieu → personnes affectées
 au lieu → employeur de ces personnes. `llm.lieu_inclusion.siret_a_l_enrichissement` est
 un SIRET déclaré à l'import, sans garantie.
+
+## Colonnes exactes des vues d'historique
+
+À utiliser telles quelles, sans deviner (`status` et non `statut`, `action` et non `type`) :
+
+| Vue | Colonnes |
+|-----|----------|
+| `llm.structure_merge_log` | `id`, `merged_at`, `status`, `dag_id`, `run_id`, `task_id`, `map_index`, `try_number`, `winner_id`, `loser_id`, `similarity_score`, `similarity_threshold`, `winner_before`, `loser_before`, `winner_after`, `moved_identifiers`, `error_message` |
+| `llm.personne_merge_log` | idem + `match_type` (après `try_number`) |
+| `llm.evenement` | `id`, `ingested_at`, `source_key`, `action`, `entity_id` (texte), `user_id`, `valeur_avant`, `valeur_apres` |
+
+Chercher une structure dans les fusions : `WHERE winner_id = X OR loser_id = X`, trier par
+`merged_at`. Chercher une entité dans le journal MIN : `WHERE entity_id = 'X'` (texte),
+trier par `ingested_at`. Les intitulés d'une fusion se lisent dans
+`winner_before ->> 'denomination_sirene'` et `loser_before ->> 'denomination_sirene'`.
 
 ## Cycle de vie : rien n'est vraiment supprimé
 

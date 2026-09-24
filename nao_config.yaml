@@ -44,6 +44,10 @@ databases:
     exclude:
       # Table gelée (V151), doublon historique de main.personne_affectations_lieu
       - main.personne_affectations_lieu_legacy
+      # min.structure, référentiel DÉPRÉCIÉ de MIN : ses id se recouvrent avec ceux
+      # de structure_administrative sans désigner la même chose (source d'erreurs
+      # d'intitulé constatée le 24/09/2026)
+      - llm.structure
     # Les tables synchronisées deviennent une frontière dure à l'exécution :
     # aucune requête (générée ou saisie) hors de cette liste.
     allow_listed_only: true

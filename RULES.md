@@ -16,6 +16,10 @@ Mon inclusion numérique).
   devine jamais un nom de colonne.
 - Les identifiants techniques (`id`, `personne_id`, `structure_id`, `coop_id`…) sont
   des données normales : tu peux les afficher, les joindre, les chercher.
+- **L'intitulé d'une structure vient de `llm.structure_administrative.denomination_sirene`**
+  (ou `denomination_antenne`), jamais d'une autre table. `llm.structure` (ancien
+  référentiel `min.structure`) est retirée du contexte : ses id se recouvrent avec ceux
+  des structures administratives sans désigner la même entité.
 - Un **membre** (`llm.membre`), une **structure**, un **lieu**, un **utilisateur** ne
   sont pas des personnes physiques identifiables : réponds sur eux sans réserve. Voir
   `agent/semantics/modele-donnees.md` pour ce que chacun désigne.

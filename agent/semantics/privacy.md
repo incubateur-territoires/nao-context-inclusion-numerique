@@ -43,7 +43,7 @@ identifiables.
 | `llm.activites_coop` | `main.activites_coop` | `precisions_demarche` (texte libre saisi par les médiateurs) |
 | `llm.utilisateur` | `min.utilisateur` | nom, prénom, courriels, `sso_id`, téléphone |
 | `llm.membre` | `min.membre` | `contact`, `contact_technique` |
-| `llm.structure` | `min.structure` (dépréciée) | `contact` |
+| `llm.structure` | `min.structure` (dépréciée) | `contact` — **exclue du contexte** (id en collision avec les structures administratives) |
 | `llm.gouvernance` | `min.gouvernance` | `note_privee`, son éditeur ; `note_de_contexte` masquée |
 | `llm.structure_merge_log` | `audit.structure_merge_log` | clés nominatives des instantanés |
 | `llm.personne_merge_log` | `audit.personne_merge_log` | idem |
