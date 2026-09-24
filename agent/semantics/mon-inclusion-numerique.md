@@ -70,9 +70,9 @@ Tables métier gouvernance et ce que l'agent en voit (détail dans `agent/semant
 
 MIN **lit** intensivement `main.*` pour les statistiques et la cartographie, notamment :
 
-- `main.activites_coop` — activités Coop numérique (statistiques médiateurs)
+- `main.activites_coop` — activités Coop numérique (statistiques médiateurs ; l'agent passe par `llm.activites_coop`)
 - `main.personne`, `min.personne_enrichie` — résolution des filtres médiateurs (l'agent passe par `llm.personne` / `llm.personne_enrichie`)
-- `main.structure_administrative`, `main.lieu_inclusion`, `main.adresse` — structures, lieux, adresses (l'agent passe par `llm.structure_administrative`, `llm.lieu_inclusion`, `main.adresse`)
+- `main.structure_administrative`, `main.lieu_inclusion`, `main.adresse` — structures, lieux, adresses (l'agent passe par `llm.structure_administrative`, `llm.lieu_inclusion`, `llm.adresse`)
 
 Documentation détaillée des mappings : `docs/couche-anticorruption-statistiques.md` dans le repo.
 

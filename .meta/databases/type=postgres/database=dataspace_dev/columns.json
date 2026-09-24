@@ -306,6 +306,158 @@
       ]
     },
     "llm": {
+      "activites_coop": [
+        {
+          "name": "coop_id",
+          "type": "uuid"
+        },
+        {
+          "name": "lieu_id",
+          "type": "int32"
+        },
+        {
+          "name": "personne_id",
+          "type": "int32"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "date"
+        },
+        {
+          "name": "duree",
+          "type": "int32"
+        },
+        {
+          "name": "lieu_code_insee",
+          "type": "string"
+        },
+        {
+          "name": "type_lieu",
+          "type": "string"
+        },
+        {
+          "name": "autonomie",
+          "type": "string"
+        },
+        {
+          "name": "structure_de_redirection",
+          "type": "string"
+        },
+        {
+          "name": "oriente_vers_structure",
+          "type": "boolean"
+        },
+        {
+          "name": "degre_de_finalisation_demarche",
+          "type": "string(50)"
+        },
+        {
+          "name": "titre_atelier",
+          "type": "string"
+        },
+        {
+          "name": "niveau_atelier",
+          "type": "string"
+        },
+        {
+          "name": "accompagnements",
+          "type": "int32"
+        },
+        {
+          "name": "thematiques",
+          "type": "array<string>"
+        },
+        {
+          "name": "materiels",
+          "type": "array<string>"
+        },
+        {
+          "name": "thematiques_demarche_administrative",
+          "type": "array<string>"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "periode",
+          "type": "date"
+        },
+        {
+          "name": "created_at_coop",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "updated_at_coop",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "beneficiaires",
+          "type": "jsonb"
+        }
+      ],
+      "adresse": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "geom",
+          "type": "point:geometry;4326"
+        },
+        {
+          "name": "clef_interop",
+          "type": "string(50)"
+        },
+        {
+          "name": "code_ban",
+          "type": "uuid"
+        },
+        {
+          "name": "code_postal",
+          "type": "string(5)"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5)"
+        },
+        {
+          "name": "nom_commune",
+          "type": "string(255)"
+        },
+        {
+          "name": "nom_voie",
+          "type": "string"
+        },
+        {
+          "name": "repetition",
+          "type": "string(10)"
+        },
+        {
+          "name": "numero_voie",
+          "type": "int16"
+        },
+        {
+          "name": "departement",
+          "type": "string(3)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(6)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(6)"
+        }
+      ],
       "contact": [
         {
           "name": "id",
@@ -465,11 +617,11 @@
         },
         {
           "name": "nom",
-          "type": "string(255)"
+          "type": "string"
         },
         {
           "name": "nom_usage",
-          "type": "string(255)"
+          "type": "string"
         },
         {
           "name": "adresse_id",
@@ -1154,162 +1306,6 @@
       ]
     },
     "main": {
-      "activites_coop": [
-        {
-          "name": "coop_id",
-          "type": "uuid"
-        },
-        {
-          "name": "lieu_id",
-          "type": "int32"
-        },
-        {
-          "name": "personne_id",
-          "type": "int32"
-        },
-        {
-          "name": "type",
-          "type": "string"
-        },
-        {
-          "name": "date",
-          "type": "date"
-        },
-        {
-          "name": "duree",
-          "type": "int32"
-        },
-        {
-          "name": "lieu_code_insee",
-          "type": "string"
-        },
-        {
-          "name": "type_lieu",
-          "type": "string"
-        },
-        {
-          "name": "autonomie",
-          "type": "string"
-        },
-        {
-          "name": "structure_de_redirection",
-          "type": "string"
-        },
-        {
-          "name": "oriente_vers_structure",
-          "type": "boolean"
-        },
-        {
-          "name": "precisions_demarche",
-          "type": "string"
-        },
-        {
-          "name": "degre_de_finalisation_demarche",
-          "type": "string(50)"
-        },
-        {
-          "name": "titre_atelier",
-          "type": "string"
-        },
-        {
-          "name": "niveau_atelier",
-          "type": "string"
-        },
-        {
-          "name": "accompagnements",
-          "type": "int32"
-        },
-        {
-          "name": "thematiques",
-          "type": "array<string>"
-        },
-        {
-          "name": "materiels",
-          "type": "array<string>"
-        },
-        {
-          "name": "thematiques_demarche_administrative",
-          "type": "array<string>"
-        },
-        {
-          "name": "created_at",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "updated_at",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "periode",
-          "type": "date"
-        },
-        {
-          "name": "created_at_coop",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "updated_at_coop",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "beneficiaires",
-          "type": "jsonb"
-        }
-      ],
-      "adresse": [
-        {
-          "name": "id",
-          "type": "int32 NOT NULL"
-        },
-        {
-          "name": "geom",
-          "type": "point:geometry;4326"
-        },
-        {
-          "name": "clef_interop",
-          "type": "string(50)"
-        },
-        {
-          "name": "code_ban",
-          "type": "uuid"
-        },
-        {
-          "name": "code_postal",
-          "type": "string(5) NOT NULL"
-        },
-        {
-          "name": "code_insee",
-          "type": "string(5) NOT NULL"
-        },
-        {
-          "name": "nom_commune",
-          "type": "string(255) NOT NULL"
-        },
-        {
-          "name": "nom_voie",
-          "type": "string(255)"
-        },
-        {
-          "name": "repetition",
-          "type": "string(10)"
-        },
-        {
-          "name": "numero_voie",
-          "type": "int16"
-        },
-        {
-          "name": "created_at",
-          "type": "timestamp(6)"
-        },
-        {
-          "name": "updated_at",
-          "type": "timestamp(6)"
-        },
-        {
-          "name": "departement",
-          "type": "string(3)"
-        }
-      ],
       "contact_structure_administrative": [
         {
           "name": "id",

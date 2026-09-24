@@ -28,6 +28,8 @@ INTERDITES = {
     "main.structure_administrative",
     "main.lieu_inclusion",
     "main.lieu_appariement",
+    "main.adresse",
+    "main.activites_coop",
     "min.utilisateur",
     "min.membre",
     "min.structure",

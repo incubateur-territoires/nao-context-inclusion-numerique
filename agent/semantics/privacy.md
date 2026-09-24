@@ -29,16 +29,18 @@ identifiables.
 
 ## Périmètre lu par `nao_ro`
 
-### Schéma `llm` — vues curées (13)
+### Schéma `llm` — vues curées (15)
 
 | Vue | Source | Ce qui est retiré |
 |-----|--------|-------------------|
-| `llm.personne` | `main.personne` | prénom, nom, `contact`, `edited_by`, `deleted_by` |
+| `llm.personne` | `main.personne` | prénom, nom, `contact`, `edited_by`, `deleted_by` ; `profession_ac` mis à NULL s'il contient un courriel |
 | `llm.personne_enrichie` | `min.personne_enrichie` | idem + garde les drapeaux d'activité |
 | `llm.contact` | `main.contact` | nom, prénom, email, téléphone (reste `fonction`) |
 | `llm.structure_administrative` | `main.structure_administrative` | nom / prénom / courriels du `contact` (garde site web + téléphone d'organisation) |
-| `llm.lieu_inclusion` | `main.lieu_inclusion` | courriels de gestionnaire / référent, `presentation_*`, `import_warnings` (garde site web, téléphone, courriel générique du lieu) |
+| `llm.lieu_inclusion` | `main.lieu_inclusion` | courriels de gestionnaire / référent, `presentation_*`, `import_warnings` ; `nom`, `horaires`, `prise_rdv`, `complement_adresse` masqués (garde site web, téléphone, courriel générique du lieu) |
 | `llm.lieu_appariement` | `main.lieu_appariement` | `decide_par` (courriel du décideur) |
+| `llm.adresse` | `main.adresse` | `nom_voie` mis à NULL quand la valeur importée n'était pas un nom de voie (bloc d'adresse brut avec nom / courriel) |
+| `llm.activites_coop` | `main.activites_coop` | `precisions_demarche` (texte libre saisi par les médiateurs) |
 | `llm.utilisateur` | `min.utilisateur` | nom, prénom, courriels, `sso_id`, téléphone |
 | `llm.membre` | `min.membre` | `contact`, `contact_technique` |
 | `llm.structure` | `min.structure` (dépréciée) | `contact` |
@@ -49,8 +51,8 @@ identifiables.
 
 ### Tables en accès direct (pseudonymisées : identifiants, jamais de nominatif)
 
-- `main` : `poste`, `contrat`, `formation`, `subvention`, `activites_coop`,
-  `personne_affectations_emploi`, `personne_affectations_lieu`, `adresse`,
+- `main` : `poste`, `contrat`, `formation`, `subvention`,
+  `personne_affectations_emploi`, `personne_affectations_lieu`,
   `contact_structure_administrative`.
 - `min` : `action`, `beneficiaire_subvention`, `co_financement`, `comite`,
   `demande_de_subvention`, `feuille_de_route`, `porteur_action`,
@@ -61,7 +63,7 @@ identifiables.
 ### Sans accès (et sans remplaçant)
 
 `main.personne`, `main.contact`, `main.structure`, `main.structure_administrative`,
-`main.lieu_inclusion`, `main.lieu_appariement`, `min.utilisateur`, `min.membre`,
+`main.lieu_inclusion`, `main.lieu_appariement`, `main.adresse`, `main.activites_coop`, `min.utilisateur`, `min.membre`,
 `min.structure`, `min.personne_enrichie`, `min.contact_membre_gouvernance`,
 `min.gouvernance`, `min._prisma_migrations`, et tous les schémas `source`, `staging`,
 `audit`, `coop`, `import`, `api`, `dataviz`.

@@ -20,8 +20,6 @@ databases:
       - admin.*
       - reference.*
       # Entrepôt : tables pseudonymisées (identifiants techniques, pas de nominatif)
-      - main.activites_coop
-      - main.adresse
       - main.contact_structure_administrative
       - main.contrat
       - main.formation

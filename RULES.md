@@ -41,7 +41,7 @@ Mon inclusion numérique).
   lieu d'inclusion, `m` membre, `p` personne).
 - Désigne une personne par son `id`, son rôle et son territoire ; n'invente jamais une
   identité et ne cherche pas à en reconstituer une.
-- `main.activites_coop` fait plusieurs millions de lignes : agrège ou filtre par
+- `llm.activites_coop` fait plusieurs millions de lignes : agrège ou filtre par
   période, jamais de `SELECT *`.
 
 ## Où chercher quoi

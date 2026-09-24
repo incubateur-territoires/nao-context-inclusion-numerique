@@ -17,7 +17,7 @@ Les colonnes exactes sont dans `databases/…/columns.md` ; ici, le sens et les 
 | Utilisateur MIN | `llm.utilisateur` | `id` entier | Compte de l'application Mon inclusion numérique. Identité masquée : rôle, territoire, dates. |
 | Gouvernance | `llm.gouvernance` | `departement_code` | Une par département ; note de contexte. |
 | Feuille de route, action, comité, demande de subvention | `min.*` | `id` | Pilotage France Numérique Ensemble par département. |
-| Activité Coop | `main.activites_coop` | `coop_id` | Un accompagnement déclaré par un médiateur (individuel ou collectif). Millions de lignes. |
+| Activité Coop | `llm.activites_coop` | `coop_id` | Un accompagnement déclaré par un médiateur (individuel ou collectif). Millions de lignes. |
 
 ## Identifiants : formes et pièges
 
@@ -46,8 +46,8 @@ main.contrat.personne_id / structure_id ► llm.personne / llm.structure_adminis
 main.subvention.poste_id ───────────────► main.poste.id
 main.personne_affectations_emploi ──────► personne_id ⋈ structure_administrative_id (est_active)
 main.personne_affectations_lieu ────────► personne_id ⋈ lieu_id (est_active)
-main.activites_coop ────────────────────► personne_id, lieu_id (NULL si à distance / à domicile), lieu_code_insee
-llm.structure_administrative.adresse_id ► main.adresse.id  (idem llm.lieu_inclusion.adresse_id)
+llm.activites_coop ─────────────────────► personne_id, lieu_id (NULL si à distance / à domicile), lieu_code_insee
+llm.structure_administrative.adresse_id ► llm.adresse.id   (idem llm.lieu_inclusion.adresse_id)
 llm.evenement.user_id ──────────────────► llm.utilisateur.id
 llm.gouvernance.departement_code ───────► llm.membre.gouvernance_departement_code
 ```
@@ -85,11 +85,11 @@ un seuil = appariement automatique.
 - `llm.membre.categorie_membre` : `structure`, `epci`, `commune`, `departement`,
   `prefecture_departementale`, `prefecture_regionale`… ; `statut` : `candidat`,
   `confirme`, `supprimer`.
-- `main.activites_coop.type` : `individuel`, `collectif`.
+- `llm.activites_coop.type` : `individuel`, `collectif`.
 
 ## Territoires
 
 `admin.commune` (code INSEE, EPCI, département), `admin.epci`, `admin.departement`,
 `admin.region`, `admin.zonage` (QPV, FRR…), `admin.ifn_*` (indice de fragilité
 numérique). Rattacher une structure ou un lieu à un territoire : `adresse_id` →
-`main.adresse.code_insee` → `admin.commune`.
+`llm.adresse.code_insee` → `admin.commune`.
