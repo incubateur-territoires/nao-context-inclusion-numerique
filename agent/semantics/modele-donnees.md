@@ -31,11 +31,10 @@ Les colonnes exactes sont dans `databases/…/columns.md` ; ici, le sens et les 
   (1353 existe des deux côtés et ne désigne pas la même chose). Toujours qualifier.
 - `llm.evenement.entity_id` est du **texte** : id numérique de structure ou id texte de
   membre selon `source_key`. Caster avant de joindre.
-- `llm.membre.old_structure_id` / `llm.utilisateur.old_structure_id` renvoient à l'ancien
-  référentiel `min.structure`, **hors contexte** (déprécié, id en collision avec les
-  structures administratives). Ne jamais nommer une structure autrement que par
-  `llm.structure_administrative.denomination_sirene`. Les `structure_id` courants pointent
-  `llm.structure_administrative`.
+- Ne jamais nommer une structure autrement que par
+  `llm.structure_administrative.denomination_sirene`. Les `structure_id` de
+  `llm.membre` et `llm.utilisateur` pointent `llm.structure_administrative` (l'ancien
+  référentiel `min.structure` et ses `old_structure_id` ont été supprimés, V177).
 
 ## Relations utiles
 
