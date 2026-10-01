@@ -1568,10 +1568,6 @@
           "type": "string"
         },
         {
-          "name": "phone_number",
-          "type": "string"
-        },
-        {
           "name": "verticale",
           "type": "string"
         },
