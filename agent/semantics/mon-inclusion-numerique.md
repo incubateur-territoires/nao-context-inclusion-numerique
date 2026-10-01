@@ -42,7 +42,7 @@ flowchart TB
 |--------|--------------|-------------------|
 | `admin`, `main`, `reference`, `audit` | Data Space | Flyway |
 | `min` | MIN | Prisma |
-| `api`, `auth`, `import`, `dataviz`, `pseudonymisation` | Data Space | Flyway (non utilisé côté MIN) |
+| `api`, `auth`, `import`, `dataviz` | Data Space | Flyway (non utilisé côté MIN) |
 
 En production, MIN ne joue **pas** les migrations Prisma sur les schémas non-`min` : seul le schéma `min` est sous sa responsabilité. Voir `docs/integration-dataspace.md` dans le repo synchronisé.
 
@@ -63,7 +63,6 @@ Tables métier gouvernance et ce que l'agent en voit (détail dans `agent/semant
 | `min.departement`, `min.region`, `min.groupement` | Référentiels territoriaux | accès direct |
 | `min.enveloppe_financement`, `min.departement_enveloppe` | Enveloppes budgétaires | accès direct |
 | `min.postes_conseiller_numerique_synthese` | Synthèse postes CN (subventions, versements) | accès direct |
-| `min.structure` | Ancien référentiel de structures, **déprécié** (les `structure_id` pointent `main.structure_administrative`) | `llm.structure`, à ne plus utiliser |
 | `min.personne_enrichie` | Vue enrichie médiateurs | `llm.personne_enrichie` (drapeaux d'activité, identité masquée) |
 
 ### Schéma `main` (lecture MIN, écriture Data Space)
