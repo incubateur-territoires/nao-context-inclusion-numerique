@@ -17,7 +17,7 @@ Membres des gouvernances departementales. id = identifiant metier TEXTE (ex. epc
 |----------|-------|
 | **Row Count** | 2,215 |
 
-## Columns (12)
+## Columns (11)
 
 - id (string)
 - gouvernance_departement_code (string)
@@ -28,7 +28,6 @@ Membres des gouvernances departementales. id = identifiant metier TEXTE (ex. epc
 - nom (string)
 - siret_ridet (string)
 - old_uuid (uuid)
-- old_structure_id (int32)
 - structure_id (int32)
 - date_suppression (timestamp(3))
 

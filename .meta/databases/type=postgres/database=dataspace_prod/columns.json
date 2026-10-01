@@ -480,6 +480,1432 @@
           "type": "timestamp(6)"
         }
       ],
+      "coop_accompagnements": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "beneficiaire_id",
+          "type": "uuid"
+        },
+        {
+          "name": "activite_id",
+          "type": "uuid"
+        },
+        {
+          "name": "premier_accompagnement",
+          "type": "boolean"
+        }
+      ],
+      "coop_activite_coordination": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "coordinateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "nom",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "type": "date"
+        },
+        {
+          "name": "duree",
+          "type": "int32"
+        },
+        {
+          "name": "echelon_territorial",
+          "type": "string"
+        },
+        {
+          "name": "mediateurs",
+          "type": "int32"
+        },
+        {
+          "name": "structures",
+          "type": "int32"
+        },
+        {
+          "name": "autres_acteurs",
+          "type": "int32"
+        },
+        {
+          "name": "type_animation",
+          "type": "string"
+        },
+        {
+          "name": "type_animation_autre",
+          "type": "string"
+        },
+        {
+          "name": "initiative",
+          "type": "string"
+        },
+        {
+          "name": "thematiques_animation",
+          "type": "array<string>"
+        },
+        {
+          "name": "thematique_animation_autre",
+          "type": "string"
+        },
+        {
+          "name": "participants",
+          "type": "int32"
+        },
+        {
+          "name": "type_evenement",
+          "type": "string"
+        },
+        {
+          "name": "type_evenement_autre",
+          "type": "string"
+        },
+        {
+          "name": "organisateurs",
+          "type": "array<string>"
+        },
+        {
+          "name": "organisateur_autre",
+          "type": "string"
+        },
+        {
+          "name": "nature_partenariat",
+          "type": "array<string>"
+        },
+        {
+          "name": "nature_partenariat_autre",
+          "type": "string"
+        },
+        {
+          "name": "structures_partenaires",
+          "type": "jsonb"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_activite_coordination_tags": [
+        {
+          "name": "activite_coordination_id",
+          "type": "uuid"
+        },
+        {
+          "name": "tag_id",
+          "type": "uuid"
+        }
+      ],
+      "coop_activite_tags": [
+        {
+          "name": "activite_id",
+          "type": "uuid"
+        },
+        {
+          "name": "tag_id",
+          "type": "uuid"
+        }
+      ],
+      "coop_activites": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "mediateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "date",
+          "type": "date"
+        },
+        {
+          "name": "duree",
+          "type": "int32"
+        },
+        {
+          "name": "structure_id",
+          "type": "uuid"
+        },
+        {
+          "name": "structure_employeuse_id",
+          "type": "uuid"
+        },
+        {
+          "name": "structure_employeuse_main_id",
+          "type": "int32"
+        },
+        {
+          "name": "lieu_code_postal",
+          "type": "string"
+        },
+        {
+          "name": "lieu_commune",
+          "type": "string"
+        },
+        {
+          "name": "lieu_code_insee",
+          "type": "string"
+        },
+        {
+          "name": "type_lieu",
+          "type": "string"
+        },
+        {
+          "name": "autonomie",
+          "type": "string"
+        },
+        {
+          "name": "structure_de_redirection",
+          "type": "string"
+        },
+        {
+          "name": "oriente_vers_structure",
+          "type": "boolean"
+        },
+        {
+          "name": "materiel",
+          "type": "array<string>"
+        },
+        {
+          "name": "thematiques",
+          "type": "array<string>"
+        },
+        {
+          "name": "titre_atelier",
+          "type": "string"
+        },
+        {
+          "name": "niveau",
+          "type": "string"
+        },
+        {
+          "name": "accompagnements_count",
+          "type": "int32"
+        },
+        {
+          "name": "rdv_id",
+          "type": "int32"
+        },
+        {
+          "name": "rdv_service_public_id",
+          "type": "int32"
+        },
+        {
+          "name": "v1_cra_id",
+          "type": "string"
+        },
+        {
+          "name": "v1_cra_id_pg",
+          "type": "int32"
+        },
+        {
+          "name": "v1_permanence_id",
+          "type": "string"
+        },
+        {
+          "name": "v1_structure_id",
+          "type": "string"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_beneficiaires": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "mediateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "anonyme",
+          "type": "boolean"
+        },
+        {
+          "name": "attributions_aleatoires",
+          "type": "boolean"
+        },
+        {
+          "name": "pas_de_telephone",
+          "type": "boolean"
+        },
+        {
+          "name": "commune",
+          "type": "string"
+        },
+        {
+          "name": "commune_code_postal",
+          "type": "string"
+        },
+        {
+          "name": "commune_code_insee",
+          "type": "string"
+        },
+        {
+          "name": "genre",
+          "type": "string"
+        },
+        {
+          "name": "tranche_age",
+          "type": "string"
+        },
+        {
+          "name": "statut_social",
+          "type": "string"
+        },
+        {
+          "name": "accompagnements_count",
+          "type": "int32"
+        },
+        {
+          "name": "import",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "v1_imported",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "fusion_vers_id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_coordinateurs": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "autres_conseillers_v1_coordonnes",
+          "type": "array<string>"
+        },
+        {
+          "name": "derniere_creation_activite",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_cras_conseiller_numerique_v1": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "imported_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "v1_conseiller_numerique_id",
+          "type": "string"
+        },
+        {
+          "name": "canal",
+          "type": "string"
+        },
+        {
+          "name": "activite",
+          "type": "string"
+        },
+        {
+          "name": "nb_participants",
+          "type": "int32"
+        },
+        {
+          "name": "nb_participants_recurrents",
+          "type": "int32"
+        },
+        {
+          "name": "age_moins_12_ans",
+          "type": "int32"
+        },
+        {
+          "name": "age_de_12_a_18_ans",
+          "type": "int32"
+        },
+        {
+          "name": "age_de_18_a_35_ans",
+          "type": "int32"
+        },
+        {
+          "name": "age_de_35_a_60_ans",
+          "type": "int32"
+        },
+        {
+          "name": "age_plus_60_ans",
+          "type": "int32"
+        },
+        {
+          "name": "statut_etudiant",
+          "type": "int32"
+        },
+        {
+          "name": "statut_sans_emploi",
+          "type": "int32"
+        },
+        {
+          "name": "statut_en_emploi",
+          "type": "int32"
+        },
+        {
+          "name": "statut_retraite",
+          "type": "int32"
+        },
+        {
+          "name": "statut_heterogene",
+          "type": "int32"
+        },
+        {
+          "name": "themes",
+          "type": "array<string>"
+        },
+        {
+          "name": "sous_themes_sante",
+          "type": "array<string>"
+        },
+        {
+          "name": "sous_themes_accompagner",
+          "type": "array<string>"
+        },
+        {
+          "name": "sous_themes_equipement_informatique",
+          "type": "array<string>"
+        },
+        {
+          "name": "sous_themes_traitement_texte",
+          "type": "array<string>"
+        },
+        {
+          "name": "duree",
+          "type": "string"
+        },
+        {
+          "name": "duree_minutes",
+          "type": "int32"
+        },
+        {
+          "name": "accompagnement_individuel",
+          "type": "int32"
+        },
+        {
+          "name": "accompagnement_atelier",
+          "type": "int32"
+        },
+        {
+          "name": "accompagnement_redirection",
+          "type": "int32"
+        },
+        {
+          "name": "code_postal",
+          "type": "string"
+        },
+        {
+          "name": "nom_commune",
+          "type": "string"
+        },
+        {
+          "name": "code_commune",
+          "type": "string"
+        },
+        {
+          "name": "date_accompagnement",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "structure_id",
+          "type": "string"
+        },
+        {
+          "name": "structure_id_pg",
+          "type": "int32"
+        },
+        {
+          "name": "structure_type",
+          "type": "string"
+        },
+        {
+          "name": "structure_statut",
+          "type": "string"
+        },
+        {
+          "name": "structure_nom",
+          "type": "string"
+        },
+        {
+          "name": "structure_siret",
+          "type": "string"
+        },
+        {
+          "name": "structure_code_postal",
+          "type": "string"
+        },
+        {
+          "name": "structure_nom_commune",
+          "type": "string"
+        },
+        {
+          "name": "structure_code_commune",
+          "type": "string"
+        },
+        {
+          "name": "structure_code_departement",
+          "type": "string"
+        },
+        {
+          "name": "structure_code_region",
+          "type": "string"
+        },
+        {
+          "name": "permanence_id",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_id",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_id_pg",
+          "type": "int32"
+        },
+        {
+          "name": "permanence_nom_enseigne",
+          "type": "string"
+        },
+        {
+          "name": "permanence_adresse",
+          "type": "string"
+        },
+        {
+          "name": "permanence_code_postal",
+          "type": "string"
+        },
+        {
+          "name": "permanence_nom_commune",
+          "type": "string"
+        },
+        {
+          "name": "permanence_code_commune",
+          "type": "string"
+        },
+        {
+          "name": "permanence_latitude",
+          "type": "float64"
+        },
+        {
+          "name": "permanence_longitude",
+          "type": "float64"
+        },
+        {
+          "name": "permanence_siret",
+          "type": "string"
+        },
+        {
+          "name": "permanence_site_web",
+          "type": "string"
+        },
+        {
+          "name": "permanence_est_structure",
+          "type": "boolean"
+        },
+        {
+          "name": "permanence_structure_nom",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_siret",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_statut",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_type",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_code_postal",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_nom_commune",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_code_commune",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_code_departement",
+          "type": "string"
+        },
+        {
+          "name": "permanence_structure_code_region",
+          "type": "string"
+        },
+        {
+          "name": "repair_statut_migrated_at",
+          "type": "timestamp('UTC', 6)"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_employes_structures": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid"
+        },
+        {
+          "name": "structure_id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "creation_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "debut_emploi",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "fin_emploi",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "suppression_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "structure_main_id",
+          "type": "int32"
+        }
+      ],
+      "coop_invitations_equipes": [
+        {
+          "name": "coordinateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "mediateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "acceptee",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "refusee",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "renvoyee",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_lieu_inclusion": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "nom",
+          "type": "string"
+        },
+        {
+          "name": "nom_usage",
+          "type": "string"
+        },
+        {
+          "name": "adresse",
+          "type": "string"
+        },
+        {
+          "name": "commune",
+          "type": "string"
+        },
+        {
+          "name": "code_postal",
+          "type": "string(5)"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5)"
+        },
+        {
+          "name": "complement_adresse",
+          "type": "string"
+        },
+        {
+          "name": "latitude",
+          "type": "float64"
+        },
+        {
+          "name": "longitude",
+          "type": "float64"
+        },
+        {
+          "name": "siret",
+          "type": "string"
+        },
+        {
+          "name": "rna",
+          "type": "string"
+        },
+        {
+          "name": "visible_pour_cartographie_nationale",
+          "type": "boolean"
+        },
+        {
+          "name": "site_web",
+          "type": "string"
+        },
+        {
+          "name": "telephone",
+          "type": "string"
+        },
+        {
+          "name": "fiche_acces_libre",
+          "type": "string"
+        },
+        {
+          "name": "horaires",
+          "type": "string"
+        },
+        {
+          "name": "prise_rdv",
+          "type": "string"
+        },
+        {
+          "name": "structure_parente",
+          "type": "string"
+        },
+        {
+          "name": "typologies",
+          "type": "array<string>"
+        },
+        {
+          "name": "services",
+          "type": "array<string>"
+        },
+        {
+          "name": "publics_specifiquement_adresses",
+          "type": "array<string>"
+        },
+        {
+          "name": "prise_en_charge_specifique",
+          "type": "array<string>"
+        },
+        {
+          "name": "frais_a_charge",
+          "type": "array<string>"
+        },
+        {
+          "name": "dispositif_programmes_nationaux",
+          "type": "array<string>"
+        },
+        {
+          "name": "formations_labels",
+          "type": "array<string>"
+        },
+        {
+          "name": "autres_formations_labels",
+          "type": "array<string>"
+        },
+        {
+          "name": "itinerance",
+          "type": "array<string>"
+        },
+        {
+          "name": "modalites_acces",
+          "type": "array<string>"
+        },
+        {
+          "name": "modalites_accompagnement",
+          "type": "array<string>"
+        },
+        {
+          "name": "v1_imported",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "v1_structure_id",
+          "type": "string"
+        },
+        {
+          "name": "v1_permanence_id",
+          "type": "string"
+        },
+        {
+          "name": "activites_count",
+          "type": "int32"
+        },
+        {
+          "name": "ban_id",
+          "type": "string"
+        },
+        {
+          "name": "creation_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "derniere_modification_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "suppression_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "derniere_modification_source",
+          "type": "string"
+        },
+        {
+          "name": "synchronisation_siret",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_mediateurs": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "user_id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "is_visible",
+          "type": "boolean"
+        },
+        {
+          "name": "accompagnements_count",
+          "type": "int32"
+        },
+        {
+          "name": "activites_count",
+          "type": "int32"
+        },
+        {
+          "name": "beneficiaires_count",
+          "type": "int32"
+        },
+        {
+          "name": "derniere_creation_activite",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "derniere_creation_beneficiaire",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_mediateurs_coordonnes": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "mediateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "coordinateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_mediateurs_en_activite": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "mediateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "structure_id",
+          "type": "uuid"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "creation_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "debut_activite",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "derniere_modification_par_id",
+          "type": "uuid"
+        },
+        {
+          "name": "fin_activite",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression_par_id",
+          "type": "uuid"
+        }
+      ],
+      "coop_partage_statistiques": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "mediateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "deleted",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "coordinateur_id",
+          "type": "uuid"
+        }
+      ],
+      "coop_rdv_lieux": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "type": "string"
+        },
+        {
+          "name": "phone_number",
+          "type": "string"
+        },
+        {
+          "name": "organisation_id",
+          "type": "int32"
+        },
+        {
+          "name": "single_use",
+          "type": "boolean"
+        },
+        {
+          "name": "synced_at",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_rdv_motifs": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "organisation_id",
+          "type": "int32"
+        },
+        {
+          "name": "collectif",
+          "type": "boolean"
+        },
+        {
+          "name": "follow_up",
+          "type": "boolean"
+        },
+        {
+          "name": "location_type",
+          "type": "string"
+        },
+        {
+          "name": "motif_category_id",
+          "type": "int32"
+        }
+      ],
+      "coop_rdv_organisations": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phone_number",
+          "type": "string"
+        },
+        {
+          "name": "verticale",
+          "type": "string"
+        },
+        {
+          "name": "synced_at",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_rdv_participations": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "rdv_id",
+          "type": "int32"
+        },
+        {
+          "name": "status",
+          "type": "unknown(DataType(this=DType.USERDEFINED, kind=coop.rdv_attendance_status))"
+        },
+        {
+          "name": "created_by",
+          "type": "string"
+        },
+        {
+          "name": "created_by_type",
+          "type": "string"
+        },
+        {
+          "name": "created_by_id",
+          "type": "int32"
+        },
+        {
+          "name": "created_by_agent_prescripteur",
+          "type": "boolean"
+        },
+        {
+          "name": "send_lifecycle_notifications",
+          "type": "boolean"
+        },
+        {
+          "name": "send_reminder_notification",
+          "type": "boolean"
+        },
+        {
+          "name": "synced_at",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_rdvs": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "uuid",
+          "type": "string"
+        },
+        {
+          "name": "organisation_id",
+          "type": "int32"
+        },
+        {
+          "name": "motif_id",
+          "type": "int32"
+        },
+        {
+          "name": "lieu_id",
+          "type": "int32"
+        },
+        {
+          "name": "rdv_account_id",
+          "type": "int32"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "type": "string"
+        },
+        {
+          "name": "collectif",
+          "type": "boolean"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "starts_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "ends_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "duration_in_min",
+          "type": "int32"
+        },
+        {
+          "name": "max_participants_count",
+          "type": "int32"
+        },
+        {
+          "name": "users_count",
+          "type": "int32"
+        },
+        {
+          "name": "created_by",
+          "type": "string"
+        },
+        {
+          "name": "created_by_type",
+          "type": "string"
+        },
+        {
+          "name": "created_by_id",
+          "type": "int32"
+        },
+        {
+          "name": "cancelled_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "cra_declined",
+          "type": "boolean"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "synced_at",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_structure_administrative": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "siret",
+          "type": "string"
+        },
+        {
+          "name": "rna",
+          "type": "string"
+        },
+        {
+          "name": "denomination",
+          "type": "string"
+        },
+        {
+          "name": "synchronisation_siret",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "nom",
+          "type": "string"
+        },
+        {
+          "name": "adresse",
+          "type": "string"
+        },
+        {
+          "name": "commune",
+          "type": "string"
+        },
+        {
+          "name": "code_postal",
+          "type": "string(5)"
+        },
+        {
+          "name": "code_insee",
+          "type": "string(5)"
+        },
+        {
+          "name": "complement_adresse",
+          "type": "string"
+        },
+        {
+          "name": "source",
+          "type": "string"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_tags": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "nom",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "departement",
+          "type": "string"
+        },
+        {
+          "name": "mediateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "coordinateur_id",
+          "type": "uuid"
+        },
+        {
+          "name": "equipe",
+          "type": "boolean"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "modification",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
+        }
+      ],
+      "coop_users": [
+        {
+          "name": "id",
+          "type": "uuid"
+        },
+        {
+          "name": "role",
+          "type": "string"
+        },
+        {
+          "name": "email_verified",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "is_fixture",
+          "type": "boolean"
+        },
+        {
+          "name": "created",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "updated",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "deleted",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "last_login",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "last_seen",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "profil_inscription",
+          "type": "string"
+        },
+        {
+          "name": "structure_employeuse_renseignee",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "lieux_activite_renseignes",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "inscription_validee",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "acceptation_cgu",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "has_seen_onboarding",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "onboarding_status",
+          "type": "string"
+        },
+        {
+          "name": "donnees_conseiller_numerique_v1_importees",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "donnees_coordinateur_conseiller_numerique_v1_importees",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "v1_imported",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "imported_lieux_from_dataspace",
+          "type": "timestamp(3)"
+        },
+        {
+          "name": "timezone",
+          "type": "string"
+        },
+        {
+          "name": "siret",
+          "type": "string"
+        }
+      ],
       "evenement": [
         {
           "name": "id",
@@ -794,16 +2220,50 @@
           "type": "uuid"
         },
         {
-          "name": "old_structure_id",
-          "type": "int32"
-        },
-        {
           "name": "structure_id",
           "type": "int32"
         },
         {
           "name": "date_suppression",
           "type": "timestamp(3)"
+        }
+      ],
+      "membre_transfert_log": [
+        {
+          "name": "id",
+          "type": "int32"
+        },
+        {
+          "name": "membre_id",
+          "type": "string"
+        },
+        {
+          "name": "structure_source_id",
+          "type": "int32"
+        },
+        {
+          "name": "structure_cible_id",
+          "type": "int32"
+        },
+        {
+          "name": "utilisateurs_deplaces",
+          "type": "int32"
+        },
+        {
+          "name": "contacts_deplaces",
+          "type": "int32"
+        },
+        {
+          "name": "contacts_supprimes",
+          "type": "int32"
+        },
+        {
+          "name": "par_utilisateur_id",
+          "type": "int32"
+        },
+        {
+          "name": "transfere_le",
+          "type": "timestamp(6)"
         }
       ],
       "personne": [
@@ -1251,10 +2711,6 @@
         },
         {
           "name": "structure_id",
-          "type": "int32"
-        },
-        {
-          "name": "old_structure_id",
           "type": "int32"
         }
       ]
@@ -1872,6 +3328,36 @@
         {
           "name": "editeur_utilisateur_id",
           "type": "int32"
+        }
+      ],
+      "feuille_de_route_document": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "feuille_de_route_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "chemin",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "nom",
+          "type": "string NOT NULL"
+        },
+        {
+          "name": "creation",
+          "type": "timestamp(3) NOT NULL"
+        },
+        {
+          "name": "editeur_utilisateur_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "suppression",
+          "type": "timestamp(3)"
         }
       ],
       "groupement": [

@@ -37,6 +37,7 @@ databases:
       - min.departement_enveloppe
       - min.enveloppe_financement
       - min.feuille_de_route
+      - min.feuille_de_route_document
       - min.groupement
       - min.porteur_action
       - min.postes_conseiller_numerique_synthese

@@ -29,7 +29,7 @@ identifiables.
 
 ## Périmètre lu par `nao_ro`
 
-### Schéma `llm` — vues curées (15)
+### Schéma `llm` — vues curées (38)
 
 | Vue | Source | Ce qui est retiré |
 |-----|--------|-------------------|
@@ -47,6 +47,19 @@ identifiables.
 | `llm.structure_merge_log` | `audit.structure_merge_log` | clés nominatives des instantanés |
 | `llm.personne_merge_log` | `audit.personne_merge_log` | idem |
 | `llm.evenement` | `source.min__evenements` | idem, `donnee` éclatée en colonnes |
+| `llm.membre_transfert_log` | `min.membre_transfert_log` | `par_utilisateur` (identifiant de connexion) remplacé par `par_utilisateur_id` → `llm.utilisateur` |
+| `llm.coop_users` | `coop.users` | prénom, nom, courriel, téléphone, photo, localisation, titre, description |
+| `llm.coop_beneficiaires` | `coop.beneficiaires` | prénom, nom, téléphone, courriel, adresse, notes, année de naissance, liens RDV usager |
+| `llm.coop_structure_administrative` | `coop.structure_administrative` | référent nommé (nom, courriel, téléphone) |
+| `llm.coop_lieu_inclusion` | `coop.lieu_inclusion` | référent nommé, `courriels`, `presentation_*` ; `nom`, `horaires`, `prise_rdv` masqués |
+| `llm.coop_activites` | `coop.activites` | `notes`, `precisions_demarche` ; `titre_atelier` masqué |
+| `llm.coop_activite_coordination` | `coop.activite_coordination` | `notes` ; champs « autre » et `nom` masqués |
+| `llm.coop_tags` | `coop.tags` | `nom` et `description` masqués |
+| `llm.coop_cras_conseiller_numerique_v1` | `coop.cras_conseiller_numerique_v1` | `annotation`, courriel et téléphone de permanence |
+| `llm.coop_rdvs`, `llm.coop_rdv_participations` | `coop.rdvs`, `coop.rdv_participations` | `raw_data`, `context` ; usagers RDV non exposés |
+| `llm.coop_invitations_equipes` | `coop.invitations_equipes` | `email` de l'invité |
+| `llm.coop_mediateurs`, `llm.coop_coordinateurs`, `llm.coop_employes_structures`, `llm.coop_mediateurs_en_activite`, `llm.coop_mediateurs_coordonnes`, `llm.coop_partage_statistiques`, `llm.coop_accompagnements`, `llm.coop_activite_tags`, `llm.coop_activite_coordination_tags`, `llm.coop_rdv_lieux`, `llm.coop_rdv_motifs` | tables `coop` du même nom | rien (identifiants, dates, compteurs, coordonnées d'organisation) |
+| `llm.coop_rdv_organisations` | `coop.rdv_organisations` | `email` mis à NULL s'il est de forme prénom.nom@ |
 
 ### Tables en accès direct (pseudonymisées : identifiants, jamais de nominatif)
 
@@ -55,8 +68,8 @@ identifiables.
   `contact_structure_administrative`.
 - `min` : `action`, `beneficiaire_subvention`, `co_financement`, `comite`,
   `demande_de_subvention`, `feuille_de_route`, `porteur_action`,
-  `postes_conseiller_numerique_synthese`, `departement`, `region`, `groupement`,
-  `enveloppe_financement`, `departement_enveloppe`.
+  `postes_conseiller_numerique_synthese`, `feuille_de_route_document`, `departement`,
+  `region`, `groupement`, `enveloppe_financement`, `departement_enveloppe`.
 - `admin.*` et `reference.*` en entier (référentiels territoriaux, nomenclatures).
 
 ### Sans accès (et sans remplaçant)
@@ -64,8 +77,9 @@ identifiables.
 `main.personne`, `main.contact`, `main.structure_administrative`,
 `main.lieu_inclusion`, `main.lieu_appariement`, `main.adresse`, `main.activites_coop`, `min.utilisateur`, `min.membre`,
 `min.personne_enrichie`, `min.contact_membre_gouvernance`,
-`min.gouvernance`, `min._prisma_migrations`, et tous les schémas `source`, `staging`,
-`audit`, `coop`, `import`, `api`, `dataviz`.
+`min.gouvernance`, `min.membre_transfert_log`, `min._prisma_migrations`, et tous les schémas
+`source`, `staging`, `audit`, `coop` (lu uniquement à travers `llm.coop_*`), `import`, `api`,
+`dataviz`.
 
 ## Faire évoluer le périmètre
 
