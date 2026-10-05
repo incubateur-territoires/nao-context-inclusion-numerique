@@ -15,7 +15,7 @@ Journal des modifications faites depuis l'application MIN : repond au QUI et au 
 
 | Property | Value |
 |----------|-------|
-| **Row Count** | 1,907 |
+| **Row Count** | 1,914 |
 
 ## Columns (8)
 

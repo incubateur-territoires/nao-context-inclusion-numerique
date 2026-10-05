@@ -17,7 +17,7 @@ Comptes de l'application MIN, identite masquee (V102) : ni nom, ni prenom, ni co
 |----------|-------|
 | **Row Count** | 2,433 |
 
-## Columns (12)
+## Columns (11)
 
 - id (int32)
 - role (unknown(DataType(this=DType.USERDEFINED, kind=min."Role")))
@@ -30,7 +30,6 @@ Comptes de l'application MIN, identite masquee (V102) : ni nom, ni prenom, ni co
 - region_code (string)
 - groupement_id (int32)
 - structure_id (int32)
-- old_structure_id (int32)
 
 
 
