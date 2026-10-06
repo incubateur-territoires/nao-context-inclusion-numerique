@@ -139,7 +139,7 @@ def main() -> int:
                     ref = reference(m, t)
                     rep = m.ask(t["prompt"], max_wait=int(t.get("max_wait", 600)))
                     break
-                except (OSError, RuntimeError, ValueError) as e:
+                except Exception as e:  # noqa: BLE001 — réseau, HTTP (IncompleteRead), MCP
                     if essai == 2:
                         raise
                     print(f"    relance {essai + 1} ({t['name']}) : {str(e)[:80]}", flush=True)
