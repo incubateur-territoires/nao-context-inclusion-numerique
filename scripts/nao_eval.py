@@ -41,7 +41,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TESTS = ROOT / "tests"
 DB_ID = "postgres-inclusion-numerique"
 
-NUM = re.compile(r"(?<![\w,.])-?\d{1,3}(?:[   ]\d{3})*(?:[.,]\d+)?(?![\w])")
+NUM = re.compile(r"(?<![\w,.])-?(?:\d{1,3}(?:[ \u202f\u00a0]\d{3})+|\d+)(?:[.,]\d+)?(?![\w])")
 
 
 def _norm(s: str) -> str:
