@@ -29,6 +29,9 @@ Les colonnes exactes sont dans `databases/…/columns.md` ; ici, le sens et les 
   `structure_id` → `llm.structure_administrative.id`.
 - Les `id` de `llm.structure_administrative` et de `llm.lieu_inclusion` **se recouvrent**
   (1353 existe des deux côtés et ne désigne pas la même chose). Toujours qualifier.
+- Un **coordinateur** de la Coop (`llm.coop_coordinateurs`, `coordinateur_id` uuid) n'a
+  rien à voir avec un **membre** de gouvernance (`llm.membre`, id texte) : ne jamais
+  joindre l'un sur l'autre.
 - `llm.evenement.entity_id` est du **texte** : id numérique de structure ou id texte de
   membre selon `source_key`. Caster avant de joindre.
 - Ne jamais nommer une structure autrement que par
