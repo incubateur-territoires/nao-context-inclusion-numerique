@@ -46,6 +46,32 @@ llm.coop_lieu_inclusion.id ◄──────────────  llm.li
 llm.coop_structure_administrative.id ◄────  llm.structure_administrative.structure_coop_id
 ```
 
+## Recette : rattacher un compte Coop à son employeur
+
+Un compte peut avoir **plusieurs** lignes d'emploi (anciens emplois conservés) et un
+SIRET porte **plusieurs** structures administratives (siège + antennes). Joindre sans
+filtrer multiplie les lignes (constaté : 4 548 activités de coordination → 17 571
+lignes exportées). La seule jointure correcte :
+
+```sql
+LEFT JOIN llm.coop_employes_structures es
+       ON es.user_id = u.id
+      AND es.suppression IS NULL
+      AND es.fin_emploi IS NULL            -- emploi en cours
+LEFT JOIN llm.structure_administrative sa
+       ON sa.id = es.structure_main_id      -- id canonique, jamais par SIRET
+```
+
+Pour un coordinateur : `llm.coop_activite_coordination.coordinateur_id` →
+`llm.coop_coordinateurs.id` → `user_id` → la jointure ci-dessus. S'il reste plus
+d'un emploi en cours, prendre le plus récent (`DISTINCT ON (u.id) … ORDER BY
+es.debut_emploi DESC`).
+
+**Avant de livrer un export ligne à ligne, compter** : le résultat ne doit pas avoir
+plus de lignes que la table de base filtrée (`SELECT count(*) FROM
+llm.coop_activite_coordination WHERE suppression IS NULL`). S'il en a plus, une
+jointure multiplie.
+
 ## Pièges
 
 - Dans la Coop, `structure_id` désigne presque toujours un **lieu** (`coop_lieu_inclusion`)
