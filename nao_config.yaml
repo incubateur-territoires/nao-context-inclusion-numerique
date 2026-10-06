@@ -21,6 +21,7 @@ databases:
       - reference.*
       # Entrepôt : tables pseudonymisées (identifiants techniques, pas de nominatif)
       - main.contact_structure_administrative
+      - main.conum_labellisation
       - main.contrat
       - main.formation
       - main.personne_affectations_emploi
