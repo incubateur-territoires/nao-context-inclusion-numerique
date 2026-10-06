@@ -152,37 +152,12 @@ Pour purger les données et repartir de zéro :
 ./scripts-dev/setup.sh --reset --profile all
 ```
 
-### Import des données pseudonymisées
+### Données de dev
 
-Pour travailler avec des données réalistes (pseudonymisées), vous pouvez importer un dump :
-
-1. Téléchargez l'archive `dataspace_pseudonym.tar.gz` depuis le drive
-2. Placez-la dans le dossier `import-data/`
-3. Lancez le setup avec l'option `--with-data` :
-
-```bash
-# Setup + import des données
-./scripts-dev/setup.sh --with-data
-
-# Reset complet + import des données
-./scripts-dev/setup.sh --reset --with-data
-
-# Combinable avec les profiles
-./scripts-dev/setup.sh --profile all --with-data
-```
-
-Ou importez manuellement après un setup :
-
-```bash
-./scripts-dev/import-data.sh
-```
-
-Seuls les fichiers de données sont importés :
-- `dataspace-02-data-admin-ref.sql` - Données admin et reference
-- `dataspace-03-data-main.sql` - Données main (structures, personnes pseudonymisées)
-- `dataspace-04-data-min.sql` - Données min (utilisateurs pseudonymisés)
-
-L'archive est automatiquement supprimée après l'import.
+Il n'y a plus de jeu de données pseudonymisé fourni : l'ancien export
+(`db_pseudonym_export.py`, `--with-data`) a été abandonné (V177, 2026-09-30),
+le chantier est à reprendre de zéro. Les données viennent des DAGs lancés en
+local, ou d'une copie de base fournie à la main.
 
 ## Installation Pas à Pas
 
@@ -315,8 +290,9 @@ TOKEN="<votre-token-dev>"
 # Swagger / OpenAPI spec
 curl http://localhost:3000/
 
-# Lister les structures (GET sur une vue)
-curl http://localhost:3000/structures \
+# Lister des lieux (GET sur une vue ; le rôle du token doit avoir le droit
+# SELECT sur la vue, cf docs/POSTGREST.md)
+curl "http://localhost:3000/carto?limit=5" \
   -H "Authorization: Bearer $TOKEN"
 
 # Appeler une fonction RPC (POST)
@@ -584,13 +560,11 @@ scripts/
 ├── airflow-variables.dev.json # Variables Airflow pour dev
 ├── scripts-dev/
 │   ├── setup.sh              # Setup complet (à utiliser) - crée aussi le token dev PostgREST
-│   ├── import-data.sh        # Import des données pseudonymisées
 │   ├── init-databases.sql    # Init PostgreSQL dataspace (bases dev/test/prod, rôle app_api)
 │   ├── init-airflow-db.sql   # Init PostgreSQL airflow (base metabase)
 │   ├── run-flyway.sh         # Exécution manuelle de Flyway
 │   ├── check-env.sh          # Vérification de l'environnement
 │   └── import-variables.sh   # Import des variables Airflow
-├── import-data/              # Dossier pour l'archive dataspace_pseudonym.tar.gz
 ├── database/
 │   ├── flyway.toml           # Configuration Flyway
 │   ├── POSTGREST.md          # Documentation architecture PostgREST
