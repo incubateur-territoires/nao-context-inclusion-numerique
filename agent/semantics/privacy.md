@@ -49,7 +49,7 @@ identifiables.
 | `llm.evenement` | `source.min__evenements` | idem, `donnee` éclatée en colonnes |
 | `llm.membre_transfert_log` | `min.membre_transfert_log` | `par_utilisateur` (identifiant de connexion) remplacé par `par_utilisateur_id` → `llm.utilisateur` |
 | `llm.coop_users` | `coop.users` | prénom, nom, courriel, téléphone, photo, localisation, titre, description |
-| `llm.coop_beneficiaires` | `coop.beneficiaires` | prénom, nom, téléphone, courriel, adresse, notes, année de naissance, liens RDV usager |
+| `llm.coop_beneficiaires` | `coop.beneficiaires` | prénom, nom, téléphone, courriel, adresse, notes, année de naissance (remplacée par `tranche_age_derivee`, V179), liens RDV usager |
 | `llm.coop_structure_administrative` | `coop.structure_administrative` | référent nommé (nom, courriel, téléphone) |
 | `llm.coop_lieu_inclusion` | `coop.lieu_inclusion` | référent nommé, `courriels`, `presentation_*` ; `nom`, `horaires`, `prise_rdv` masqués |
 | `llm.coop_activites` | `coop.activites` | `notes`, `precisions_demarche` ; `titre_atelier` masqué |
@@ -65,7 +65,7 @@ identifiables.
 
 - `main` : `poste`, `contrat`, `formation`, `subvention`,
   `personne_affectations_emploi`, `personne_affectations_lieu`,
-  `contact_structure_administrative`.
+  `contact_structure_administrative`, `conum_labellisation`.
 - `min` : `action`, `beneficiaire_subvention`, `co_financement`, `comite`,
   `demande_de_subvention`, `feuille_de_route`, `porteur_action`,
   `postes_conseiller_numerique_synthese`, `feuille_de_route_document`, `departement`,

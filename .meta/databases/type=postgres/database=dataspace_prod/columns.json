@@ -784,6 +784,10 @@
           "type": "string"
         },
         {
+          "name": "tranche_age_derivee",
+          "type": "string"
+        },
+        {
           "name": "statut_social",
           "type": "string"
         },
@@ -2766,6 +2770,24 @@
         {
           "name": "structure_id",
           "type": "int32"
+        }
+      ],
+      "conum_labellisation": [
+        {
+          "name": "id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "structure_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "utilisateur_id",
+          "type": "int32 NOT NULL"
+        },
+        {
+          "name": "date_attestation",
+          "type": "timestamp(3) NOT NULL"
         }
       ],
       "formation": [
