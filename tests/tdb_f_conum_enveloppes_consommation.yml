@@ -1,0 +1,16 @@
+name: tdb_f_conum_enveloppes_consommation
+prompt: "Pour chacune des enveloppes de financement « Conseiller Numérique » (libellé commençant par « Conseiller Numérique »), quelle est la consommation nationale en euros ? Règle du tableau de bord MIN : la consommation de l'enveloppe « Plan France Relance » = somme brute de toutes les subventions de première convention (V1) des postes ; celle de l'enveloppe « Renouvellement » = somme brute de toutes les subventions de renouvellement (V2). Tableau libellé complet de l'enveloppe / montant exact en euros."
+kind: table
+tags: [tableau-de-bord, F]
+sql: |
+  WITH agg AS (
+    SELECT COALESCE(SUM(s.montant_subvention_v1), 0)::bigint AS total_v1,
+           COALESCE(SUM(s.montant_subvention_v2), 0)::bigint AS total_v2
+    FROM main.subvention s)
+  SELECT e.libelle AS enveloppe,
+         CASE WHEN e.libelle LIKE '%Renouvellement%' THEN agg.total_v2
+              WHEN e.libelle LIKE '%Plan France Relance%' THEN agg.total_v1
+              ELSE 0 END AS consommation
+  FROM min.enveloppe_financement e CROSS JOIN agg
+  WHERE e.libelle LIKE 'Conseiller Numérique%'
+  ORDER BY e.libelle

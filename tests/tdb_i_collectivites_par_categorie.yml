@@ -1,0 +1,16 @@
+name: tdb_i_collectivites_par_categorie
+prompt: "Sur la page d'administration des gouvernances de MIN, les « collectivités impliquées dans la gouvernance » sont les membres (tous statuts confondus, y compris supprimés, hors gouvernance technique « zzz ») dont le type est l'un des suivants : « Collectivité, commune », « Collectivité, EPCI », « Collectivité, intercommunalité », « Collectivité territoriale », « Commune », « Conseil départemental », « EPCI », « Préfecture départementale », « Préfecture régionale », « Région ». Donne leur ventilation en catégories : « Conseils départementaux » (type Conseil départemental), « Conseils régionaux » (type Région), « EPCI » (types EPCI, Collectivité, EPCI et Collectivité, intercommunalité), « Communes » (types Commune et Collectivité, commune), « Autres » (le reste, dont les préfectures). Tableau catégorie / nombre de membres."
+kind: table
+tags: [tableau-de-bord, I]
+sql: |
+  SELECT CASE
+           WHEN type = 'Conseil départemental' THEN 'Conseils départementaux'
+           WHEN type = 'Région' THEN 'Conseils régionaux'
+           WHEN type IN ('EPCI', 'Collectivité, EPCI', 'Collectivité, intercommunalité') THEN 'EPCI'
+           WHEN type IN ('Commune', 'Collectivité, commune') THEN 'Communes'
+           ELSE 'Autres' END AS categorie,
+         count(*) AS n
+  FROM llm.membre
+  WHERE gouvernance_departement_code <> 'zzz'
+    AND type IN ('Collectivité, commune', 'Collectivité, EPCI', 'Collectivité, intercommunalité', 'Collectivité territoriale', 'Commune', 'Conseil départemental', 'EPCI', 'Préfecture départementale', 'Préfecture régionale', 'Région')
+  GROUP BY 1 ORDER BY 2 DESC

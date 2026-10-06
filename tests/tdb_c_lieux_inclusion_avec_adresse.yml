@@ -1,0 +1,8 @@
+name: tdb_c_lieux_inclusion_avec_adresse
+prompt: "Au niveau national, combien de lieux d'inclusion numérique disposent d'une adresse rattachée ? Compter tous les lieux ayant une adresse, y compris les lieux archivés / supprimés (règle du bloc « État des lieux » du tableau de bord MIN) ; les lieux sans adresse sont exclus."
+kind: scalar
+tags: [tableau-de-bord, C]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.lieu_inclusion l
+  JOIN llm.adresse a ON a.id = l.adresse_id

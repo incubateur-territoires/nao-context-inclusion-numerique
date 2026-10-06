@@ -1,0 +1,11 @@
+name: tdb_s_thematiques_mediation_top10
+prompt: "Sur la page Statistiques de MIN au niveau national, quelles sont les 10 thématiques de médiation numérique les plus fréquentes ? Pour chaque thématique, le nombre = somme du nombre d'accompagnements des activités portant cette thématique (une activité multi-thématiques compte dans chacune). Période de référence de la page Statistiques : du 17/11/2020 (début du dispositif) à aujourd'hui inclus (date de l'activité). Seules les activités Coop non supprimées comptent. Les thématiques de médiation numérique sont (identifiants enregistrés) : diagnostic_numerique, prendre_en_main_du_materiel, maintenance_de_materiel, gere_ses_contenus_numeriques, navigation_sur_internet, email, bureautique, reseaux_sociaux, sante, banque_et_achats_en_ligne, entrepreneuriat, insertion_professionnelle, securite_numerique, parentalite, scolarite_et_numerique, creer_avec_le_numerique, culture_numerique, intelligence_artificielle, aide_aux_demarches_administratives. Tableau identifiant de thématique (tel qu'enregistré) / nombre, du plus fréquent au moins fréquent. Les valeurs évoluent chaque jour, une tolérance de 1 % est admise."
+kind: table
+rtol: 0.01
+tags: [tableau-de-bord, S]
+sql: |
+  SELECT th AS thematique, SUM(act.accompagnements_count)::bigint AS n
+  FROM llm.coop_activites act, unnest(act.thematiques) AS th
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE
+    AND th IN ('diagnostic_numerique','prendre_en_main_du_materiel','maintenance_de_materiel','gere_ses_contenus_numeriques','navigation_sur_internet','email','bureautique','reseaux_sociaux','sante','banque_et_achats_en_ligne','entrepreneuriat','insertion_professionnelle','securite_numerique','parentalite','scolarite_et_numerique','creer_avec_le_numerique','culture_numerique','intelligence_artificielle','aide_aux_demarches_administratives')
+  GROUP BY 1 ORDER BY 2 DESC LIMIT 10

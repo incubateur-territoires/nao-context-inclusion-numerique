@@ -1,0 +1,8 @@
+name: tdb_e_membres_gouvernance
+prompt: "Combien de membres de gouvernance non supprimés y a-t-il au total dans MIN (un membre = une organisation siégeant dans la gouvernance d'un département ; une même organisation présente dans plusieurs départements compte plusieurs fois) ? Règle du tableau de bord : tous les membres dont le statut n'est pas « supprimé » (candidats et confirmés inclus). Exclure la gouvernance technique « zzz »."
+kind: scalar
+tags: [tableau-de-bord, E]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.membre
+  WHERE gouvernance_departement_code <> 'zzz' AND statut <> 'supprimer'
