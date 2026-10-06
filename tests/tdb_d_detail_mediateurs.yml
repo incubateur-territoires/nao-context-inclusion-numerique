@@ -1,0 +1,16 @@
+name: tdb_d_detail_mediateurs
+prompt: "Parmi les médiateurs numériques actuellement en poste au niveau national, donne un tableau avec trois lignes : « Coordinateurs » (médiateurs en poste ayant le rôle de coordinateur), « Conseillers numériques » (médiateurs en poste qui sont actuellement conseiller numérique) et « Aidants Connect » (médiateurs en poste habilités Aidants Connect), avec le nombre pour chacun. Chaque ligne est filtrée sur les médiateurs actuellement en poste."
+kind: table
+tags: [tableau-de-bord, D]
+sql: |
+  SELECT 'Coordinateurs' AS indicateur, count(*) AS n
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND is_coordinateur = true
+  UNION ALL
+  SELECT 'Conseillers numériques', count(*)
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND est_actuellement_conseiller_numerique = true
+  UNION ALL
+  SELECT 'Aidants Connect', count(*)
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND labellisation_aidant_connect = true

@@ -1,0 +1,13 @@
+name: structures_actives_par_region
+prompt: Combien de structures administratives actives (non supprimées) y a-t-il par région ? Donne un tableau région / nombre.
+kind: table
+tags: [socle]
+sql: |
+  SELECT r.nom AS region, count(*) AS n
+  FROM llm.structure_administrative sa
+  JOIN llm.adresse a ON a.id = sa.adresse_id
+  JOIN admin.commune c ON c.code_insee = a.code_insee
+  JOIN admin.departement d ON d.id = c.departement_id
+  JOIN admin.region r ON r.id = d.region_id
+  WHERE sa.deleted_at IS NULL
+  GROUP BY 1 ORDER BY 1

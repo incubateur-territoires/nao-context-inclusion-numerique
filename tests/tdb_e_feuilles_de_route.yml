@@ -1,0 +1,6 @@
+name: tdb_e_feuilles_de_route
+prompt: "Combien de feuilles de route ont été déposées dans MIN, toutes gouvernances confondues ? Toute feuille de route existante compte ; exclure celles de la gouvernance technique « zzz »."
+kind: scalar
+tags: [tableau-de-bord, E]
+sql: |
+  SELECT count(*) AS n FROM min.feuille_de_route WHERE gouvernance_departement_code <> 'zzz'

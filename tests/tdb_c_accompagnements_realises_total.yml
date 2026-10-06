@@ -1,0 +1,11 @@
+name: tdb_c_accompagnements_realises_total
+prompt: "Au niveau national, quel est le nombre total d'accompagnements réalisés, tous dispositifs confondus, selon la règle du bloc « État des lieux » du tableau de bord MIN : somme des accompagnements déclarés par les aidants numériques (Aidants Connect, personnes dont le type d'accompagnateur est « aidant numérique ») + somme des accompagnements de toutes les activités Coop non supprimées, toutes périodes confondues (sans filtre de date). Donne le nombre exact."
+kind: scalar
+tags: [tableau-de-bord, C]
+sql: |
+  SELECT (SELECT COALESCE(SUM(pe.nb_accompagnements_ac), 0)
+            FROM llm.personne_enrichie pe
+           WHERE pe.type_accompagnateur = 'aidant_numerique')
+       + (SELECT COALESCE(SUM(a.accompagnements_count), 0)
+            FROM llm.coop_activites a
+           WHERE a.suppression IS NULL) AS n

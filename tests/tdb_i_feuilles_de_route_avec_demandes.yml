@@ -1,0 +1,11 @@
+name: tdb_i_feuilles_de_route_avec_demandes
+prompt: "Combien de feuilles de route (hors gouvernance technique « zzz ») comportent au moins une action ayant au moins une demande de subvention, quel que soit le statut de la demande ?"
+kind: scalar
+tags: [tableau-de-bord, I]
+sql: |
+  SELECT count(*) AS n
+  FROM min.feuille_de_route f
+  WHERE f.gouvernance_departement_code <> 'zzz'
+    AND EXISTS (SELECT 1 FROM min.action a
+                JOIN min.demande_de_subvention d ON d.action_id = a.id
+                WHERE a.feuille_de_route_id = f.id)

@@ -1,0 +1,10 @@
+name: tdb_a_lieux_a_actualiser
+prompt: "Au niveau national, combien de lieux d'inclusion numérique non supprimés sont « à actualiser », c'est-à-dire dont la dernière mise à jour date de plus de 18 mois (548 jours) ou n'est pas renseignée ? Règle du tableau de bord MIN (un mois = 30,44 jours). La valeur évolue chaque jour, une tolérance de 1 % est admise."
+kind: scalar
+rtol: 0.01
+tags: [tableau-de-bord, A]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.lieu_inclusion l
+  WHERE l.deleted_at IS NULL
+    AND (l.updated_at IS NULL OR l.updated_at <= now() - interval '548 days')

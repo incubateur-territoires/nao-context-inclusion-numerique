@@ -22,6 +22,24 @@ Mon inclusion numérique).
   sont pas des personnes physiques identifiables : réponds sur eux sans réserve. Voir
   `agent/semantics/modele-donnees.md` pour ce que chacun désigne.
 
+## Vocabulaire → table (ne pas deviner)
+
+| On parle de… | Table |
+|--------------|-------|
+| activité de **coordination**, CRA coordo, animation / événement / partenariat d'un coordinateur | `llm.coop_activite_coordination` (jamais `llm.activites_coop`) |
+| activité de **médiation**, accompagnement, atelier, démarche d'un médiateur | `llm.activites_coop` (agrégat entrepôt) ou `llm.coop_activites` (détail Coop) |
+| bénéficiaire, usager accompagné | `llm.coop_beneficiaires`, `llm.coop_accompagnements` |
+| compte Coop, inscription, onboarding | `llm.coop_users` |
+| médiateur / coordinateur (profil Coop) | `llm.coop_mediateurs` / `llm.coop_coordinateurs` |
+| équipe d'un coordinateur | `llm.coop_mediateurs_coordonnes` |
+| lieu d'activité déclaré dans la Coop | `llm.coop_mediateurs_en_activite` → `llm.coop_lieu_inclusion` |
+| lieu d'inclusion (registre, carto) | `llm.lieu_inclusion` |
+| structure, employeur, SIRET | `llm.structure_administrative` |
+| poste / contrat / subvention conseiller numérique | `main.poste` / `main.contrat` / `main.subvention` |
+| membre de gouvernance, gouvernance, feuille de route, action FNE | `llm.membre`, `llm.gouvernance`, `min.feuille_de_route`, `min.action` |
+| utilisateur MIN, gestionnaire | `llm.utilisateur` |
+| « que s'est-il passé », fusion, suppression, qui a modifié | `llm.structure_merge_log`, `llm.personne_merge_log`, `llm.evenement` |
+
 ## Réflexes de support
 
 1. **Regarde dans la base avant de demander des précisions.** Si la question cite un
@@ -57,6 +75,7 @@ Mon inclusion numérique).
 | Entités, clés, pièges (id texte des membres, recouvrement des id structure / lieu, fusions, suppressions logiques) | `agent/semantics/modele-donnees.md` |
 | Périmètre exact et règles de confidentialité | `agent/semantics/privacy.md` |
 | Coop de la médiation numérique (comptes, équipes, lieux déclarés, activités, bénéficiaires, RDV) | `agent/semantics/coop.md` |
+| Reconstruire un indicateur du **tableau de bord MIN** ou de la page statistiques (définition exacte, SQL, périmètre, constantes) | `agent/semantics/tableau-de-bord-min.md` |
 | Pipeline de données (sources, schémas, DAG Airflow) | `agent/semantics/dataspace-etl.md` |
 | Application Mon inclusion numérique (schéma `min`, gouvernance, FNE) | `agent/semantics/mon-inclusion-numerique.md` |
 | Documentation du dataspace (index par rubrique : guides, sources, règles, décisions) | `repos/data-space-scripts/docs/README.md` |

@@ -1,0 +1,6 @@
+name: tdb_h_structures_eligibles_label_conum
+prompt: "Combien de structures sont éligibles au label « conseiller numérique » au sens du tableau de bord MIN, c'est-à-dire ont au moins un poste Conseiller numérique dans leur historique (quel que soit l'état du poste : occupé, vacant ou rendu) ? Compter les structures distinctes."
+kind: scalar
+tags: [tableau-de-bord, H]
+sql: |
+  SELECT count(DISTINCT p.structure_id) AS n FROM main.poste p WHERE p.structure_id IS NOT NULL

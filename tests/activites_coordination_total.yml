@@ -1,0 +1,6 @@
+name: activites_coordination_total
+prompt: Combien d'activités de coordination non supprimées ont été déclarées dans la Coop, au total ?
+kind: scalar
+tags: [socle, coop]
+sql: |
+  SELECT count(*) AS n FROM llm.coop_activite_coordination WHERE suppression IS NULL

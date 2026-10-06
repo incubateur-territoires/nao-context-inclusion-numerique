@@ -1,0 +1,12 @@
+name: tdb_s_accompagnements_par_mois
+prompt: "Sur la page Statistiques de MIN au niveau national, donne le nombre d'accompagnements par mois sur les 6 derniers mois pleins, sous forme de tableau mois (format AAAA-MM) / nombre. Les 6 derniers mois pleins = les 6 mois civils entièrement écoulés avant le mois en cours (le mois en cours est exclu). Seules les activités Coop non supprimées comptent. Unité de ce graphique : une ligne d'accompagnement par bénéficiaire (chaque participation à une activité compte un), et non le compteur d'accompagnements de l'activité."
+kind: table
+tags: [tableau-de-bord, S]
+sql: |
+  SELECT to_char(date_trunc('month', act.date), 'YYYY-MM') AS mois, count(*) AS n
+  FROM llm.coop_activites act
+  JOIN llm.coop_accompagnements acc ON acc.activite_id = act.id
+  WHERE act.suppression IS NULL
+    AND act.date >= date_trunc('month', CURRENT_DATE) - interval '6 months'
+    AND act.date <  date_trunc('month', CURRENT_DATE)
+  GROUP BY 1 ORDER BY 1

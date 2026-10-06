@@ -1,0 +1,9 @@
+name: tdb_c_mediateurs_et_aidants_en_poste
+prompt: "Au niveau national, combien de personnes sont actuellement médiateur numérique en poste OU aidant numérique en poste (une personne qui est les deux compte une fois) ? C'est l'indicateur « Médiateurs et aidants numériques » du bloc « État des lieux » du tableau de bord MIN."
+kind: scalar
+tags: [tableau-de-bord, C]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.personne_enrichie
+  WHERE est_actuellement_aidant_numerique_en_poste = true
+     OR est_actuellement_mediateur_en_poste = true

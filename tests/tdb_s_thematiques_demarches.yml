@@ -1,0 +1,11 @@
+name: tdb_s_thematiques_demarches
+prompt: "Sur la page Statistiques de MIN au niveau national, donne la répartition des thématiques d'accompagnement aux démarches administratives. Pour chaque thématique, le nombre = somme du nombre d'accompagnements des activités portant cette thématique (une activité multi-thématiques compte dans chacune). Période de référence de la page Statistiques : du 17/11/2020 (début du dispositif) à aujourd'hui inclus (date de l'activité). Seules les activités Coop non supprimées comptent. Les thématiques de démarches administratives sont (identifiants enregistrés) : papiers_elections_citoyennete, famille_scolarite, social_sante, travail_formation, logement, transports_mobilite, argent_impots, justice, etrangers_europe, loisirs_sports_culture, associations. Tableau identifiant de thématique (tel qu'enregistré) / nombre, du plus fréquent au moins fréquent. Les valeurs évoluent chaque jour, une tolérance de 1 % est admise."
+kind: table
+rtol: 0.01
+tags: [tableau-de-bord, S]
+sql: |
+  SELECT th AS thematique, SUM(act.accompagnements_count)::bigint AS n
+  FROM llm.coop_activites act, unnest(act.thematiques) AS th
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE
+    AND th IN ('papiers_elections_citoyennete','famille_scolarite','social_sante','travail_formation','logement','transports_mobilite','argent_impots','justice','etrangers_europe','loisirs_sports_culture','associations')
+  GROUP BY 1 ORDER BY 2 DESC

@@ -1,0 +1,10 @@
+name: tdb_b_accompagnements_6_mois_total
+prompt: "Quel est le total cumulé des accompagnements déclarés dans la Coop sur les 6 derniers mois pleins, toutes structures confondues ? Les 6 derniers mois pleins = les 6 mois civils entièrement écoulés avant le mois en cours (le mois en cours est exclu). Seules les activités Coop non supprimées comptent. Un accompagnement = le nombre d'accompagnements porté par chaque activité (une activité collective compte pour autant d'accompagnements que de participants)."
+kind: scalar
+tags: [tableau-de-bord, B]
+sql: |
+  SELECT COALESCE(SUM(a.accompagnements_count), 0)::bigint AS n
+  FROM llm.coop_activites a
+  WHERE a.suppression IS NULL
+    AND a.date >= date_trunc('month', CURRENT_DATE) - interval '6 months'
+    AND a.date <  date_trunc('month', CURRENT_DATE)

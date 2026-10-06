@@ -1,0 +1,11 @@
+name: tdb_s_beneficiaires_accompagnes
+prompt: "Sur la page Statistiques de MIN au niveau national, combien de bénéficiaires distincts ont été accompagnés, c'est-à-dire combien de fiches bénéficiaire distinctes sont rattachées à au moins un accompagnement d'une activité Coop non supprimée ? Période de référence de la page Statistiques : du 17/11/2020 (début du dispositif) à aujourd'hui inclus (date de l'activité). Les fiches anonymes comptent (une fiche anonyme par accompagnement). La valeur évolue chaque jour, une tolérance de 1 % est admise."
+kind: scalar
+rtol: 0.01
+tags: [tableau-de-bord, S]
+sql: |
+  SELECT count(DISTINCT ben.id) AS n 
+  FROM llm.coop_activites act
+  JOIN llm.coop_accompagnements acc ON acc.activite_id = act.id
+  JOIN llm.coop_beneficiaires ben ON ben.id = acc.beneficiaire_id
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE

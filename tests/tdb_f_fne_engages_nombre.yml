@@ -1,0 +1,13 @@
+name: tdb_f_fne_engages_nombre
+prompt: "Combien de financements ont été engagés par l'État au titre de France Numérique Ensemble, c'est-à-dire combien de demandes de subvention au statut « acceptée » rattachées à une action d'une feuille de route (hors gouvernance technique « zzz ») ?"
+kind: scalar
+tags: [tableau-de-bord, F]
+sql: |
+  WITH demandes AS (
+      SELECT d.subvention_demandee, e.libelle AS enveloppe_libelle, e.montant AS enveloppe_montant
+      FROM min.demande_de_subvention d
+      JOIN min.action a ON a.id = d.action_id
+      JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
+      JOIN min.enveloppe_financement e ON e.id = d.enveloppe_financement_id
+      WHERE f.gouvernance_departement_code <> 'zzz' AND d.statut = 'acceptee')
+  SELECT count(*) AS n FROM demandes

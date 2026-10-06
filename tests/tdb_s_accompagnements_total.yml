@@ -1,0 +1,9 @@
+name: tdb_s_accompagnements_total
+prompt: "Sur la page Statistiques de MIN au niveau national, quel est le nombre total d'accompagnements ? Période de référence de la page Statistiques : du 17/11/2020 (début du dispositif) à aujourd'hui inclus (date de l'activité). Seules les activités Coop non supprimées comptent. Un accompagnement = le nombre d'accompagnements porté par chaque activité (une activité collective compte pour autant d'accompagnements que de participants). La valeur évolue chaque jour, une tolérance de 1 % est admise."
+kind: scalar
+rtol: 0.01
+tags: [tableau-de-bord, S]
+sql: |
+  SELECT COALESCE(SUM(act.accompagnements_count), 0)::bigint AS n
+  FROM llm.coop_activites act
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE
