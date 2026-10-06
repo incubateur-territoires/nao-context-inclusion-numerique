@@ -1,0 +1,62 @@
+# Pousse le contexte vers l'instance Nao à chaque merge sur main.
+#
+# Nao ne propose pas de webhook pour « Pull latest » : le seul point d'entrée
+# programmatique documenté est `nao deploy`, qui envoie une archive du dossier
+# projet à POST <instance>/api/deploy avec une clé d'API d'organisation.
+#
+# Prérequis (Settings → Secrets and variables → Actions du dépôt GitHub) :
+#   - variable  NAO_URL      : URL de l'instance (ex. https://nao.exemple.gouv.fr)
+#   - secret    NAO_API_KEY  : clé créée dans Nao, Settings → Organization
+#                              Settings → Organization API Keys
+# Sans ces deux valeurs, le job s'arrête proprement sans rien envoyer.
+name: Déployer le contexte Nao
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-nao
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Vérifier la configuration
+        id: cfg
+        env:
+          NAO_URL: ${{ vars.NAO_URL }}
+          NAO_API_KEY: ${{ secrets.NAO_API_KEY }}
+        run: |
+          if [ -z "$NAO_URL" ] || [ -z "$NAO_API_KEY" ]; then
+            echo "::warning::NAO_URL (variable) ou NAO_API_KEY (secret) absent : déploiement ignoré."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Installer le CLI nao
+        if: steps.cfg.outputs.ok == 'true'
+        run: pipx install nao-core
+
+      - name: Vérification privacy (sans connexion base)
+        if: steps.cfg.outputs.ok == 'true'
+        run: python3 scripts/verify-privacy-config.py
+
+      - name: Déployer
+        if: steps.cfg.outputs.ok == 'true'
+        env:
+          NAO_URL: ${{ vars.NAO_URL }}
+          NAO_API_KEY: ${{ secrets.NAO_API_KEY }}
+          # nao_config.yaml référence ces variables ; valeurs factices, aucune
+          # connexion n'est ouverte par `deploy`.
+          NAO_DB_HOST: localhost
+          NAO_DB_PORT: "5432"
+          NAO_DB_NAME: dataspace_prod
+          NAO_DB_USER: nao_ro
+          NAO_DB_PASSWORD: non-utilise
+        run: nao deploy "$NAO_URL" --api-key "$NAO_API_KEY"

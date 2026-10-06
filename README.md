@@ -34,8 +34,10 @@ ce dépôt (« Pull latest » dans Réglages → Git).
    nao sync         # régénère databases/ et repos/
    python3 scripts/verify-privacy-config.py
    ```
-3. Commiter `databases/`, `repos/`, `.meta/` et la config, pousser, puis « Pull latest »
-   côté Nao.
+3. Commiter `databases/`, `repos/`, `.meta/` et la config, pousser. Au merge sur
+   `main`, l'action GitHub `deploy-nao.yml` envoie le contexte à l'instance
+   (`nao deploy`) si la variable `NAO_URL` et le secret `NAO_API_KEY` sont
+   définis dans le dépôt ; sinon, « Pull latest » côté Nao (Réglages → Git).
 
 À refaire après toute migration qui touche `llm.*`, un `GRANT`/`REVOKE` sur `nao_ro`
 ou l'ajout d'une table dans `include`.
