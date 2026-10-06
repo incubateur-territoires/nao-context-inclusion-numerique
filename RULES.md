@@ -75,6 +75,7 @@ Mon inclusion numérique).
 | Entités, clés, pièges (id texte des membres, recouvrement des id structure / lieu, fusions, suppressions logiques) | `agent/semantics/modele-donnees.md` |
 | Périmètre exact et règles de confidentialité | `agent/semantics/privacy.md` |
 | Coop de la médiation numérique (comptes, équipes, lieux déclarés, activités, bénéficiaires, RDV) | `agent/semantics/coop.md` |
+| Reconstruire un indicateur du **tableau de bord MIN** ou de la page statistiques (définition exacte, SQL, périmètre, constantes) | `agent/semantics/tableau-de-bord-min.md` |
 | Pipeline de données (sources, schémas, DAG Airflow) | `agent/semantics/dataspace-etl.md` |
 | Application Mon inclusion numérique (schéma `min`, gouvernance, FNE) | `agent/semantics/mon-inclusion-numerique.md` |
 | Documentation du dataspace (index par rubrique : guides, sources, règles, décisions) | `repos/data-space-scripts/docs/README.md` |
