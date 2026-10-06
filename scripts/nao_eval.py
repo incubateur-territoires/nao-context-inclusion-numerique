@@ -46,7 +46,7 @@ NUM = re.compile(r"(?<![\w,.])-?(?:\d{1,3}(?:[ \u202f\u00a0]\d{3})+|\d+)(?:[.,]\
 
 def _norm(s: str) -> str:
     s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode()
-    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
+    return re.sub(r"[^a-z0-9]+", "", s.lower())
 
 
 def _nums(text: str) -> list[float]:
@@ -128,13 +128,22 @@ def main() -> int:
     if not tests:
         print("aucun test")
         return 2
-    m = Mcp()
     resultats = []
     for t in tests:
         t0 = time.time()
         try:
-            ref = reference(m, t)
-            rep = m.ask(t["prompt"])
+            rep = None
+            for essai in range(3):
+                try:
+                    m = Mcp()  # session neuve : une session abîmée ne contamine pas la suite
+                    ref = reference(m, t)
+                    rep = m.ask(t["prompt"], max_wait=int(t.get("max_wait", 600)))
+                    break
+                except (OSError, RuntimeError, ValueError) as e:
+                    if essai == 2:
+                        raise
+                    print(f"    relance {essai + 1} ({t['name']}) : {str(e)[:80]}", flush=True)
+                    time.sleep(30)
             data = rep["data"] if isinstance(rep["data"], dict) else {}
             texte = data.get("text", "") if not rep["isError"] else str(rep["data"])
             ok, details = comparer(t, ref, texte)
@@ -146,7 +155,7 @@ def main() -> int:
         except Exception as e:  # noqa: BLE001
             res = {"name": t["name"], "ok": False, "details": [f"erreur : {e}"], "secondes": round(time.time() - t0)}
         resultats.append(res)
-        print(f"{'OK ' if res['ok'] else 'KO '} {res['name']:40s} {res['secondes']:4d}s  {' | '.join(res['details'])[:160]}")
+        print(f"{'OK ' if res['ok'] else 'KO '} {res['name']:40s} {res['secondes']:4d}s  {' | '.join(res['details'])[:160]}", flush=True)
 
     n_ok = sum(r["ok"] for r in resultats)
     print(f"\n{n_ok}/{len(resultats)} tests OK — modèle : {a.model}")
