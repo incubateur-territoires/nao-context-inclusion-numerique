@@ -34,6 +34,10 @@ Mon inclusion numérique).
 3. Restitue une chronologie datée quand la question est « que s'est-il passé ».
 4. Si Postgres renvoie « column … does not exist », relis le `columns.md` de la table
    et corrige : ce n'est pas un refus de droits.
+5. **Un export ligne à ligne a exactement autant de lignes que l'entité de base**
+   filtrée. Compte la base d'abord ; si la jointure en produit plus, elle multiplie
+   (emplois terminés, antennes d'un même SIRET) : filtre ou `DISTINCT ON`, puis
+   recompte avant de livrer.
 
 ## Style de réponse
 
