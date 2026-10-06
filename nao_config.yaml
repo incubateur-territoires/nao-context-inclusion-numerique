@@ -67,8 +67,7 @@ repos:
       - "**/__pycache__/**"
       - "**/*.pyc"
       - "**/.pytest_cache/**"
-      # Documents de travail contenant des courriels de personnes
-      - "docs/refonte-structure-plan.md"
+      # Document de travail contenant des courriels de personnes
       - "docs/CONTACT_MERGE.md"
   - name: suite-gestionnaire-numerique
     url: https://github.com/anct-cnum/suite-gestionnaire-numerique.git

@@ -175,7 +175,6 @@ Chaque consommateur de l'API a un rôle PostgreSQL dédié (NOLOGIN) :
 | Rôle                       | Description                        | Accès                                                             |
 |----------------------------|------------------------------------|-------------------------------------------------------------------|
 | `postgrest_anonymous`      | Accès non authentifié (Swagger)    | Schémas `auth`, `api` uniquement                                  |
-| `postgrest_anct_dev`       | ANCT Dev (tests)                   | `api.structures`                                                  |
 | `postgrest_anct_carto`     | Cartographie nationale             | `api.carto`, `api.carto_region`, `api.carto_departement`, `api.get_carto_mediateur()` |
 | `postgrest_coop`           | Coopérative de médiation           | *aucun objet `api` depuis V157 (`get_mediateur()` supprimée) — rôle conservé pour `auth`* |
 | `postgrest_anct_incub`     | ANCT Incubateur                    | `api.carto`, `api.aidants_connect`, `api.feuille_de_route`        |
@@ -206,28 +205,6 @@ GRANT EXECUTE ON FUNCTION api.ma_fonction TO postgrest_xxx;
 ## Endpoints exposés
 
 ### Vues (GET)
-
-#### `GET /structures`
-
-Informations de base sur les structures.
-
-| Colonne                       | Type    | Description                                  |
-|-------------------------------|---------|----------------------------------------------|
-| `siret`                       | varchar | Numéro SIRET                                 |
-| `rna`                         | varchar | Numéro RNA                                   |
-| `nom`                         | varchar | Nom de la structure                          |
-| `code_activite_principale`    | varchar | Code NAF                                     |
-| `etat_administratif`          | varchar | Etat administratif                           |
-| `code_categorie_juridique`    | varchar | Code catégorie juridique                     |
-| `libelle_categorie_juridique` | varchar | Libellé catégorie juridique                  |
-| `adresse`                     | text    | Adresse complète concaténée                  |
-| `longitude` / `latitude`      | float   | Coordonnées WGS84 EPSG:4326                 |
-
-Rôles autorisés : `postgrest_anct_dev`
-
-Migration : `V007`
-
----
 
 #### `GET /carto`
 
@@ -522,3 +499,4 @@ NOTIFY pgrst, 'reload schema';
 | V036      | `V036_20251216__postgrest_token.sql`              | Mise à jour `create_role_n_token()` et `add_token()` (expiration en timestamp) |
 | V037      | `V037_20251216__api_data_inclusion.sql`            | Rôle `postgrest_anct_data_incl`                                   |
 | V157      | `V157_20260828__drop_coordination_mediation_et_get_mediateur.sql` | Suppression de `api.get_mediateur()` et de `main.coordination_mediation` (#1707) |
+| V177      | `V177_20260930__nettoyage_residus_refonte_structure.sql` | Suppression de la vue `api.structures` (compat V087, plus de consommateur) et du rôle `postgrest_anct_dev` (N6) |

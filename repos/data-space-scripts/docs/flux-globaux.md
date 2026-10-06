@@ -130,7 +130,6 @@ Trois grands modes d'accès :
    | `api.carto`, `api.get_carto_mediateur` | `postgrest_anct_carto` | **Cartographie** (`cartographie/`) |
    | `api.get_mediateur` (RPC) | `postgrest_coop` | **Coop** (`coop-mediation-numerique/`) — déclenche en cascade des écritures côté Coop qui repartiront vers `coop-import`, voir §5 |
    | `api.aidants_connect`, `api.feuille_de_route` | `postgrest_anct_incub` | "Incubateur ANCT" — **consommateur externe non identifié dans les 3 repos scannés**. La vue `api.feuille_de_route` agrège côté entrepôt la donnée écrite par MIN dans `min.feuille_de_route`. Plausiblement consommé par un dashboard / un site ANCT, mais à confirmer côté ops |
-   | `api.structures` | `postgrest_anct_dev` | Rôle "ANCT role for dev tests" (cf V007), pas un consommateur de production |
 
 3. **Accès direct DB par Prisma** — **MIN uniquement** (`min/`). Prisma ouvre
    la connexion PostgreSQL sur la base entrepôt et a accès aux schémas

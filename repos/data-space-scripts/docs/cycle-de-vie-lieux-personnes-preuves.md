@@ -65,7 +65,7 @@ découpée en sous-assertions par strate, avec un pointeur vers sa preuve.*
 | Sous-assertion | Module | Preuve |
 |---|---|---|
 | le difftool est présenté avant modification d'un lieu divergent | app coop | 🤝 PR coop #615 (leurs tests UI) — nous n'avons AUCUNE preuve de notre côté |
-| la vue divergences fournit le matériau exact du difftool | V161/V166 | 🧪 TI-manuel partiel (contrôle de santé §1-2) — ❌ TI dédié à créer (cas synthétiques par champ) |
+| la vue divergences fournit le matériau exact du difftool | V161/V166/V176 | 🧪 TI-manuel partiel (contrôle de santé §1-2) — ❌ TI dédié à créer (cas synthétiques par champ) |
 
 ### T-05 « Toute réconciliation gardée par date est aveugle → le filet compare les valeurs »
 
@@ -117,7 +117,7 @@ découpée en sous-assertions par strate, avec un pointeur vers sa preuve.*
 | Sous-assertion | Module | Preuve |
 |---|---|---|
 | comparateurs du filet normalisés (`NULLIF(..., '{}')`) | filet | ✅ TU-CI (expressions dans les SQL testés) |
-| vue divergences normalisée | V166 | 🔎 contrôle §1 (plus aucune fausse divergence liste) — ❌ TI à créer (cas synthétique `[]` vs NULL → 0 divergence) |
+| vue divergences normalisée | V166/V176 | 🔎 contrôle §1 (plus aucune fausse divergence liste) — ❌ TI à créer (cas synthétique `[]` vs NULL → 0 divergence) |
 
 ### L-05 « Critères d'affichage carte d'un lieu : référencé + visible + non supprimé »
 

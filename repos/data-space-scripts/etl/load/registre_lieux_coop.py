@@ -172,7 +172,12 @@ UPDATE main.lieu_inclusion r SET
                         CASE WHEN cl.courriels IS NOT NULL AND array_length(cl.courriels, 1) > 0
                              THEN jsonb_build_object('email', array_to_string(cl.courriels, '|'))
                              ELSE NULL::jsonb END,
-                    'site_web', NULLIF(cl.site_web, '')))
+                    'site_web',
+                        CASE jsonb_typeof(to_jsonb(cl)->'site_web')
+                             WHEN 'array'
+                             THEN NULLIF(array_to_string(ARRAY(SELECT jsonb_array_elements_text(to_jsonb(cl)->'site_web')), '|'), '')
+                             ELSE NULLIF(to_jsonb(cl)->>'site_web', '')
+                        END))
 FROM coop.lieu_inclusion cl
 WHERE cl.id = r.structure_coop_id
   AND (r.nom, r.deleted_at, r.visible_pour_cartographie_nationale,
@@ -214,7 +219,12 @@ WHERE cl.id = r.structure_coop_id
                  CASE WHEN cl.courriels IS NOT NULL AND array_length(cl.courriels, 1) > 0
                       THEN jsonb_build_object('email', array_to_string(cl.courriels, '|'))
                       ELSE NULL::jsonb END,
-             'site_web', NULLIF(cl.site_web, ''))))
+             'site_web',
+                 CASE jsonb_typeof(to_jsonb(cl)->'site_web')
+                      WHEN 'array'
+                      THEN NULLIF(array_to_string(ARRAY(SELECT jsonb_array_elements_text(to_jsonb(cl)->'site_web')), '|'), '')
+                      ELSE NULLIF(to_jsonb(cl)->>'site_web', '')
+                 END)))
 """
 
 # 7) Orphelins (SEPT #1950, piège n° 8) : ligne référentiel vivante dont le

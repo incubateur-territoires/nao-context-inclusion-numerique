@@ -244,7 +244,7 @@ FROM api.carto;
 - `main.lieu_inclusion` = **la vérité pour tous les autres** : api.carto, opendata,
   MIN, dataviz.
 - Les deux peuvent diverger **temporairement** ; la vue `main.lieu_divergences_coop`
-  (V161/V166) expose une ligne par (lieu coop vivant, champ divergent). Quand un
+  (V161/V166/V176) expose une ligne par (lieu coop vivant, champ divergent). Quand un
   utilisateur coop veut modifier un lieu divergent, l'application lui demande
   d'abord de **synchroniser** via un difftool : c'est le garde-fou « l'humain
   tranche ».
@@ -605,8 +605,9 @@ piège n° 9.
 ## 5. Index des références
 
 **Migrations clés (lieux)** : V153 (vue d'union), V155 (`trouver_ou_creer_adresse_lieu`),
-V160 (grants + re-matérialisation du stock coop), V161/V166 (vue divergences,
-équivalence listes vides), V162 (bascule vue → table), V163 (renommage
+V160 (grants + re-matérialisation du stock coop), V161/V166/V176 (vue divergences,
+équivalence listes vides ; V176 : `site_web` coop lu en texte ou en liste),
+V162 (bascule vue → table), V163 (renommage
 `lieu_inclusion_registre` → `lieu_inclusion`), V145 (filtre opendata), V158
 (`emplois` NULL), V167 (`api.carto` : `deleted_at` filtré pour toutes les
 origines).
