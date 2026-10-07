@@ -1,8 +1,8 @@
 name: tdb_e_membres_coporteurs
-prompt: "Combien de membres de gouvernance non supprimés sont coporteurs, toutes gouvernances confondues ? Règle du tableau de bord : membres dont le statut n'est pas « supprimé » (candidats et confirmés inclus). Exclure la gouvernance technique « zzz »."
+prompt: "Combien de membres de gouvernance non supprimés sont coporteurs, toutes gouvernances confondues ? Règle du tableau de bord : membres dont le statut n'est pas « supprimé » (candidats et confirmés inclus)."
 kind: scalar
 tags: [tableau-de-bord, E]
 sql: |
   SELECT count(*) AS n
   FROM llm.membre
-  WHERE gouvernance_departement_code <> 'zzz' AND statut <> 'supprimer' AND is_coporteur = true
+  WHERE statut <> 'supprimer' AND is_coporteur = true

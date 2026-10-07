@@ -1,5 +1,5 @@
 name: tdb_i_gouvernances_sans_coporteur
-prompt: "Sur la page d'administration des gouvernances de MIN, combien de gouvernances sont « sans coporteur », c'est-à-dire n'ont qu'un seul membre coporteur (en pratique la préfecture) ? Règle de cette page : tous les membres comptent, quel que soit leur statut (y compris supprimés). Exclure la gouvernance technique « zzz »."
+prompt: "Sur la page d'administration des gouvernances de MIN, combien de gouvernances sont « sans coporteur », c'est-à-dire n'ont qu'un seul membre coporteur (en pratique la préfecture) ? Règle de cette page : tous les membres comptent, quel que soit leur statut (y compris supprimés)."
 kind: scalar
 tags: [tableau-de-bord, I]
 sql: |
@@ -7,5 +7,4 @@ sql: |
     SELECT g.departement_code
     FROM llm.gouvernance g
     LEFT JOIN llm.membre m ON m.gouvernance_departement_code = g.departement_code AND m.is_coporteur = true
-    WHERE g.departement_code <> 'zzz'
     GROUP BY 1 HAVING count(m.id) = 1) t

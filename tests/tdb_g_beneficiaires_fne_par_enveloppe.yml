@@ -1,5 +1,5 @@
 name: tdb_g_beneficiaires_fne_par_enveloppe
-prompt: "Pour chaque enveloppe de financement France Numérique Ensemble, combien de membres de gouvernance distincts sont bénéficiaires d'une demande de subvention « acceptée » rattachée à une action d'une feuille de route (hors gouvernance technique « zzz ») ? Tableau libellé complet de l'enveloppe / nombre de bénéficiaires distincts."
+prompt: "Pour chaque enveloppe de financement France Numérique Ensemble, combien de membres de gouvernance distincts sont bénéficiaires d'une demande de subvention « acceptée » rattachée à une action d'une feuille de route ? Tableau libellé complet de l'enveloppe / nombre de bénéficiaires distincts."
 kind: table
 tags: [tableau-de-bord, G]
 sql: |
@@ -9,5 +9,5 @@ sql: |
   JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
   JOIN min.enveloppe_financement e ON e.id = d.enveloppe_financement_id
   JOIN min.beneficiaire_subvention b ON b.demande_de_subvention_id = d.id
-  WHERE f.gouvernance_departement_code <> 'zzz' AND d.statut = 'acceptee'
+  WHERE d.statut = 'acceptee'
   GROUP BY 1 ORDER BY 1
