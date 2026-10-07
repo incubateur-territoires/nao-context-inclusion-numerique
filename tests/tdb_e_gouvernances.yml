@@ -1,6 +1,6 @@
 name: tdb_e_gouvernances
-prompt: "Combien de gouvernances départementales existent dans MIN ? Exclure la gouvernance technique de code département « zzz »."
+prompt: "Combien de gouvernances départementales existent dans MIN ?"
 kind: scalar
 tags: [tableau-de-bord, E]
 sql: |
-  SELECT count(*) AS n FROM llm.gouvernance WHERE departement_code <> 'zzz'
+  SELECT count(*) AS n FROM llm.gouvernance

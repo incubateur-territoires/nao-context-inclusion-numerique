@@ -1,5 +1,5 @@
 name: tdb_f_fne_par_enveloppe
-prompt: "Donne la ventilation par enveloppe de financement du montant des financements France Numérique Ensemble engagés par l'État : pour chaque enveloppe, la somme en euros des subventions demandées des demandes « acceptée » rattachées à une action d'une feuille de route (hors gouvernance technique « zzz »). Tableau libellé complet de l'enveloppe / montant exact en euros."
+prompt: "Donne la ventilation par enveloppe de financement du montant des financements France Numérique Ensemble engagés par l'État : pour chaque enveloppe, la somme en euros des subventions demandées des demandes « acceptée » rattachées à une action d'une feuille de route. Tableau libellé complet de l'enveloppe / montant exact en euros."
 kind: table
 tags: [tableau-de-bord, F]
 sql: |
@@ -9,7 +9,7 @@ sql: |
     JOIN min.action a ON a.id = d.action_id
     JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
     JOIN min.enveloppe_financement e ON e.id = d.enveloppe_financement_id
-    WHERE f.gouvernance_departement_code <> 'zzz' AND d.statut = 'acceptee')
-
+    WHERE d.statut = 'acceptee')
+  
   SELECT enveloppe_libelle AS enveloppe, SUM(subvention_demandee)::bigint AS montant
   FROM demandes GROUP BY 1 ORDER BY 1

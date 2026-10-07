@@ -1,5 +1,5 @@
 name: tdb_e_gouvernances_coportees
-prompt: "Combien de gouvernances départementales sont co-portées, c'est-à-dire ont au moins 2 membres coporteurs non supprimés (membres candidats ou confirmés, hors statut « supprimé ») ? Exclure la gouvernance technique de code département « zzz »."
+prompt: "Combien de gouvernances départementales sont co-portées, c'est-à-dire ont au moins 2 membres coporteurs non supprimés (membres candidats ou confirmés, hors statut « supprimé ») ?"
 kind: scalar
 tags: [tableau-de-bord, E]
 sql: |
@@ -8,5 +8,4 @@ sql: |
     FROM llm.gouvernance g
     JOIN llm.membre m ON m.gouvernance_departement_code = g.departement_code
                      AND m.is_coporteur = true AND m.statut <> 'supprimer'
-    WHERE g.departement_code <> 'zzz'
     GROUP BY 1 HAVING count(*) >= 2) t

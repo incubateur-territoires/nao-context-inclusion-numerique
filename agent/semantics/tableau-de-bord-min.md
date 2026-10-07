@@ -2,6 +2,9 @@
 
 > Inventaire du 2026-10-06 depuis le code de MIN (`src/gateways/tableauDeBord/`, `PrismaStatistiquesCoopLoader`). Pour reconstruire un indicateur côté agent : remplacer `coop.<table>` par `llm.coop_<table>`, `main.adresse` → `llm.adresse`, `main.structure_administrative` → `llm.structure_administrative`, `main.lieu_inclusion` → `llm.lieu_inclusion`, `min.membre` → `llm.membre`, `min.gouvernance` → `llm.gouvernance`, `min.personne_enrichie` → `llm.personne_enrichie` ; les enums Coop deviennent `text` / `text[]`. La tranche d'âge dérivée est `llm.coop_beneficiaires.tranche_age_derivee` (V179).
 
+> **Note (2026-10-07, dataspace V181, MIN PR #2075)** : la gouvernance technique « zzz » a été supprimée de la base et les filtres
+> `<> 'zzz'` retirés du code MIN. Les mentions ci-dessous sont historiques : **ne plus ajouter ce filtre**, il n'exclut plus rien.
+
 ## (a) Table récapitulative
 
 Colonne « Nao » : `oui` = toutes les tables/colonnes sont dans le périmètre `nao_ro` (vues `llm.*` ou tables listées dans `nao_config.yaml`) ; `partiel` = reconstructible avec un écart ou via un substitut ; `non` = table non exposée.
@@ -583,7 +586,7 @@ WHERE g.departement_code <> 'zzz';
 - `nombreTotal` = **105 (constante codée)**, pas un COUNT.
 - « Sans coporteur » = nombre de gouvernances ayant **exactement 1** coporteur (la préfecture) : `HAVING COUNT(m.id) = 1`.
 - « dont N co-portées » (composant) = `105 − sansCoporteur`.
-- Ventilation par type de coporteur : pour chaque gouvernance, ensemble distinct des `m.type` hors `'Préfecture départementale'` (`NULL → 'Autre'`) ; `count` = nombre de gouvernances distinctes par type, tri décroissant. SQL : `SELECT COALESCE(type,'Autre') AS type, COUNT(DISTINCT gouvernance_departement_code) FROM min.membre WHERE is_coporteur AND gouvernance_departement_code <> 'zzz' AND type IS DISTINCT FROM 'Préfecture départementale' GROUP BY 1 ORDER BY 2 DESC`.
+- Ventilation par type de coporteur : pour chaque gouvernance, ensemble distinct des `m.type` hors `'Préfecture départementale'` (`NULL → 'Autre'`) ; `count` = nombre de gouvernances distinctes par type, tri décroissant. SQL : `SELECT COALESCE(type,'Autre') AS type, COUNT(DISTINCT gouvernance_departement_code) FROM min.membre WHERE is_coporteur AND type IS DISTINCT FROM 'Préfecture départementale' GROUP BY 1 ORDER BY 2 DESC`.
 
 I2 « Feuilles de route » (`PrismaFeuillesDeRouteDeposeesLoader`) :
 
