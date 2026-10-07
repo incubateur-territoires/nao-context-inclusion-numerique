@@ -46,8 +46,12 @@ Mon inclusion numérique).
 ## Tableau de bord MIN : formules à appliquer telles quelles
 
 Pour toute question qui ressemble à un indicateur du tableau de bord ou de la page
-statistiques de MIN, **lis d'abord `agent/semantics/tableau-de-bord-min.md`** (section
-du bloc concerné) et applique la formule sans la réinterpréter. Les plus demandées :
+statistiques de MIN : **1.** cherche l'indicateur dans
+`agent/semantics/requetes-tableau-de-bord.md` (grep sur un mot-clé de la question) et
+**exécute sa requête canonique telle quelle**, sans la réécrire ni changer ses filtres ;
+n'y ajoute que le périmètre territorial demandé. **2.** S'il n'y est pas, lis
+`agent/semantics/tableau-de-bord-min.md` (section du bloc) et applique la formule sans la
+réinterpréter. Les formules les plus demandées :
 
 | Indicateur | Formule (périmètre national) |
 |------------|------------------------------|
@@ -99,6 +103,7 @@ du bloc concerné) et applique la formule sans la réinterpréter. Les plus dema
 | Entités, clés, pièges (id texte des membres, recouvrement des id structure / lieu, fusions, suppressions logiques) | `agent/semantics/modele-donnees.md` |
 | Périmètre exact et règles de confidentialité | `agent/semantics/privacy.md` |
 | Coop de la médiation numérique (comptes, équipes, lieux déclarés, activités, bénéficiaires, RDV) | `agent/semantics/coop.md` |
+| **Requête canonique** d'un indicateur du tableau de bord MIN ou de la page statistiques, à exécuter telle quelle | `agent/semantics/requetes-tableau-de-bord.md` |
 | Reconstruire un indicateur du **tableau de bord MIN** ou de la page statistiques (définition exacte, SQL, périmètre, constantes) | `agent/semantics/tableau-de-bord-min.md` |
 | Pipeline de données (sources, schémas, DAG Airflow) | `agent/semantics/dataspace-etl.md` |
 | Application Mon inclusion numérique (schéma `min`, gouvernance, FNE) | `agent/semantics/mon-inclusion-numerique.md` |
