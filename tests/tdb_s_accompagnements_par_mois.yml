@@ -1,5 +1,6 @@
 name: tdb_s_accompagnements_par_mois
 prompt: "Sur la page Statistiques de MIN au niveau national, donne le nombre d'accompagnements par mois sur les 6 derniers mois pleins, sous forme de tableau mois (format AAAA-MM) / nombre. Les 6 derniers mois pleins = les 6 mois civils entièrement écoulés avant le mois en cours (le mois en cours est exclu). Seules les activités Coop non supprimées comptent. Unité de ce graphique : une ligne d'accompagnement par bénéficiaire (chaque participation à une activité compte un), et non le compteur d'accompagnements de l'activité."
+rtol: 0.01
 kind: table
 tags: [tableau-de-bord, S]
 sql: |
