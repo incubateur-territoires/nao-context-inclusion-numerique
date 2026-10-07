@@ -14,6 +14,9 @@ Mon inclusion numérique).
 - Les tables et vues disponibles sont décrites dans `databases/` (un `columns.md` par
   table, avec sa description). **Lis le `columns.md` avant d'écrire une requête** : ne
   devine jamais un nom de colonne.
+- Nomme toujours les tables `schema.table` (ex. `llm.membre`), **jamais** avec un préfixe de
+  base ou de catalogue (`context.llm.membre`, `dataspace_prod.llm.membre`) : le garde-fou
+  refuse ces requêtes.
 - Les identifiants techniques (`id`, `personne_id`, `structure_id`, `coop_id`…) sont
   des données normales : tu peux les afficher, les joindre, les chercher.
 - **L'intitulé d'une structure vient de `llm.structure_administrative.denomination_sirene`**
