@@ -1,13 +1,13 @@
 """Core BAN : transformation pure des réponses de géocodage.
 
-Functional core (approche-data/16) : aucune I/O ici. L'entrée est la forme
+Functional core (docs/architecture/architecture-code-fcis.md) : aucune I/O ici. L'entrée est la forme
 brute capturée dans source.ban__adresses (une ligne du CSV de réponse
 /search/csv, valeurs str | None — cf. contracts/ban__adresses.yml) ; la
 sortie, des lignes (dicts) aux colonnes produites par
 GeocodeurBatch.geocoder_dataframe.
 
 Comportement aligné sur le legacy `_geocoder_batch` (etl/geocoding_batch.py),
-SAUF correction décidée et tracée (MR 2 boucle BAN, approche-data/17) :
+SAUF correction décidée et tracée (MR 2 boucle BAN, docs/archive/plan-remise-au-propre.md) :
 - code_ban lit `result_banId` (casse réelle de l'API — le legacy lisait
   `result_banid` en minuscules, clef inexistante, 100 % None).
 

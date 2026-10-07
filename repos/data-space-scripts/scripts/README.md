@@ -13,10 +13,10 @@ Convertit un fichier markdown du repo en PDF stylé, en passant par
 
 ```bash
 # Sortie par défaut : <doc>.pdf à côté du source
-./scripts/export-doc-pdf.sh docs/flux-globaux.md
+./scripts/export-doc-pdf.sh docs/architecture/flux-globaux.md
 
 # Sortie personnalisée
-./scripts/export-doc-pdf.sh docs/flux-globaux.md /tmp/flux.pdf
+./scripts/export-doc-pdf.sh docs/architecture/flux-globaux.md /tmp/flux.pdf
 ```
 
 Le script marche pour **n'importe quel `.md`** du repo (pas juste

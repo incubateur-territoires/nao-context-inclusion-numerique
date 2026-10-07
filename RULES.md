@@ -100,8 +100,8 @@ du bloc concerné) et applique la formule sans la réinterpréter. Les plus dema
 | Pipeline de données (sources, schémas, DAG Airflow) | `agent/semantics/dataspace-etl.md` |
 | Application Mon inclusion numérique (schéma `min`, gouvernance, FNE) | `agent/semantics/mon-inclusion-numerique.md` |
 | Documentation du dataspace (index par rubrique : guides, sources, règles, décisions) | `repos/data-space-scripts/docs/README.md` |
-| « Mon lieu n'apparaît pas », « ce médiateur ne devrait plus être là » : d'où viennent les données, à quel rythme, pourquoi un affichage diffère | `repos/data-space-scripts/docs/cycle-de-vie-lieux-personnes-support.md` (version sans jargon), `cycle-de-vie-lieux-personnes.md` (règles exactes) |
-| Quand deux sources se contredisent, laquelle gagne | `repos/data-space-scripts/docs/regles-survivance.md` |
-| Chaque source de données (Coop, Conseillers numériques, Aidants Connect, cartographie) : technique et version métier `-metier` | `repos/data-space-scripts/docs/<source>.md` |
+| « Mon lieu n'apparaît pas », « ce médiateur ne devrait plus être là » : d'où viennent les données, à quel rythme, pourquoi un affichage diffère | `repos/data-space-scripts/docs/reference/regles/cycle-de-vie-lieux-personnes-support.md` (version sans jargon), `cycle-de-vie-lieux-personnes.md` (règles exactes, même dossier) |
+| Quand deux sources se contredisent, laquelle gagne | `repos/data-space-scripts/docs/reference/regles/regles-survivance.md` |
+| Chaque source de données (Coop, Conseillers numériques, Aidants Connect, cartographie) : technique et version métier `-metier` | `repos/data-space-scripts/docs/reference/sources/<source>.md` |
 | Règles métier détaillées et historique des changements | `repos/data-space-scripts/database/migrations/` (en-têtes commentés), `repos/data-space-scripts/CHANGELOG.md` |
 | Modèle Prisma de MIN | `repos/suite-gestionnaire-numerique/prisma/schema.prisma` |

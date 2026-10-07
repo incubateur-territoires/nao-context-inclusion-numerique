@@ -7,7 +7,7 @@ partagées entre les écrivains (etl/enrichment_cache.py, wrappers cache-first)
 et les lecteurs (jointure silver ⋈ caches côté ingest) sans dupliquer la
 logique — les shells (SireneBatch, enrichment_cache) délèguent ici.
 
-Functional core (approche-data/16) : aucune I/O, aucun pandas. Les NaN pandas
+Functional core (docs/architecture/architecture-code-fcis.md) : aucune I/O, aucun pandas. Les NaN pandas
 sont détectés par l'identité NaN != NaN (les appelants shell peuvent aussi
 convertir en None en amont).
 """

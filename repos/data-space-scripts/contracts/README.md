@@ -1,7 +1,7 @@
 # Contrats de flux (data contracts)
 
 > Un fichier YAML par flux entrant. Décrit ce que le pipeline **attend** de chaque source :
-> schéma, sémantique, garanties, volumétrie. Voir [approche-data/02-data-contracts.md](../approche-data/02-data-contracts.md).
+> schéma, sémantique, garanties, volumétrie. Voir [docs/architecture/data-contracts.md](../docs/architecture/data-contracts.md).
 
 ## Statut : documentaire
 

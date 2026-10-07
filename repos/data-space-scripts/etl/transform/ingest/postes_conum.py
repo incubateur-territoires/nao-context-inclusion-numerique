@@ -17,7 +17,7 @@ def dedup_rows_by_structure_tp_id(rows):
     Le CSV id-poste est tabulaire multidim : N lignes peuvent porter le même
     `structure_tp_id` avec des attributs structure identiques.
     `main.structure_administrative` impose `UNIQUE(structure_tp_id)`.
-    Voir `docs/id-poste-regles.md`.
+    Voir `docs/reference/regles/id-poste-regles.md`.
 
     Args:
         rows: itérable de mappings (dict ou pandas Series) exposant `.get(key)`.

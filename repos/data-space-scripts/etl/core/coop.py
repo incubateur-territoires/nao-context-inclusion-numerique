@@ -1,6 +1,6 @@
 """Core coop-numerique : transformations pures source.* → lignes finales.
 
-Functional core (approche-data/16) : aucune I/O ici. L'entrée est la forme
+Functional core (docs/architecture/architecture-code-fcis.md) : aucune I/O ici. L'entrée est la forme
 brute capturée dans source.coop__* (donnee JSONB : {"id", "attributes": {...}},
 cf. contracts/coop__*.yml) ; la sortie, des lignes (dicts) aux colonnes de la
 chaîne d'ingest existante.

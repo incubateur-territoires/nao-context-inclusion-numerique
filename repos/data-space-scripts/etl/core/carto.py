@@ -1,6 +1,6 @@
 """Core carto : transformation pure du fichier national mednum-cli.
 
-Functional core (approche-data/16) : aucune I/O ici. L'entrée est la forme
+Functional core (docs/architecture/architecture-code-fcis.md) : aucune I/O ici. L'entrée est la forme
 brute capturée dans source.carto__structures (les lieux du fichier national
 dédupliqué, schéma data-inclusion — cf. contracts/carto__structures.yml) ;
 la sortie, le DataFrame prêt à matérialiser dans staging.carto__structures.
