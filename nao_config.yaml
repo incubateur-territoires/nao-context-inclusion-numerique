@@ -4,7 +4,11 @@ databases:
     type: postgres
     host: "{{ env('NAO_DB_HOST') }}"
     port: "{{ env('NAO_DB_PORT') }}"
-    database: "{{ env('NAO_DB_NAME') }}"
+    # Nom de base en dur : la valeur NAO_DB_NAME du serveur (« context ») ne
+    # correspond pas à la base réellement connectée ; l'agent préfixait alors ses
+    # requêtes par « context. » et le garde-fou les refusait (36 refus en deux
+    # jours dans les logs). Doit rester égal au nom du dossier databases/…/database=.
+    database: dataspace_prod
     user: "{{ env('NAO_DB_USER') }}"
     password: "{{ env('NAO_DB_PASSWORD') }}"
     # Périmètre = exactement ce que le rôle Postgres `nao_ro` peut lire.
