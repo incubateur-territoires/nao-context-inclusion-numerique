@@ -1,5 +1,5 @@
 name: tdb_f_fne_par_enveloppe
-prompt: "Donne la ventilation par enveloppe de financement du montant des financements France Numérique Ensemble engagés par l'État : pour chaque enveloppe, la somme en euros des subventions demandées des demandes « acceptée » rattachées à une action d'une feuille de route. Tableau libellé complet de l'enveloppe / montant exact en euros."
+prompt: "Donne la ventilation par enveloppe de financement du montant des financements France Numérique Ensemble engagés par l'État : pour chaque enveloppe, la somme en euros des subventions demandées des demandes « acceptée » rattachées à une action d'une feuille de route. Règle du tableau de bord MIN : toute enveloppe compte, quel que soit son libellé, dès lors qu'elle n'est pas une enveloppe « Conseiller Numérique » (ne pas filtrer sur les mots « France Numérique Ensemble »). Tableau libellé complet de l'enveloppe / montant exact en euros."
 kind: table
 tags: [tableau-de-bord, F]
 sql: |

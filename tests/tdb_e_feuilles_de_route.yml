@@ -1,5 +1,5 @@
 name: tdb_e_feuilles_de_route
-prompt: ""
+prompt: "Combien de feuilles de route ont été déposées dans MIN, toutes gouvernances confondues ? Toute feuille de route existante compte."
 kind: scalar
 tags: [tableau-de-bord, E]
 sql: |

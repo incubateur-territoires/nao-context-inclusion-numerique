@@ -143,7 +143,7 @@ JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
 
 ### `tdb_e_feuilles_de_route` (scalar)
 
-**Question** : 
+**Question** : Combien de feuilles de route ont été déposées dans MIN, toutes gouvernances confondues ? Toute feuille de route existante compte.
 
 ```sql
 SELECT count(*) AS n FROM min.feuille_de_route
@@ -254,7 +254,7 @@ SELECT count(*) AS n FROM demandes
 
 ### `tdb_f_fne_par_enveloppe` (table)
 
-**Question** : Donne la ventilation par enveloppe de financement du montant des financements France Numérique Ensemble engagés par l'État : pour chaque enveloppe, la somme en euros des subventions demandées des demandes « acceptée » rattachées à une action d'une feuille de route. Tableau libellé complet de l'enveloppe / montant exact en euros.
+**Question** : Donne la ventilation par enveloppe de financement du montant des financements France Numérique Ensemble engagés par l'État : pour chaque enveloppe, la somme en euros des subventions demandées des demandes « acceptée » rattachées à une action d'une feuille de route. Règle du tableau de bord MIN : toute enveloppe compte, quel que soit son libellé, dès lors qu'elle n'est pas une enveloppe « Conseiller Numérique » (ne pas filtrer sur les mots « France Numérique Ensemble »). Tableau libellé complet de l'enveloppe / montant exact en euros.
 
 ```sql
 WITH demandes AS (
