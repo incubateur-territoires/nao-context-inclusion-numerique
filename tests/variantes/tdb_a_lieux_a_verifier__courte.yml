@@ -1,0 +1,11 @@
+name: tdb_a_lieux_a_verifier__courte
+prompt: "Combien de lieux à vérifier ?"
+kind: scalar
+rtol: 0.01
+tags: [variante, courte, A]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.lieu_inclusion l
+  WHERE l.deleted_at IS NULL
+    AND l.updated_at > now() - interval '548 days'
+    AND l.updated_at <= now() - interval '365 days'

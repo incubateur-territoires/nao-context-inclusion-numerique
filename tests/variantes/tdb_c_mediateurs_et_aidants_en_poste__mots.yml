@@ -1,0 +1,10 @@
+name: tdb_c_mediateurs_et_aidants_en_poste__mots
+prompt: "Nombre de personnes actuellement en poste comme médiateur numérique ou comme aidant numérique, chaque personne comptée une seule fois, France entière."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, C]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.personne_enrichie
+  WHERE est_actuellement_aidant_numerique_en_poste = true
+     OR est_actuellement_mediateur_en_poste = true

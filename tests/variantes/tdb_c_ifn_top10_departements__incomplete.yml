@@ -1,0 +1,11 @@
+name: tdb_c_ifn_top10_departements__incomplete
+prompt: "Quels sont les 10 départements dont l'indice de fragilité numérique est le plus élevé ? Tableau nom du département / score arrondi à 2 décimales, du plus fragile au moins fragile."
+kind: table
+rtol: 0.005
+tags: [variante, incomplete, C]
+sql: |
+  SELECT d.nom AS departement, round(i.score::numeric, 2) AS score
+  FROM admin.ifn_departement i
+  JOIN admin.departement d ON d.code = i.code
+  ORDER BY i.score DESC, d.nom
+  LIMIT 10

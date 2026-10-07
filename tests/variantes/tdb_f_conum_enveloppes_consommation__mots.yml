@@ -1,0 +1,17 @@
+name: tdb_f_conum_enveloppes_consommation__mots
+prompt: "Pour les enveloppes dont le nom commence par « Conseiller Numérique », montant national consommé : enveloppe Plan France Relance = total brut des subventions V1 des postes, enveloppe Renouvellement = total brut des subventions V2. Tableau libellé de l'enveloppe / euros."
+kind: table
+rtol: 0.005
+tags: [variante, mots, F]
+sql: |
+  WITH agg AS (
+    SELECT COALESCE(SUM(s.montant_subvention_v1), 0)::bigint AS total_v1,
+           COALESCE(SUM(s.montant_subvention_v2), 0)::bigint AS total_v2
+    FROM main.subvention s)
+  SELECT e.libelle AS enveloppe,
+         CASE WHEN e.libelle LIKE '%Renouvellement%' THEN agg.total_v2
+              WHEN e.libelle LIKE '%Plan France Relance%' THEN agg.total_v1
+              ELSE 0 END AS consommation
+  FROM min.enveloppe_financement e CROSS JOIN agg
+  WHERE e.libelle LIKE 'Conseiller Numérique%'
+  ORDER BY e.libelle

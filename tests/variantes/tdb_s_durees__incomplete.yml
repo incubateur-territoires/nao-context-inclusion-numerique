@@ -1,0 +1,15 @@
+name: tdb_s_durees__incomplete
+prompt: "Sur la page Statistiques de MIN au niveau national, donne la répartition des accompagnements par durée d'activité, tableau avec exactement ces libellés : « Moins de 30 min », « 30min à 1 h », « 1 h à 2 h », « 2 h et plus ». Tolérance 1 %."
+kind: table
+rtol: 0.01
+tags: [variante, incomplete, S]
+sql: |
+  SELECT CASE WHEN act.duree < 30 THEN 'Moins de 30 min'
+              WHEN act.duree < 60 THEN '30min à 1 h'
+              WHEN act.duree < 120 THEN '1 h à 2 h'
+              ELSE '2 h et plus' END AS tranche,
+         SUM(act.accompagnements_count)::bigint AS n
+  FROM llm.coop_activites act
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE
+    AND act.duree IS NOT NULL AND act.duree >= 0
+  GROUP BY 1 ORDER BY min(act.duree)

@@ -1,0 +1,11 @@
+name: tdb_c_ifn_top10_departements__courte
+prompt: "Top 10 des départements les plus fragiles numériquement ? Tableau département / score à 2 décimales."
+kind: table
+rtol: 0.005
+tags: [variante, courte, C]
+sql: |
+  SELECT d.nom AS departement, round(i.score::numeric, 2) AS score
+  FROM admin.ifn_departement i
+  JOIN admin.departement d ON d.code = i.code
+  ORDER BY i.score DESC, d.nom
+  LIMIT 10

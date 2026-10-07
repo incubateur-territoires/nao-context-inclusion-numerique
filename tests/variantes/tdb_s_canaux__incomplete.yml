@@ -1,0 +1,16 @@
+name: tdb_s_canaux__incomplete
+prompt: "Sur la page Statistiques de MIN au niveau national, donne la répartition des accompagnements par canal, tableau avec exactement ces libellés : « Lieu d'activité », « Autre lieu », « À domicile », « À distance ». Tolérance 1 %."
+kind: table
+rtol: 0.01
+tags: [variante, incomplete, S]
+sql: |
+  SELECT CASE act.type_lieu
+           WHEN 'lieu_activite' THEN 'Lieu d''activité'
+           WHEN 'autre' THEN 'Autre lieu'
+           WHEN 'domicile' THEN 'À domicile'
+           WHEN 'a_distance' THEN 'À distance' END AS canal,
+         SUM(act.accompagnements_count)::bigint AS n
+  FROM llm.coop_activites act
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE
+    AND act.type_lieu IN ('lieu_activite', 'autre', 'domicile', 'a_distance')
+  GROUP BY 1 ORDER BY 2 DESC

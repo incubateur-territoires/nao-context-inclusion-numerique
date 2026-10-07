@@ -1,0 +1,9 @@
+name: tdb_d_mediateurs_numeriques__courte
+prompt: "Combien de médiateurs numériques en poste ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, D]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.personne_enrichie
+  WHERE est_actuellement_mediateur_en_poste = true

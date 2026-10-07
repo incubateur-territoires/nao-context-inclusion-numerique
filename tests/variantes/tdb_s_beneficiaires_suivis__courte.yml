@@ -1,0 +1,11 @@
+name: tdb_s_beneficiaires_suivis__courte
+prompt: "Combien de bénéficiaires suivis sur la page Statistiques ?"
+kind: scalar
+rtol: 0.01
+tags: [variante, courte, S]
+sql: |
+  SELECT count(DISTINCT ben.id) AS n 
+  FROM llm.coop_activites act
+  JOIN llm.coop_accompagnements acc ON acc.activite_id = act.id
+  JOIN llm.coop_beneficiaires ben ON ben.id = acc.beneficiaire_id
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE AND ben.anonyme = false

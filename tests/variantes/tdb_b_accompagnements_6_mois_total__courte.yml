@@ -1,0 +1,11 @@
+name: tdb_b_accompagnements_6_mois_total__courte
+prompt: "Total des accompagnements Coop sur les 6 derniers mois pleins ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, B]
+sql: |
+  SELECT COALESCE(SUM(a.accompagnements_count), 0)::bigint AS n
+  FROM llm.coop_activites a
+  WHERE a.suppression IS NULL
+    AND a.date >= date_trunc('month', CURRENT_DATE) - interval '6 months'
+    AND a.date <  date_trunc('month', CURRENT_DATE)

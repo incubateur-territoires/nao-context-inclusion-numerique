@@ -1,0 +1,11 @@
+name: tdb_s_thematiques_mediation_top10__courte
+prompt: "Top 10 des thématiques de médiation numérique (page Statistiques) ? Tableau identifiant de thématique / nombre."
+kind: table
+rtol: 0.01
+tags: [variante, courte, S]
+sql: |
+  SELECT th AS thematique, SUM(act.accompagnements_count)::bigint AS n
+  FROM llm.coop_activites act, unnest(act.thematiques) AS th
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE
+    AND th IN ('diagnostic_numerique','prendre_en_main_du_materiel','maintenance_de_materiel','gere_ses_contenus_numeriques','navigation_sur_internet','email','bureautique','reseaux_sociaux','sante','banque_et_achats_en_ligne','entrepreneuriat','insertion_professionnelle','securite_numerique','parentalite','scolarite_et_numerique','creer_avec_le_numerique','culture_numerique','intelligence_artificielle','aide_aux_demarches_administratives')
+  GROUP BY 1 ORDER BY 2 DESC LIMIT 10

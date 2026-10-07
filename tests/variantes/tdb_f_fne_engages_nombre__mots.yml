@@ -1,0 +1,14 @@
+name: tdb_f_fne_engages_nombre__mots
+prompt: "Nombre de demandes de subvention acceptées rattachées à une action de feuille de route (financements engagés par l'État au titre de France Numérique Ensemble)."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, F]
+sql: |
+  WITH demandes AS (
+      SELECT d.subvention_demandee, e.libelle AS enveloppe_libelle, e.montant AS enveloppe_montant
+      FROM min.demande_de_subvention d
+      JOIN min.action a ON a.id = d.action_id
+      JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
+      JOIN min.enveloppe_financement e ON e.id = d.enveloppe_financement_id
+      WHERE d.statut = 'acceptee')
+  SELECT count(*) AS n FROM demandes

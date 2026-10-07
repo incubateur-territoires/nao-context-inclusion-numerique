@@ -1,0 +1,10 @@
+name: tdb_c_mediateurs_et_aidants_en_poste__courte
+prompt: "Combien de médiateurs et aidants numériques en poste ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, C]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.personne_enrichie
+  WHERE est_actuellement_aidant_numerique_en_poste = true
+     OR est_actuellement_mediateur_en_poste = true

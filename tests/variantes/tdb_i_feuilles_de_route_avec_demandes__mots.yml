@@ -1,0 +1,11 @@
+name: tdb_i_feuilles_de_route_avec_demandes__mots
+prompt: "Nombre de feuilles de route dont une action au moins porte une demande de subvention, peu importe l'état de la demande."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, I]
+sql: |
+  SELECT count(*) AS n
+  FROM min.feuille_de_route f
+  WHERE EXISTS (SELECT 1 FROM min.action a
+                JOIN min.demande_de_subvention d ON d.action_id = a.id
+                WHERE a.feuille_de_route_id = f.id)

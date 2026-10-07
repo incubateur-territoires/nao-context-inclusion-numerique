@@ -1,0 +1,9 @@
+name: tdb_e_membres_gouvernance__mots
+prompt: "Nombre total d'organisations membres des gouvernances départementales dans MIN, non supprimées (candidates ou confirmées), une organisation siégeant dans plusieurs départements étant comptée à chaque fois."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, E]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.membre
+  WHERE statut <> 'supprimer'

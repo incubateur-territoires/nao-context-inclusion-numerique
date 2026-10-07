@@ -1,0 +1,7 @@
+name: tdb_e_gouvernances__incomplete
+prompt: "Combien de gouvernances existent ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, incomplete, E]
+sql: |
+  SELECT count(*) AS n FROM llm.gouvernance

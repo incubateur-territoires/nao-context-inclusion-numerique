@@ -1,0 +1,11 @@
+name: tdb_i_gouvernances_sans_coporteur__courte
+prompt: "Combien de gouvernances sans coporteur (page admin) ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, I]
+sql: |
+  SELECT count(*) AS n FROM (
+    SELECT g.departement_code
+    FROM llm.gouvernance g
+    LEFT JOIN llm.membre m ON m.gouvernance_departement_code = g.departement_code AND m.is_coporteur = true
+    GROUP BY 1 HAVING count(m.id) = 1) t

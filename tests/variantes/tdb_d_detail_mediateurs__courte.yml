@@ -1,0 +1,17 @@
+name: tdb_d_detail_mediateurs__courte
+prompt: "Parmi les médiateurs en poste : combien de coordinateurs, de conseillers numériques et d'Aidants Connect ? Tableau à trois lignes."
+kind: table
+rtol: 0.005
+tags: [variante, courte, D]
+sql: |
+  SELECT 'Coordinateurs' AS indicateur, count(*) AS n
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND is_coordinateur = true
+  UNION ALL
+  SELECT 'Conseillers numériques', count(*)
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND est_actuellement_conseiller_numerique = true
+  UNION ALL
+  SELECT 'Aidants Connect', count(*)
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND labellisation_aidant_connect = true

@@ -1,0 +1,13 @@
+name: tdb_s_accompagnements_par_mois__mots
+prompt: "Page Statistiques, national : pour chacun des six mois civils complets précédant le mois en cours, nombre de participations de bénéficiaires à des activités Coop non supprimées (une ligne d'accompagnement par bénéficiaire). Tableau mois au format AAAA-MM / nombre."
+kind: table
+rtol: 0.01
+tags: [variante, mots, S]
+sql: |
+  SELECT to_char(date_trunc('month', act.date), 'YYYY-MM') AS mois, count(*) AS n
+  FROM llm.coop_activites act
+  JOIN llm.coop_accompagnements acc ON acc.activite_id = act.id
+  WHERE act.suppression IS NULL
+    AND act.date >= date_trunc('month', CURRENT_DATE) - interval '6 months'
+    AND act.date <  date_trunc('month', CURRENT_DATE)
+  GROUP BY 1 ORDER BY 1

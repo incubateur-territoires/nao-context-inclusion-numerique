@@ -1,0 +1,12 @@
+name: tdb_c_accompagnements_realises_total__courte
+prompt: "Combien d'accompagnements réalisés au total, Coop et Aidants Connect ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, C]
+sql: |
+  SELECT (SELECT COALESCE(SUM(pe.nb_accompagnements_ac), 0)
+            FROM llm.personne_enrichie pe
+           WHERE pe.type_accompagnateur = 'aidant_numerique')
+       + (SELECT COALESCE(SUM(a.accompagnements_count), 0)
+            FROM llm.coop_activites a
+           WHERE a.suppression IS NULL) AS n

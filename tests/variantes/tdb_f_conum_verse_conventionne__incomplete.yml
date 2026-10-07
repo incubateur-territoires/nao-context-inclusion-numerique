@@ -1,0 +1,11 @@
+name: tdb_f_conum_verse_conventionne__incomplete
+prompt: "Au niveau national, quel est le montant total conventionné et le montant total versé pour les postes Conseiller numérique ? Tableau à deux lignes : « conventionné » / montant, « versé » / montant, en euros."
+kind: table
+rtol: 0.005
+tags: [variante, incomplete, F]
+sql: |
+  SELECT 'conventionné' AS indicateur, COALESCE(SUM(v.montant_subvention_cumule), 0)::bigint AS montant
+    FROM min.postes_conseiller_numerique_synthese v
+  UNION ALL
+  SELECT 'versé', COALESCE(SUM(v.montant_versement_cumule), 0)::bigint
+    FROM min.postes_conseiller_numerique_synthese v

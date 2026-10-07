@@ -70,9 +70,9 @@ def _lines_with_label(text: str, label: str) -> list[str]:
     return [ln for ln in text.splitlines() if key and key in _norm(ln)]
 
 
-def charger_tests(motif: str | None, tag: str | None) -> list[dict]:
+def charger_tests(motif: str | None, tag: str | None, dossier: Path = TESTS) -> list[dict]:
     tests = []
-    for p in sorted(TESTS.glob("*.y*ml")):
+    for p in sorted(Path(dossier).glob("*.y*ml")):
         t = yaml.safe_load(p.read_text())
         t.setdefault("name", p.stem)
         t.setdefault("kind", "scalar")
@@ -121,11 +121,12 @@ def main() -> int:
     ap.add_argument("-k", dest="motif")
     ap.add_argument("-t", dest="tag")
     ap.add_argument("-x", dest="exclure", help="tag à exclure (ex. lourd)")
+    ap.add_argument("-d", dest="dossier", default=str(TESTS), help="dossier de tests (défaut : tests/)")
     ap.add_argument("-o", dest="out", default="rapport_eval.json")
     ap.add_argument("--model", default="(modèle configuré dans Nao)")
     a = ap.parse_args()
 
-    tests = [t for t in charger_tests(a.motif, a.tag) if not (a.exclure and a.exclure in (t.get("tags") or []))]
+    tests = [t for t in charger_tests(a.motif, a.tag, Path(a.dossier)) if not (a.exclure and a.exclure in (t.get("tags") or []))]
     if not tests:
         print("aucun test")
         return 2

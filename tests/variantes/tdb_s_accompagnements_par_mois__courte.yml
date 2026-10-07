@@ -1,0 +1,13 @@
+name: tdb_s_accompagnements_par_mois__courte
+prompt: "Accompagnements par mois sur les 6 derniers mois pleins ? Tableau AAAA-MM / nombre."
+kind: table
+rtol: 0.01
+tags: [variante, courte, S]
+sql: |
+  SELECT to_char(date_trunc('month', act.date), 'YYYY-MM') AS mois, count(*) AS n
+  FROM llm.coop_activites act
+  JOIN llm.coop_accompagnements acc ON acc.activite_id = act.id
+  WHERE act.suppression IS NULL
+    AND act.date >= date_trunc('month', CURRENT_DATE) - interval '6 months'
+    AND act.date <  date_trunc('month', CURRENT_DATE)
+  GROUP BY 1 ORDER BY 1

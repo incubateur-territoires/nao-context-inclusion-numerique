@@ -1,0 +1,9 @@
+name: tdb_e_membres_gouvernance__incomplete
+prompt: "Combien de membres de gouvernance non supprimés y a-t-il au total dans MIN ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, incomplete, E]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.membre
+  WHERE statut <> 'supprimer'

@@ -1,0 +1,7 @@
+name: tdb_h_structures_eligibles_label_conum__mots
+prompt: "Nombre de structures distinctes ayant eu au moins un poste Conseiller numérique, peu importe l'état du poste (occupé, vacant, rendu) : éligibilité au label au sens du tableau de bord."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, H]
+sql: |
+  SELECT count(DISTINCT p.structure_id) AS n FROM main.poste p WHERE p.structure_id IS NOT NULL
