@@ -1,5 +1,5 @@
 name: tdb_b_lieux_avec_personne_affectee
-prompt: "Combien de lieux d'inclusion numérique distincts ont au moins une personne (médiateur ou aidant) actuellement affectée à ce lieu, c'est-à-dire avec une affectation au lieu encore active ? Compter tous les lieux, y compris ceux marqués supprimés (c'est la règle du bloc « Données structure » du tableau de bord MIN)."
+prompt: "Combien de lieux d'inclusion numérique distincts ont au moins une affectation de personne encore active (affectation au lieu avec est_active vrai), sans aucune condition sur le statut de la personne (pas de filtre « en poste ») ? Compter tous les lieux, y compris ceux marqués supprimés (c'est la règle du bloc « Données structure » du tableau de bord MIN)."
 kind: scalar
 tags: [tableau-de-bord, B]
 sql: |
