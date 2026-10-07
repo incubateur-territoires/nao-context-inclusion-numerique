@@ -41,7 +41,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TESTS = ROOT / "tests"
 DB_ID = "postgres-inclusion-numerique"
 
-NUM = re.compile(r"(?<![\w,.])-?(?:\d{1,3}(?:[ \u202f\u00a0]\d{3})+|\d+)(?:[.,]\d+)?(?![\w])")
+NUM = re.compile(r"(?<![\w,.])-?(?:\d{1,3}(?:[ \u202f\u00a0,]\d{3})+|\d+)(?:[.,]\d+)?(?![\w])")
 
 
 def _norm(s: str) -> str:
@@ -120,11 +120,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("-k", dest="motif")
     ap.add_argument("-t", dest="tag")
+    ap.add_argument("-x", dest="exclure", help="tag à exclure (ex. lourd)")
     ap.add_argument("-o", dest="out", default="rapport_eval.json")
     ap.add_argument("--model", default="(modèle configuré dans Nao)")
     a = ap.parse_args()
 
-    tests = charger_tests(a.motif, a.tag)
+    tests = [t for t in charger_tests(a.motif, a.tag) if not (a.exclure and a.exclure in (t.get("tags") or []))]
     if not tests:
         print("aucun test")
         return 2

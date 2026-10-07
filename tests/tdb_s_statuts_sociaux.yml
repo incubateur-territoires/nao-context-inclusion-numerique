@@ -2,7 +2,7 @@ name: tdb_s_statuts_sociaux
 prompt: "Sur la page Statistiques de MIN au niveau national, donne la répartition par statut social des bénéficiaires accompagnés : nombre de fiches bénéficiaire distinctes rattachées à au moins un accompagnement d'une activité Coop non supprimée, par statut enregistré : retraite, sans_emploi, en_emploi, scolarise, non_communique (les fiches sans statut comptent dans non_communique). Période de référence de la page Statistiques : du 17/11/2020 (début du dispositif) à aujourd'hui inclus (date de l'activité). Tableau identifiant de statut / nombre. Les valeurs évoluent chaque jour, une tolérance de 1 % est admise."
 kind: table
 rtol: 0.01
-tags: [tableau-de-bord, S]
+tags: [tableau-de-bord, S, lourd]
 sql: |
   SELECT COALESCE(ben.statut_social, 'non_communique') AS statut, count(DISTINCT ben.id) AS n
 
