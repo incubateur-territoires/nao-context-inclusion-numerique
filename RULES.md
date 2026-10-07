@@ -40,6 +40,27 @@ Mon inclusion numérique).
 | utilisateur MIN, gestionnaire | `llm.utilisateur` |
 | « que s'est-il passé », fusion, suppression, qui a modifié | `llm.structure_merge_log`, `llm.personne_merge_log`, `llm.evenement` |
 
+## Tableau de bord MIN : formules à appliquer telles quelles
+
+Pour toute question qui ressemble à un indicateur du tableau de bord ou de la page
+statistiques de MIN, **lis d'abord `agent/semantics/tableau-de-bord-min.md`** (section
+du bloc concerné) et applique la formule sans la réinterpréter. Les plus demandées :
+
+| Indicateur | Formule (périmètre national) |
+|------------|------------------------------|
+| Gouvernances | `llm.gouvernance` hors `departement_code = 'zzz'` (gouvernance technique, toujours exclue) ; MIN affiche la constante 105 |
+| Membres de gouvernance | `llm.membre` où `gouvernance_departement_code <> 'zzz'` **et `statut <> 'supprimer'`** (candidats + confirmés) ; co-porteurs = idem et `is_coporteur` |
+| Collectivités par catégorie (`/gouvernances`) | sur `llm.membre.type` : Conseil départemental → « Conseils départementaux » ; Région → « Conseils régionaux » ; EPCI / Collectivité, EPCI / intercommunalité → « EPCI » ; Commune / Collectivité, commune → « Communes » ; les autres types de collectivités et préfectures → « Autres » ; les structures (type vide ou associatif) ne comptent pas |
+| Médiateurs en poste | `llm.personne_enrichie.est_actuellement_mediateur_en_poste` ; coordinateurs = `is_coordinateur` ; conseillers numériques = `est_actuellement_conseiller_numerique` ; Aidants Connect = `labellisation_aidant_connect` ; aidants numériques = `est_actuellement_aidant_numerique_en_poste` |
+| Financements FNE engagés par l'État | demandes `min.demande_de_subvention` au `statut = 'acceptee'`, jointes à `min.action` → `min.feuille_de_route` hors `zzz` ; montant = `SUM(subvention_demandee)`, nombre = `COUNT(*)` ; ventilation par `min.enveloppe_financement.libelle` |
+| Financements Conseiller numérique versés / conventionnés | `min.postes_conseiller_numerique_synthese` : versé = `SUM(montant_versement_cumule)`, conventionné = `SUM(montant_subvention_cumule)` |
+| Enveloppes Conseiller numérique (consommation) | enveloppes `libelle LIKE 'Conseiller Numérique%'` ; consommation = `SUM(main.subvention.montant_subvention_v2)` pour « Renouvellement », `SUM(montant_subvention_v1)` pour « Plan France Relance » ; plafond = `montant` de l'enveloppe |
+| Feuilles de route avec demandes | feuilles hors `zzz` ayant au moins une action avec au moins une `demande_de_subvention` |
+| Accompagnements (page statistiques) | activités `llm.coop_activites` non supprimées, `date` entre 2020-11-17 et aujourd'hui ; un accompagnement = une ligne de `llm.coop_accompagnements` (équivalent : `SUM(accompagnements_count)`) ; toute répartition (durée, type de lieu, thématique, matériel, canal) est **pondérée par `accompagnements_count`**, jamais un simple comptage d'activités |
+| Bénéficiaires | `COUNT(DISTINCT beneficiaire_id)` via `llm.coop_accompagnements` sur ces activités ; « suivis » = `anonyme = false` ; répartitions par `genre`, `statut_social`, **`tranche_age_derivee`** (pas `tranche_age`) |
+| Durées | tranches `[0,30[`, `[30,60[`, `[60,120[`, `120+` minutes sur `duree`, pondérées par `accompagnements_count` |
+| Lieux à actualiser / à vérifier | lieux non supprimés dont `updated_at` a plus de 12 mois / 18 mois (mois = 30,44 jours) |
+
 ## Réflexes de support
 
 1. **Regarde dans la base avant de demander des précisions.** Si la question cite un
