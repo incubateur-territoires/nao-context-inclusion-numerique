@@ -29,9 +29,9 @@ le stub s'efface alors de lui-même.
    `test_transform_*.py` (transformation extract), `test_ingest_*.py`, etc. Noms de
    fichiers **uniques dans tout `tests-unitaires/`** (contrainte pytest sans packages).
 3. **On teste le core, pas le legacy.** Cible : les fonctions pures de l'architecture
-   FCIS ([approche-data/16](../approche-data/16-architecture-code-fcis.md)) et les
+   FCIS ([docs/architecture/architecture-code-fcis.md](../docs/architecture/architecture-code-fcis.md)) et les
    briques du pattern bronze
-   ([approche-data/15](../approche-data/15-pattern-flux-reference.md)) — capture brute
+   ([docs/architecture/pattern-flux-reference.md](../docs/architecture/pattern-flux-reference.md)) — capture brute
    (`etl/source_capture.py`), puis transformations `etl/core/` au fil des migrations de
    flux. On ne fige PAS par des tests les transformations legacy enfouies dans les
    opérateurs : elles meurent par remplacement (décision 2026-07-27, un premier lot de

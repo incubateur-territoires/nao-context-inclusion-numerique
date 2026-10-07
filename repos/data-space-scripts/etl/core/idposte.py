@@ -8,7 +8,7 @@ décidé et tracé (changelog 2026-07-30) : les géocodages invalides
 (score < 0.5, mismatch INSEE) ne sont plus consommés — le cache ne contient
 que les géocodages valides.
 
-Functional core (approche-data/16) : aucune I/O. Entrées = dicts natifs
+Functional core (docs/architecture/architecture-code-fcis.md) : aucune I/O. Entrées = dicts natifs
 (lignes silver relues par le DAG, hits des caches), sortie = dicts aux
 colonnes consommées par process_enriched_structure.
 

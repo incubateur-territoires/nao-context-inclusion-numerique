@@ -214,5 +214,5 @@ Pour mettre à jour les valeurs de référence, modifier les constantes dans :
 
 ## Documentation associée
 
-- [Documentation technique des postes CoNum](/home/beta/Dev/min/docs/postes-conseiller-numerique.md)
+- [Documentation technique des postes CoNum](https://github.com/anct-cnum/suite-gestionnaire-numerique/blob/main/docs/reference/postes-conseiller-numerique.md) (dépôt MIN)
 - [ETL IdPoste](/home/beta/Dev/dataspace/etl/README-IdPoste.md)

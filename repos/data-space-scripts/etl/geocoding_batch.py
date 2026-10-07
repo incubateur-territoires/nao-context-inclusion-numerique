@@ -246,7 +246,7 @@ class GeocodeurBatch:
                 logger.error("[source] échec capture BAN", exc_info=True)
 
         # Transformation portée par le core pur (etl/core/ban.py) depuis la
-        # bascule (MR 3 boucle BAN, approche-data/17).
+        # bascule (MR 3 boucle BAN, docs/archive/plan-remise-au-propre.md).
         resultats = transformer_reponses(records, score_minimum=self.score_minimum)
 
         nb_valides = sum(1 for r in resultats if r["geocodage_valide"])

@@ -207,7 +207,7 @@ class APIClientOperator(BaseOperator):
                 return
 
             # Transformation portée par le core (etl/core/ac.py) depuis la
-            # bascule (MR 3 boucle AC quotidien, approche-data/17).
+            # bascule (MR 3 boucle AC quotidien, docs/archive/plan-remise-au-propre.md).
             # aidants-accompagnements n'a pas de transformation avec XCom :
             # son seul usage est en do_xcom_push=False (fetch + capture brute).
             if self.data_type == "aidants-accompagnements":
@@ -240,7 +240,7 @@ class APIClientOperator(BaseOperator):
             "coop_utilisateurs",
             "coop_structures",
         ):
-            # Depuis la bascule (MR 3 boucle coop, approche-data/17), le fetch
+            # Depuis la bascule (MR 3 boucle coop, docs/archive/plan-remise-au-propre.md), le fetch
             # se limite à la collecte + capture brute (couche source) — la
             # transformation est portée par le core (etl/core/coop.py) dans les
             # tâches transform_* du DAG, qui relisent source.coop__*.

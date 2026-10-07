@@ -1,5 +1,9 @@
 # Changelog métier — dataspace
 
+## 2026-10-06
+
+- **Assistant d'analyse — vers la reconstruction du tableau de bord** (`V179`). Les 70 indicateurs du tableau de bord et de la page statistiques de l'application de gouvernance ont été inventoriés pour que l'assistant puisse les recalculer sur demande. Deux compléments étaient nécessaires : la répartition des bénéficiaires par tranche d'âge, telle qu'affichée dans l'application, et le statut « structure labellisée ». L'assistant voit désormais la tranche d'âge calculée (sept intervalles larges), jamais l'année de naissance, qui reste hors de sa portée.
+
 ## 2026-10-01
 
 - **Assistant d'analyse — il voit désormais la Coop de la médiation numérique** (`V178`). Jusqu'ici, l'assistant de support ne pouvait rien dire sur les comptes de la Coop : un médiateur a-t-il un compte, dans quelle équipe, quels lieux d'activité a-t-il déclarés, combien d'accompagnements. Ces données sont maintenant lisibles, avec la même règle qu'ailleurs : aucun nom, prénom, courriel, téléphone ni adresse de personne. Les bénéficiaires des accompagnements sont réduits à leur genre, tranche d'âge, statut social et commune ; leur année de naissance n'est pas exposée pour éviter tout recoupement. Les notes libres des médiateurs, les rendez-vous bruts et les usagers de RDV Service Public restent hors de portée. Deux oublis côté application de gouvernance sont aussi corrigés : les documents déposés sur les feuilles de route et l'historique des transferts de membres sont consultables, le second sans l'identifiant de connexion de l'agent qui a fait le transfert.

@@ -7,7 +7,7 @@ l'exécute tel quel sur base, en transaction annulée, cas par cas
 (`tests/carto/cas_cycle_de_vie_lieux.yml`).
 
 Doctrine « l'état d'un lieu n'est pas une donnée »
-(docs/cycle-de-vie-lieux-personnes.md §1.3) :
+(docs/reference/regles/cycle-de-vie-lieux-personnes.md §1.3) :
 
 - l'ÉTAT (`visible_pour_cartographie_nationale`, `deleted_at`) appartient aux
   outils de gestion — la Coop (`structure_coop_id`) et MIN (`updated_at_min`).

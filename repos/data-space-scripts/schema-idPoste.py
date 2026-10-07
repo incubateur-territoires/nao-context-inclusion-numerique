@@ -1322,7 +1322,7 @@ with DAG(
 
             # === Étape 3 : Batch update structures (rattachement sans structure_tp_id) ===
             # Dédup par structure_tp_id imposée par UNIQUE(structure_tp_id) sur
-            # main.structure_administrative — voir docs/id-poste-regles.md.
+            # main.structure_administrative — voir docs/reference/regles/id-poste-regles.md.
             update_rows = []
             for row in dedup_rows_by_structure_tp_id(r for _, r in data.iterrows()):
                 adresse_id = _resolve_adresse_id(row)
@@ -1378,7 +1378,7 @@ with DAG(
                               -- co-localisés, doublons V073, géocodage AC sur le siège).
                               -- On rattache à l'antenne dont le nom ressemble le plus
                               -- au nom id-poste (match_nom) ; le siège (antenne NULL)
-                              -- est scoré sur denomination_sirene. Voir docs/id-poste-regles.md §4.
+                              -- est scoré sur denomination_sirene. Voir docs/reference/regles/id-poste-regles.md §4.
                               SELECT s3.id
                               FROM main.structure_administrative s3
                               WHERE s3.siret = v.match_siret

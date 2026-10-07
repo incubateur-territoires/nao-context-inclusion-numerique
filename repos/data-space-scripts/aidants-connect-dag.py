@@ -185,7 +185,7 @@ def _enrich_chunk_sirene_ban(
     # (placeholder 57490/Moyenvic, désync avec city/zipcode). Le CP, lui, est
     # fiable — à condition de le normaliser à 5 chiffres : AC l'envoie sans zéro
     # initial (`1110` → `01110`), sinon le filtre postcode ne matche pas.
-    # Cf docs/fix-ingestion-ac-geocodage-cp.md (A/B : conformité SIRENE 34→69 %).
+    # Cf docs/chantiers/1534-adresse-canonique/fix-ingestion-ac-geocodage-cp.md (A/B : conformité SIRENE 34→69 %).
     if "code_postal" in df_chunk.columns:
         df_chunk["code_postal"] = df_chunk["code_postal"].apply(_normalize_cp)
 
@@ -280,7 +280,7 @@ def _enrich_chunk_sirene_ban(
     return df_chunk
 
 
-# === Couche silver (schéma staging) — fiche 01 approche-data ===
+# === Couche silver (schéma staging) — docs/architecture/architecture-medallion.md ===
 #
 # États transformés du run matérialisés dans staging.ac__* (V129), reconstruits
 # à chaque run (TRUNCATE + INSERT) et 100 % re-dérivables depuis la capture
@@ -1001,7 +1001,7 @@ with DAG(
     # transformation est portée par stage_aidants (core) depuis
     # source.ac__aidants. Fetch COMPLET (endpoint nu, ~18 500 aidants) : la
     # table source capture le stock du run — capture mutualisée
-    # aidants + accompagnements (rétention : voir approche-data/19).
+    # aidants + accompagnements (rétention : voir docs/chantiers/retention-bronze/retention-bronze.md).
     fetch_all_aidants_personnes = APIClientOperator(
         task_id="fetch_all_aidants_personnes",
         conn_id=CONN_ID,
