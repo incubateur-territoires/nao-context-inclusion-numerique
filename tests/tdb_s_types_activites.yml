@@ -2,7 +2,7 @@ name: tdb_s_types_activites
 prompt: "Sur la page Statistiques de MIN au niveau national, donne un tableau à trois lignes : « accompagnements individuels » (nombre d'activités de type individuel), « participations aux ateliers collectifs » (somme du nombre d'accompagnements des activités de type collectif) et « ateliers collectifs » (nombre d'activités de type collectif). Période de référence de la page Statistiques : du 17/11/2020 (début du dispositif) à aujourd'hui inclus (date de l'activité). Seules les activités Coop non supprimées comptent. Les valeurs évoluent chaque jour, une tolérance de 1 % est admise."
 kind: table
 rtol: 0.01
-tags: [tableau-de-bord, S]
+tags: [tableau-de-bord, S, lourd]
 sql: |
   SELECT 'accompagnements individuels' AS indicateur, count(*) AS n
     FROM llm.coop_activites act WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE AND act.type = 'individuel'
