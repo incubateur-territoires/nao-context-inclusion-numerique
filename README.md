@@ -33,8 +33,9 @@ ce dépôt (« Pull latest » dans Réglages → Git).
    nao debug        # doit afficher ✓ sur postgres-inclusion-numerique
    nao sync         # régénère databases/ et repos/
    python3 scripts/verify-privacy-config.py
+   python3 scripts/generer_inventaire_contexte.py   # inventaire des tables dans RULES.md
    ```
-3. Commiter `databases/`, `repos/`, `.meta/` et la config, pousser, puis « Pull latest »
+3. Commiter `databases/`, `repos/`, `.meta/`, `RULES.md` et la config, pousser, puis « Pull latest »
    côté Nao.
 
 À refaire après toute migration qui touche `llm.*`, un `GRANT`/`REVOKE` sur `nao_ro`
