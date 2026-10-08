@@ -30,16 +30,12 @@ def main() -> None:
                    ) if False else []
     for p in sorted((ROOT / "tests").glob("tdb_*.yml")):
         t = yaml.safe_load(p.read_text()); t["_file"] = p.stem; tests.append(t)
-    # Reformulations (tests/variantes/<nom>__<variante>.yml) : listées sous la question
-    # canonique pour qu'un grep sur une question courte ou tournée autrement tombe
-    # sur la bonne requête.
-    variantes: dict[str, list[str]] = {}
-    for p in sorted((ROOT / "tests" / "variantes").glob("tdb_*__*.yml")):
-        base = p.stem.split("__", 1)[0]
-        variantes.setdefault(base, []).append(yaml.safe_load(p.read_text())["prompt"].strip())
+    # Les reformulations de tests/variantes/ ne sont PAS reprises ici : listées sous la
+    # question canonique (PR #21), elles faisaient répondre Mistral Large 4 par une
+    # requête juste mais sans aucun texte (0 réponse vide avant, 17 sur 22 après).
     parts = [
         "# Requêtes canoniques du tableau de bord MIN\n",
-        "> Fichier **généré** par `scripts/generer_catalogue_requetes.py` depuis `tests/*.yml` et `tests/variantes/` : ne pas éditer à la main.\n",
+        "> Fichier **généré** par `scripts/generer_catalogue_requetes.py` depuis `tests/*.yml` : ne pas éditer à la main.\n",
         "> Pour chaque indicateur : la question telle qu'un utilisateur la pose, et **la requête à exécuter telle quelle** "
         "(périmètre national). Pour un département ou une région, ajouter uniquement le filtre territorial "
         "(voir `tableau-de-bord-min.md`, « Mailles et périmètre ») sans toucher au reste. "
@@ -51,9 +47,7 @@ def main() -> None:
         if bloc != bloc_courant:
             parts.append(f"\n## {BLOCS.get(bloc, bloc.upper())}\n")
             bloc_courant = bloc
-        autres = "".join(f"- {q}\n" for q in variantes.get(t["_file"], []) if q != t["prompt"].strip())
-        autres = f"\n**Autres formulations** :\n{autres}" if autres else ""
-        parts.append(f"\n### `{t['name']}` ({t.get('kind', 'scalar')})\n\n**Question** : {t['prompt'].strip()}\n{autres}\n```sql\n{t['sql'].rstrip()}\n```\n")
+        parts.append(f"\n### `{t['name']}` ({t.get('kind', 'scalar')})\n\n**Question** : {t['prompt'].strip()}\n\n```sql\n{t['sql'].rstrip()}\n```\n")
     OUT.write_text("".join(parts))
     print(f"{OUT.relative_to(ROOT)} : {len(tests)} requêtes")
 
