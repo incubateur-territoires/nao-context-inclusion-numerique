@@ -1,0 +1,10 @@
+name: tdb_a_lieux_a_actualiser__incomplete
+prompt: "Au niveau national, combien de lieux d'inclusion numérique sont « à actualiser » au sens du tableau de bord MIN ? Tolérance 1 %."
+kind: scalar
+rtol: 0.01
+tags: [variante, incomplete, A]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.lieu_inclusion l
+  WHERE l.deleted_at IS NULL
+    AND (l.updated_at IS NULL OR l.updated_at <= now() - interval '548 days')

@@ -1,0 +1,16 @@
+name: tdb_i_collectivites_par_categorie__incomplete
+prompt: "Sur la page d'administration des gouvernances de MIN, donne la ventilation des « collectivités impliquées dans la gouvernance » par catégorie : « Conseils départementaux », « Conseils régionaux », « EPCI », « Communes », « Autres ». Tableau catégorie / nombre de membres."
+kind: table
+rtol: 0.005
+tags: [variante, incomplete, I]
+sql: |
+  SELECT CASE
+           WHEN type = 'Conseil départemental' THEN 'Conseils départementaux'
+           WHEN type = 'Région' THEN 'Conseils régionaux'
+           WHEN type IN ('EPCI', 'Collectivité, EPCI', 'Collectivité, intercommunalité') THEN 'EPCI'
+           WHEN type IN ('Commune', 'Collectivité, commune') THEN 'Communes'
+           ELSE 'Autres' END AS categorie,
+         count(*) AS n
+  FROM llm.membre
+  WHERE type IN ('Collectivité, commune', 'Collectivité, EPCI', 'Collectivité, intercommunalité', 'Collectivité territoriale', 'Commune', 'Conseil départemental', 'EPCI', 'Préfecture départementale', 'Préfecture régionale', 'Région')
+  GROUP BY 1 ORDER BY 2 DESC

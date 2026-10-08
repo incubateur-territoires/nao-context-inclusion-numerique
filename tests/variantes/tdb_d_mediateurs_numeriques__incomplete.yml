@@ -1,0 +1,9 @@
+name: tdb_d_mediateurs_numeriques__incomplete
+prompt: "Au niveau national, combien de médiateurs numériques sont actuellement en poste ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, incomplete, D]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.personne_enrichie
+  WHERE est_actuellement_mediateur_en_poste = true

@@ -1,0 +1,9 @@
+name: tdb_e_actions__incomplete
+prompt: "Combien d'actions sont enregistrées dans les feuilles de route ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, incomplete, E]
+sql: |
+  SELECT count(*) AS n
+  FROM min.action a
+  JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id

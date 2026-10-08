@@ -1,0 +1,11 @@
+name: tdb_s_thematiques_demarches__incomplete
+prompt: "Sur la page Statistiques de MIN au niveau national, donne la répartition des thématiques d'accompagnement aux démarches administratives. Tableau identifiant de thématique (tel qu'enregistré : papiers_elections_citoyennete, famille_scolarite, social_sante, travail_formation, logement, transports_mobilite, argent_impots, justice, etrangers_europe, loisirs_sports_culture, associations) / nombre, du plus fréquent au moins fréquent. Tolérance 1 %."
+kind: table
+rtol: 0.01
+tags: [variante, incomplete, S]
+sql: |
+  SELECT th AS thematique, SUM(act.accompagnements_count)::bigint AS n
+  FROM llm.coop_activites act, unnest(act.thematiques) AS th
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE
+    AND th IN ('papiers_elections_citoyennete','famille_scolarite','social_sante','travail_formation','logement','transports_mobilite','argent_impots','justice','etrangers_europe','loisirs_sports_culture','associations')
+  GROUP BY 1 ORDER BY 2 DESC

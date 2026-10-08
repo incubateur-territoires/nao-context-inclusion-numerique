@@ -1,0 +1,9 @@
+name: tdb_e_membres_coporteurs__courte
+prompt: "Combien de membres coporteurs ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, E]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.membre
+  WHERE statut <> 'supprimer' AND is_coporteur = true

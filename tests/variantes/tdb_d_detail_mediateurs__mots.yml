@@ -1,0 +1,17 @@
+name: tdb_d_detail_mediateurs__mots
+prompt: "Détail des médiateurs numériques actuellement en activité : tableau « Coordinateurs » / « Conseillers numériques » / « Aidants Connect » avec les effectifs, chaque ligne restreinte aux médiateurs en poste."
+kind: table
+rtol: 0.005
+tags: [variante, mots, D]
+sql: |
+  SELECT 'Coordinateurs' AS indicateur, count(*) AS n
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND is_coordinateur = true
+  UNION ALL
+  SELECT 'Conseillers numériques', count(*)
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND est_actuellement_conseiller_numerique = true
+  UNION ALL
+  SELECT 'Aidants Connect', count(*)
+    FROM llm.personne_enrichie
+   WHERE est_actuellement_mediateur_en_poste = true AND labellisation_aidant_connect = true

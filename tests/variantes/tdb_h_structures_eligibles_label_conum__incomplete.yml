@@ -1,0 +1,7 @@
+name: tdb_h_structures_eligibles_label_conum__incomplete
+prompt: "Combien de structures sont éligibles au label « conseiller numérique » au sens du tableau de bord MIN ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, incomplete, H]
+sql: |
+  SELECT count(DISTINCT p.structure_id) AS n FROM main.poste p WHERE p.structure_id IS NOT NULL

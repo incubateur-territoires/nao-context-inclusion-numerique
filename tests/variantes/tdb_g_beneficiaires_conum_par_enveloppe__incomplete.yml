@@ -1,0 +1,18 @@
+name: tdb_g_beneficiaires_conum_par_enveloppe__incomplete
+prompt: "Pour chacune des enveloppes « Conseiller Numérique », combien de structures distinctes en ont bénéficié au niveau national ? Tableau libellé complet de l'enveloppe / nombre de structures."
+kind: table
+rtol: 0.005
+tags: [variante, incomplete, G]
+sql: |
+  WITH agg AS (
+    SELECT count(DISTINCT CASE WHEN s.montant_subvention_v1 > 0 THEN p.structure_id END) AS total_v1,
+           count(DISTINCT CASE WHEN s.montant_subvention_v2 > 0 THEN p.structure_id END) AS total_v2
+    FROM main.subvention s
+    JOIN main.poste p ON p.id = s.poste_id)
+  SELECT e.libelle AS enveloppe,
+         CASE WHEN e.libelle LIKE '%Renouvellement%' THEN agg.total_v2
+              WHEN e.libelle LIKE '%Plan France Relance%' THEN agg.total_v1
+              ELSE 0 END AS n
+  FROM min.enveloppe_financement e CROSS JOIN agg
+  WHERE e.libelle LIKE 'Conseiller Numérique%'
+  ORDER BY e.libelle

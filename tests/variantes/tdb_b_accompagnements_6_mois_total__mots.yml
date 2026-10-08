@@ -1,0 +1,11 @@
+name: tdb_b_accompagnements_6_mois_total__mots
+prompt: "Sur les six mois civils complets qui précèdent le mois courant, combien d'accompagnements au total ont été enregistrés dans la Coop, toutes structures, en pondérant chaque activité par son nombre d'accompagnements ? Activités supprimées exclues."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, B]
+sql: |
+  SELECT COALESCE(SUM(a.accompagnements_count), 0)::bigint AS n
+  FROM llm.coop_activites a
+  WHERE a.suppression IS NULL
+    AND a.date >= date_trunc('month', CURRENT_DATE) - interval '6 months'
+    AND a.date <  date_trunc('month', CURRENT_DATE)

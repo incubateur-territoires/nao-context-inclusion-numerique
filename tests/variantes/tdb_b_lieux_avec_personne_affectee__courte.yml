@@ -1,0 +1,9 @@
+name: tdb_b_lieux_avec_personne_affectee__courte
+prompt: "Combien de lieux ont au moins une personne affectée active ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, B]
+sql: |
+  SELECT count(DISTINCT pal.lieu_id) AS n
+  FROM main.personne_affectations_lieu pal
+  WHERE pal.est_active = true

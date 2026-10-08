@@ -1,0 +1,9 @@
+name: tdb_e_membres_coporteurs__mots
+prompt: "Nombre de membres de gouvernance actifs (candidats ou confirmés, non supprimés) qui sont coporteurs, toutes gouvernances."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, E]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.membre
+  WHERE statut <> 'supprimer' AND is_coporteur = true

@@ -1,0 +1,9 @@
+name: tdb_d_mediateurs_numeriques__mots
+prompt: "Effectif national des médiateurs numériques actuellement en activité, tel qu'affiché dans le bloc médiateurs du tableau de bord."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, D]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.personne_enrichie
+  WHERE est_actuellement_mediateur_en_poste = true

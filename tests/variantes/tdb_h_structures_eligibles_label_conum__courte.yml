@@ -1,0 +1,7 @@
+name: tdb_h_structures_eligibles_label_conum__courte
+prompt: "Combien de structures éligibles au label conseiller numérique ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, H]
+sql: |
+  SELECT count(DISTINCT p.structure_id) AS n FROM main.poste p WHERE p.structure_id IS NOT NULL

@@ -1,0 +1,9 @@
+name: tdb_s_accompagnements_total__mots
+prompt: "Page Statistiques, France entière : total des accompagnements depuis le début du dispositif (17/11/2020) jusqu'à aujourd'hui, activités Coop non supprimées, chaque activité pesant son nombre d'accompagnements. Tolérance 1 %."
+kind: scalar
+rtol: 0.01
+tags: [variante, mots, S]
+sql: |
+  SELECT COALESCE(SUM(act.accompagnements_count), 0)::bigint AS n
+  FROM llm.coop_activites act
+  WHERE act.suppression IS NULL AND act.date::date >= DATE '2020-11-17' AND act.date::date <= CURRENT_DATE

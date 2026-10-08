@@ -1,0 +1,11 @@
+name: tdb_a_lieux_a_verifier__mots
+prompt: "Nombre de lieux d'inclusion numérique actifs dont la fiche a entre 12 et 18 mois d'ancienneté de mise à jour (365 à 548 jours), France entière, tolérance 1 %."
+kind: scalar
+rtol: 0.01
+tags: [variante, mots, A]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.lieu_inclusion l
+  WHERE l.deleted_at IS NULL
+    AND l.updated_at > now() - interval '548 days'
+    AND l.updated_at <= now() - interval '365 days'

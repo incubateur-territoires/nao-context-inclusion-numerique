@@ -1,0 +1,7 @@
+name: tdb_e_gouvernances__courte
+prompt: "Il y a combien de gouvernances ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, courte, E]
+sql: |
+  SELECT count(*) AS n FROM llm.gouvernance

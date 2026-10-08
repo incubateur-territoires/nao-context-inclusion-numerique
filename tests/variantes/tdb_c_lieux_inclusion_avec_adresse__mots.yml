@@ -1,0 +1,9 @@
+name: tdb_c_lieux_inclusion_avec_adresse__mots
+prompt: "Nombre de lieux d'inclusion numérique géolocalisables (rattachés à une adresse), en comptant aussi les lieux archivés, France entière."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, C]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.lieu_inclusion l
+  JOIN llm.adresse a ON a.id = l.adresse_id

@@ -1,0 +1,9 @@
+name: tdb_b_lieux_avec_personne_affectee__mots
+prompt: "Nombre de lieux d'inclusion distincts avec au moins un rattachement de personne en cours (affectation active), tous lieux compris même archivés, sans condition sur la personne."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, B]
+sql: |
+  SELECT count(DISTINCT pal.lieu_id) AS n
+  FROM main.personne_affectations_lieu pal
+  WHERE pal.est_active = true

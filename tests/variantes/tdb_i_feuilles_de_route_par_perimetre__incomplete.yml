@@ -1,0 +1,14 @@
+name: tdb_i_feuilles_de_route_par_perimetre__incomplete
+prompt: "Donne la répartition des feuilles de route par périmètre géographique, tableau avec exactement ces libellés : « départemental », « infra-départemental », « régional », « Autre »."
+kind: table
+rtol: 0.005
+tags: [variante, incomplete, I]
+sql: |
+  SELECT CASE perimetre_geographique
+           WHEN 'departemental' THEN 'départemental'
+           WHEN 'groupementsDeCommunes' THEN 'infra-départemental'
+           WHEN 'regional' THEN 'régional'
+           ELSE 'Autre' END AS perimetre,
+         count(*) AS n
+  FROM min.feuille_de_route
+  GROUP BY 1 ORDER BY 2 DESC

@@ -1,0 +1,7 @@
+name: tdb_e_gouvernances__mots
+prompt: "Nombre de gouvernances départementales de l'inclusion numérique dans MIN."
+kind: scalar
+rtol: 0.005
+tags: [variante, mots, E]
+sql: |
+  SELECT count(*) AS n FROM llm.gouvernance

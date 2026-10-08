@@ -1,0 +1,14 @@
+name: tdb_f_fne_engages_montant__incomplete
+prompt: "Quel est le montant total, en euros, des financements France Numérique Ensemble engagés par l'État ? Montant exact, pas en millions."
+kind: scalar
+rtol: 0.005
+tags: [variante, incomplete, F]
+sql: |
+  WITH demandes AS (
+      SELECT d.subvention_demandee, e.libelle AS enveloppe_libelle, e.montant AS enveloppe_montant
+      FROM min.demande_de_subvention d
+      JOIN min.action a ON a.id = d.action_id
+      JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
+      JOIN min.enveloppe_financement e ON e.id = d.enveloppe_financement_id
+      WHERE d.statut = 'acceptee')
+  SELECT COALESCE(SUM(subvention_demandee), 0)::bigint AS n FROM demandes

@@ -1,0 +1,16 @@
+name: tdb_f_fne_par_enveloppe__courte
+prompt: "Financements FNE engagés par enveloppe ? Tableau enveloppe / montant en euros."
+kind: table
+rtol: 0.005
+tags: [variante, courte, F]
+sql: |
+  WITH demandes AS (
+    SELECT d.subvention_demandee, e.libelle AS enveloppe_libelle, e.montant AS enveloppe_montant
+    FROM min.demande_de_subvention d
+    JOIN min.action a ON a.id = d.action_id
+    JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
+    JOIN min.enveloppe_financement e ON e.id = d.enveloppe_financement_id
+    WHERE d.statut = 'acceptee')
+  
+  SELECT enveloppe_libelle AS enveloppe, SUM(subvention_demandee)::bigint AS montant
+  FROM demandes GROUP BY 1 ORDER BY 1

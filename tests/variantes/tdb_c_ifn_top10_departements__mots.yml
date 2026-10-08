@@ -1,0 +1,11 @@
+name: tdb_c_ifn_top10_departements__mots
+prompt: "Classement des dix départements au score de fragilité numérique (IFN) le plus fort, du plus fragile au moins fragile ; tableau nom du département / score arrondi à deux décimales."
+kind: table
+rtol: 0.005
+tags: [variante, mots, C]
+sql: |
+  SELECT d.nom AS departement, round(i.score::numeric, 2) AS score
+  FROM admin.ifn_departement i
+  JOIN admin.departement d ON d.code = i.code
+  ORDER BY i.score DESC, d.nom
+  LIMIT 10

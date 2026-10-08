@@ -13,7 +13,12 @@ Mon inclusion numérique).
   de seconde couche de refus à appliquer.
 - Les tables et vues disponibles sont décrites dans `databases/` (un `columns.md` par
   table, avec sa description). **Lis le `columns.md` avant d'écrire une requête** : ne
-  devine jamais un nom de colonne.
+  devine jamais un nom de colonne, **ni un nom de table** : la liste fermée est dans
+  « Tables du contexte » ci-dessous. Une table qui n'y est pas n'existe pas pour toi
+  (`min.subvention`, `min.gouvernance`, `min.membre`, `llm.lieu` n'existent pas :
+  c'est `main.subvention`, `llm.gouvernance`, `llm.membre`, `llm.lieu_inclusion`).
+  Un refus « Access denied » sur un chemin signifie que le chemin est faux ou la table
+  absente du contexte : ne réessaie pas d'autres noms, reprends la liste.
 - Nomme toujours les tables `schema.table` (ex. `llm.membre`), **jamais** avec un préfixe de
   base ou de catalogue (`context.llm.membre`, `dataspace_prod.llm.membre`) : le garde-fou
   refuse ces requêtes.
@@ -24,6 +29,19 @@ Mon inclusion numérique).
 - Un **membre** (`llm.membre`), une **structure**, un **lieu**, un **utilisateur** ne
   sont pas des personnes physiques identifiables : réponds sur eux sans réserve. Voir
   `agent/semantics/modele-donnees.md` pour ce que chacun désigne.
+
+## Tables du contexte (liste fermée, générée)
+
+<!-- inventaire:debut -->
+Chemin d'un fichier de table : `databases/type=postgres/database=dataspace_prod/schema=<schema>/table=<table>/columns.md` (signe `=` après `schema` et `table`, jamais `/`).
+| Schéma | Tables synchronisées (liste fermée) |
+|--------|------|
+| `admin` | `commune`, `commune_epci`, `departement`, `epci`, `icp_departement`, `ifn_commune`, `ifn_departement`, `insee_cp`, `insee_historique`, `region`, `zonage` |
+| `llm` | `activites_coop`, `adresse`, `contact`, `coop_accompagnements`, `coop_activite_coordination`, `coop_activite_coordination_tags`, `coop_activite_tags`, `coop_activites`, `coop_beneficiaires`, `coop_coordinateurs`, `coop_cras_conseiller_numerique_v1`, `coop_employes_structures`, `coop_invitations_equipes`, `coop_lieu_inclusion`, `coop_mediateurs`, `coop_mediateurs_coordonnes`, `coop_mediateurs_en_activite`, `coop_partage_statistiques`, `coop_rdv_lieux`, `coop_rdv_motifs`, `coop_rdv_organisations`, `coop_rdv_participations`, `coop_rdvs`, `coop_structure_administrative`, `coop_tags`, `coop_users`, `evenement`, `gouvernance`, `lieu_appariement`, `lieu_inclusion`, `membre`, `membre_transfert_log`, `personne`, `personne_enrichie`, `personne_merge_log`, `structure_administrative`, `structure_merge_log`, `utilisateur` |
+| `main` | `contact_structure_administrative`, `contrat`, `conum_labellisation`, `formation`, `personne_affectations_emploi`, `personne_affectations_lieu`, `poste`, `subvention` |
+| `min` | `action`, `beneficiaire_subvention`, `co_financement`, `comite`, `demande_de_subvention`, `departement`, `departement_enveloppe`, `enveloppe_financement`, `feuille_de_route`, `feuille_de_route_document`, `groupement`, `porteur_action`, `postes_conseiller_numerique_synthese`, `region` |
+| `reference` | `categories_juridiques`, `naf` |
+<!-- inventaire:fin -->
 
 ## Vocabulaire → table (ne pas deviner)
 

@@ -1,0 +1,14 @@
+name: tdb_g_beneficiaires_fne_par_enveloppe__mots
+prompt: "Par enveloppe France Numérique Ensemble, nombre de membres de gouvernance distincts désignés bénéficiaires d'une demande de subvention acceptée liée à une action de feuille de route. Tableau libellé complet / nombre."
+kind: table
+rtol: 0.005
+tags: [variante, mots, G]
+sql: |
+  SELECT e.libelle AS enveloppe, count(DISTINCT b.membre_id) AS n
+  FROM min.demande_de_subvention d
+  JOIN min.action a ON a.id = d.action_id
+  JOIN min.feuille_de_route f ON f.id = a.feuille_de_route_id
+  JOIN min.enveloppe_financement e ON e.id = d.enveloppe_financement_id
+  JOIN min.beneficiaire_subvention b ON b.demande_de_subvention_id = d.id
+  WHERE d.statut = 'acceptee'
+  GROUP BY 1 ORDER BY 1

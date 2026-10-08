@@ -1,0 +1,9 @@
+name: tdb_c_lieux_inclusion_avec_adresse__incomplete
+prompt: "Au niveau national, combien de lieux d'inclusion numérique disposent d'une adresse rattachée ?"
+kind: scalar
+rtol: 0.005
+tags: [variante, incomplete, C]
+sql: |
+  SELECT count(*) AS n
+  FROM llm.lieu_inclusion l
+  JOIN llm.adresse a ON a.id = l.adresse_id
