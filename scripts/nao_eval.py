@@ -149,15 +149,26 @@ def main() -> int:
             data = rep["data"] if isinstance(rep["data"], dict) else {}
             texte = data.get("text", "") if not rep["isError"] else str(rep["data"])
             ok, details = comparer(t, ref, texte)
+            apercus = [q.get("preview") for q in data.get("queries", []) if isinstance(q, dict)]
+            if not ok and not texte.strip():
+                # Réponse sans texte : on regarde si la requête exécutée portait quand même la valeur
+                # attendue (symptôme « requête juste, réponse vide », cf. PR #22).
+                _, d_req = comparer(t, ref, json.dumps(apercus, ensure_ascii=False))
+                juste = all("présent" in d or "concordant" in d for d in d_req)
+                details = ["RÉPONSE VIDE" + (", valeur juste dans la requête" if juste else "")] + details
             res = {
                 "name": t["name"], "ok": ok, "details": details,
-                "queries": len(data.get("queries", [])), "chatUrl": data.get("chatUrl"),
-                "secondes": round(time.time() - t0), "texte": texte[:3000],
+                "queries": len(data.get("queries", [])), "apercus": apercus[:5], "texte_vide": not texte.strip(),
+                "chatUrl": data.get("chatUrl"), "secondes": round(time.time() - t0), "texte": texte[:3000],
             }
         except Exception as e:  # noqa: BLE001
             res = {"name": t["name"], "ok": False, "details": [f"erreur : {e}"], "secondes": round(time.time() - t0)}
         resultats.append(res)
         print(f"{'OK ' if res['ok'] else 'KO '} {res['name']:40s} {res['secondes']:4d}s  {' | '.join(res['details'])[:160]}", flush=True)
+        # Rapport réécrit à chaque test : un run interrompu garde ce qui a été mesuré.
+        Path(a.out).write_text(json.dumps({"model": a.model, "date": time.strftime("%Y-%m-%d %H:%M"), "en_cours": True,
+                                           "ok": sum(r["ok"] for r in resultats), "total": len(tests), "tests": resultats},
+                                          ensure_ascii=False, indent=2))
 
     n_ok = sum(r["ok"] for r in resultats)
     print(f"\n{n_ok}/{len(resultats)} tests OK — modèle : {a.model}")
