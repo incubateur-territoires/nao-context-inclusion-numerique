@@ -650,10 +650,6 @@
           "type": "uuid"
         },
         {
-          "name": "structure_employeuse_id",
-          "type": "uuid"
-        },
-        {
           "name": "structure_employeuse_main_id",
           "type": "int32"
         },
@@ -1114,56 +1110,6 @@
         {
           "name": "updated_at",
           "type": "timestamp(3)"
-        }
-      ],
-      "coop_employes_structures": [
-        {
-          "name": "id",
-          "type": "uuid"
-        },
-        {
-          "name": "user_id",
-          "type": "uuid"
-        },
-        {
-          "name": "structure_id",
-          "type": "uuid"
-        },
-        {
-          "name": "creation",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "modification",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "suppression",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "creation_par_id",
-          "type": "uuid"
-        },
-        {
-          "name": "debut_emploi",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "fin_emploi",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "modification_par_id",
-          "type": "uuid"
-        },
-        {
-          "name": "suppression_par_id",
-          "type": "uuid"
-        },
-        {
-          "name": "structure_main_id",
-          "type": "int32"
         }
       ],
       "coop_invitations_equipes": [
@@ -1709,68 +1655,6 @@
         },
         {
           "name": "synced_at",
-          "type": "timestamp(3)"
-        }
-      ],
-      "coop_structure_administrative": [
-        {
-          "name": "id",
-          "type": "uuid"
-        },
-        {
-          "name": "siret",
-          "type": "string"
-        },
-        {
-          "name": "rna",
-          "type": "string"
-        },
-        {
-          "name": "denomination",
-          "type": "string"
-        },
-        {
-          "name": "synchronisation_siret",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "nom",
-          "type": "string"
-        },
-        {
-          "name": "adresse",
-          "type": "string"
-        },
-        {
-          "name": "commune",
-          "type": "string"
-        },
-        {
-          "name": "code_postal",
-          "type": "string(5)"
-        },
-        {
-          "name": "code_insee",
-          "type": "string(5)"
-        },
-        {
-          "name": "complement_adresse",
-          "type": "string"
-        },
-        {
-          "name": "source",
-          "type": "string"
-        },
-        {
-          "name": "creation",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "modification",
-          "type": "timestamp(3)"
-        },
-        {
-          "name": "suppression",
           "type": "timestamp(3)"
         }
       ],

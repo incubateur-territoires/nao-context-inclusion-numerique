@@ -50,7 +50,6 @@ identifiables.
 | `llm.membre_transfert_log` | `min.membre_transfert_log` | `par_utilisateur` (identifiant de connexion) remplacé par `par_utilisateur_id` → `llm.utilisateur` |
 | `llm.coop_users` | `coop.users` | prénom, nom, courriel, téléphone, photo, localisation, titre, description |
 | `llm.coop_beneficiaires` | `coop.beneficiaires` | prénom, nom, téléphone, courriel, adresse, notes, année de naissance (remplacée par `tranche_age_derivee`, V179), liens RDV usager |
-| `llm.coop_structure_administrative` | `coop.structure_administrative` | référent nommé (nom, courriel, téléphone) |
 | `llm.coop_lieu_inclusion` | `coop.lieu_inclusion` | référent nommé, `courriels`, `presentation_*` ; `nom`, `horaires`, `prise_rdv` masqués |
 | `llm.coop_activites` | `coop.activites` | `notes`, `precisions_demarche` ; `titre_atelier` masqué |
 | `llm.coop_activite_coordination` | `coop.activite_coordination` | `notes` ; champs « autre » et `nom` masqués |
@@ -58,7 +57,7 @@ identifiables.
 | `llm.coop_cras_conseiller_numerique_v1` | `coop.cras_conseiller_numerique_v1` | `annotation`, courriel et téléphone de permanence |
 | `llm.coop_rdvs`, `llm.coop_rdv_participations` | `coop.rdvs`, `coop.rdv_participations` | `raw_data`, `context` ; usagers RDV non exposés |
 | `llm.coop_invitations_equipes` | `coop.invitations_equipes` | `email` de l'invité |
-| `llm.coop_mediateurs`, `llm.coop_coordinateurs`, `llm.coop_employes_structures`, `llm.coop_mediateurs_en_activite`, `llm.coop_mediateurs_coordonnes`, `llm.coop_partage_statistiques`, `llm.coop_accompagnements`, `llm.coop_activite_tags`, `llm.coop_activite_coordination_tags`, `llm.coop_rdv_lieux`, `llm.coop_rdv_motifs` | tables `coop` du même nom | rien (identifiants, dates, compteurs, coordonnées d'organisation) |
+| `llm.coop_mediateurs`, `llm.coop_coordinateurs`, `llm.coop_mediateurs_en_activite`, `llm.coop_mediateurs_coordonnes`, `llm.coop_partage_statistiques`, `llm.coop_accompagnements`, `llm.coop_activite_tags`, `llm.coop_activite_coordination_tags`, `llm.coop_rdv_lieux`, `llm.coop_rdv_motifs` | tables `coop` du même nom | rien (identifiants, dates, compteurs, coordonnées d'organisation) |
 | `llm.coop_rdv_organisations` | `coop.rdv_organisations` | `email` mis à NULL s'il est de forme prénom.nom@ |
 
 ### Tables en accès direct (pseudonymisées : identifiants, jamais de nominatif)
