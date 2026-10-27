@@ -143,9 +143,9 @@ V: dict[str, dict[str, str]] = {
         "incomplete": "Combien de structures sont éligibles au label « conseiller numérique » au sens du tableau de bord MIN ?",
     },
     "tdb_i_collectivites_par_categorie": {
-        "courte": "Répartition des collectivités impliquées dans les gouvernances par catégorie (page admin) ? Tableau catégorie / nombre : Conseils départementaux, Conseils régionaux, EPCI, Communes, Autres.",
-        "mots": "Page d'administration des gouvernances : nombre de membres collectivités, tous statuts y compris supprimés, selon les types retenus par la page (communes, EPCI et intercommunalités, collectivités territoriales, conseils départementaux, régions, préfectures). Tableau avec les catégories Conseils départementaux / Conseils régionaux / EPCI / Communes / Autres.",
-        "incomplete": "Sur la page d'administration des gouvernances de MIN, donne la ventilation des « collectivités impliquées dans la gouvernance » par catégorie : « Conseils départementaux », « Conseils régionaux », « EPCI », « Communes », « Autres ». Tableau catégorie / nombre de membres.",
+        "courte": "Répartition des collectivités impliquées dans les gouvernances par catégorie (page admin) ? Tableau catégorie / nombre : EPCI, Communes, Conseils départementaux, Régions et collectivités à statut particulier.",
+        "mots": "Page d'administration des gouvernances : nombre de structures distinctes membres confirmées (non supprimées) d'au moins une gouvernance, classées par catégorie juridique INSEE de la structure : EPCI à fiscalité propre (7343, 7344, 7346, 7347, 7348), communes (7210), départements (7220), régions et collectivités à statut particulier (7229, 7230) ; préfectures et autres services de l'État (71xx) exclus. Tableau avec les catégories EPCI / Communes / Conseils départementaux / Régions et collectivités à statut particulier.",
+        "incomplete": "Sur la page d'administration des gouvernances de MIN, donne la ventilation des « collectivités impliquées dans la gouvernance » par catégorie : « EPCI », « Communes », « Conseils départementaux », « Régions et collectivités à statut particulier ». Tableau catégorie / nombre de structures.",
     },
     "tdb_i_feuilles_de_route_avec_demandes": {
         "courte": "Combien de feuilles de route ont au moins une demande de subvention ?",
@@ -159,7 +159,7 @@ V: dict[str, dict[str, str]] = {
     },
     "tdb_i_gouvernances_sans_coporteur": {
         "courte": "Combien de gouvernances sans coporteur (page admin) ?",
-        "mots": "Sur la page d'administration des gouvernances, nombre de gouvernances dont le seul coporteur est la préfecture (un unique membre coporteur), tous membres comptés quel que soit leur statut, supprimés inclus.",
+        "mots": "Sur la page d'administration des gouvernances, nombre de gouvernances dont aucun membre confirmé non supprimé n'est coporteur, hors services de l'État (une préfecture coporteuse ne compte pas).",
         "incomplete": "Sur la page d'administration des gouvernances de MIN, combien de gouvernances sont « sans coporteur » ?",
     },
     "tdb_s_accompagnements_par_mois": {

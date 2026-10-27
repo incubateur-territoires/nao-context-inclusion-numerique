@@ -1,16 +1,21 @@
 name: tdb_i_collectivites_par_categorie__courte
-prompt: "Répartition des collectivités impliquées dans les gouvernances par catégorie (page admin) ? Tableau catégorie / nombre : Conseils départementaux, Conseils régionaux, EPCI, Communes, Autres."
+prompt: "Répartition des collectivités impliquées dans les gouvernances par catégorie (page admin) ? Tableau catégorie / nombre : EPCI, Communes, Conseils départementaux, Régions et collectivités à statut particulier."
 kind: table
 rtol: 0.005
 tags: [variante, courte, I]
 sql: |
+  WITH s AS (
+    SELECT m.structure_id, max(sa.categorie_juridique) AS cj
+    FROM llm.membre m
+    JOIN llm.structure_administrative sa ON sa.id = m.structure_id
+    WHERE m.statut = 'confirme' AND m.date_suppression IS NULL
+    GROUP BY m.structure_id)
   SELECT CASE
-           WHEN type = 'Conseil départemental' THEN 'Conseils départementaux'
-           WHEN type = 'Région' THEN 'Conseils régionaux'
-           WHEN type IN ('EPCI', 'Collectivité, EPCI', 'Collectivité, intercommunalité') THEN 'EPCI'
-           WHEN type IN ('Commune', 'Collectivité, commune') THEN 'Communes'
-           ELSE 'Autres' END AS categorie,
+           WHEN cj IN ('7343', '7344', '7346', '7347', '7348') THEN 'EPCI'
+           WHEN cj = '7210' THEN 'Communes'
+           WHEN cj = '7220' THEN 'Conseils départementaux'
+           ELSE 'Régions et collectivités à statut particulier' END AS categorie,
          count(*) AS n
-  FROM llm.membre
-  WHERE type IN ('Collectivité, commune', 'Collectivité, EPCI', 'Collectivité, intercommunalité', 'Collectivité territoriale', 'Commune', 'Conseil départemental', 'EPCI', 'Préfecture départementale', 'Préfecture régionale', 'Région')
+  FROM s
+  WHERE cj IN ('7210', '7220', '7229', '7230', '7343', '7344', '7346', '7347', '7348')
   GROUP BY 1 ORDER BY 2 DESC

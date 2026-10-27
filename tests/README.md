@@ -92,8 +92,11 @@ nombre doit être relu avant d'être imputé à l'agent.
   correspond à aucune valeur de l'énumération (`candidat`, `confirme`, `supprimer`) :
   le tableau de bord compte donc en réalité tous les membres. Le banc teste la
   définition voulue, pas le défaut ; l'écart local est de 61 membres hors zzz.
-- **Page `/gouvernances`** (bloc I) : tous les membres, quel que soit le statut, comme
-  dans MIN. La liste `/gouvernances/list` (`statut = 'confirme'`) n'est pas testée.
+- **Page `/gouvernances`** (bloc I, MIN PR #2179) : membres `statut = 'confirme'` et
+  `date_suppression IS NULL`, comptés par structure distincte et classés par catégorie
+  juridique INSEE de la structure (`llm.structure_administrative.categorie_juridique`) ;
+  les services de l'État (`71xx`) ne sont ni des collectivités, ni des autres
+  structures, ni des coporteurs. La liste `/gouvernances/list` n'est pas testée.
 - **Accompagnements** : « nombre d'accompagnements » = somme de
   `accompagnements_count` (S1, B3, C3) ; la série mensuelle S5 compte une ligne
   d'accompagnement par bénéficiaire, comme le graphique MIN.

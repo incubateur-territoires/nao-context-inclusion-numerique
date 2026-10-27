@@ -27,6 +27,14 @@ Les colonnes exactes sont dans `databases/…/columns.md` ; ici, le sens et les 
   `prefecture-…`, `structure-<id>-<dep>`. Un même EPCI peut être membre de plusieurs
   gouvernances (un id par département). Pour retrouver la personne morale :
   `structure_id` → `llm.structure_administrative.id`.
+- **Typologie d'un membre** (« type », « catégorie » affichés par MIN) = catégorie
+  juridique INSEE de sa structure : `llm.membre.structure_id` →
+  `llm.structure_administrative.categorie_juridique` (code à 4 caractères), libellé via
+  `reference.categories_juridiques.nom` (jointure sur `code`). `llm.membre` n'a plus de
+  colonne `type` (supprimée, V188). Les codes `71xx` sont les services de l'État
+  (préfectures, SGAR…).
+- **Préfecture départementale** = le membre dont l'`id` commence par `prefecture-`
+  (`id LIKE 'prefecture-%'`, un par gouvernance), règle de MIN.
 - Les `id` de `llm.structure_administrative` et de `llm.lieu_inclusion` **se recouvrent**
   (1353 existe des deux côtés et ne désigne pas la même chose). Toujours qualifier.
 - Un **coordinateur** de la Coop (`llm.coop_coordinateurs`, `coordinateur_id` uuid) n'a
