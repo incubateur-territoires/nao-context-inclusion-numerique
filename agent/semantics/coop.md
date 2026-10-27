@@ -12,13 +12,11 @@ répliquée dans le schéma `coop` de l'entrepôt. L'agent n'y accède que par d
 | `llm.coop_users` | `id` uuid | Compte Coop. Identité masquée : rôle, dates, drapeaux d'inscription, `siret` déclaré. **`llm.personne.coop_id` = `llm.coop_users.id`.** |
 | `llm.coop_mediateurs` | `id` uuid ; `user_id` → `coop_users` | Profil médiateur d'un compte (compteurs d'activités, visibilité carto). |
 | `llm.coop_coordinateurs` | `id` uuid ; `user_id` → `coop_users` | Profil coordinateur d'un compte. |
-| `llm.coop_employes_structures` | `user_id` ⋈ `structure_id` | Emploi déclaré : qui travaille pour quelle structure employeuse (`debut_emploi`, `fin_emploi`, `suppression`). `structure_main_id` → `llm.structure_administrative`. |
 | `llm.coop_mediateurs_en_activite` | `mediateur_id` ⋈ `structure_id` | Lieux d'activité d'un médiateur. **`structure_id` pointe `coop_lieu_inclusion`, pas une structure.** |
 | `llm.coop_mediateurs_coordonnes` | `mediateur_id` ⋈ `coordinateur_id` | Équipe : quel coordinateur suit quel médiateur. |
 | `llm.coop_invitations_equipes` | `coordinateur_id`, `mediateur_id` | Invitations à rejoindre une équipe (courriel invité retiré). |
-| `llm.coop_structure_administrative` | `id` uuid ; `siret` | Structures employeuses côté Coop. Pour l'entité canonique : `llm.structure_administrative.structure_coop_id` = cet `id`. |
 | `llm.coop_lieu_inclusion` | `id` uuid | Lieux d'activité côté Coop. Entité canonique : `llm.lieu_inclusion.structure_coop_id` = cet `id`. |
-| `llm.coop_activites` | `id` uuid ; `mediateur_id` | Une activité déclarée (individuel, collectif, démarche). `structure_id` → `coop_lieu_inclusion` (lieu), `structure_employeuse_id` → `coop_structure_administrative`. Millions de lignes. |
+| `llm.coop_activites` | `id` uuid ; `mediateur_id` | Une activité déclarée (individuel, collectif, démarche). `structure_id` → `coop_lieu_inclusion` (lieu), `structure_employeuse_main_id` → `llm.structure_administrative` (employeuse du médiateur au moment de l'activité). Millions de lignes. |
 | `llm.coop_accompagnements` | `activite_id` ⋈ `beneficiaire_id` | Qui a été accompagné dans quelle activité. Millions de lignes. |
 | `llm.coop_beneficiaires` | `id` uuid ; `mediateur_id` | Bénéficiaires, identité et année de naissance retirées : ne restent que genre, tranche d'âge, statut social, commune. |
 | `llm.coop_activite_coordination` | `id` uuid ; `coordinateur_id` | Activités de coordination (animation, événement, partenariat). |
@@ -33,9 +31,6 @@ répliquée dans le schéma `coop` de l'entrepôt. L'agent n'y accède que par d
 llm.personne.coop_id ─────────────────────► llm.coop_users.id
 llm.coop_mediateurs.user_id ──────────────► llm.coop_users.id
 llm.coop_coordinateurs.user_id ───────────► llm.coop_users.id
-llm.coop_employes_structures.user_id ─────► llm.coop_users.id
-llm.coop_employes_structures.structure_id ► llm.coop_structure_administrative.id
-llm.coop_employes_structures.structure_main_id ► llm.structure_administrative.id
 llm.coop_mediateurs_en_activite.structure_id ► llm.coop_lieu_inclusion.id   (un LIEU)
 llm.coop_activites.mediateur_id ──────────► llm.coop_mediateurs.id
 llm.coop_activites.structure_id ──────────► llm.coop_lieu_inclusion.id      (un LIEU)
@@ -43,29 +38,34 @@ llm.coop_activites.structure_employeuse_main_id ► llm.structure_administrative
 llm.coop_accompagnements ─────────────────► activite_id ⋈ beneficiaire_id
 llm.coop_beneficiaires.fusion_vers_id ────► llm.coop_beneficiaires.id (doublon fusionné)
 llm.coop_lieu_inclusion.id ◄──────────────  llm.lieu_inclusion.structure_coop_id
-llm.coop_structure_administrative.id ◄────  llm.structure_administrative.structure_coop_id
 ```
 
 ## Recette : rattacher un compte Coop à son employeur
 
-Un compte peut avoir **plusieurs** lignes d'emploi (anciens emplois conservés) et un
-SIRET porte **plusieurs** structures administratives (siège + antennes). Joindre sans
-filtrer multiplie les lignes (constaté : 4 548 activités de coordination → 17 571
-lignes exportées). La seule jointure correcte :
+La Coop n'a plus de table d'emploi propre (`coop.employes_structures` et
+`coop.structure_administrative` supprimées, V190) : l'employeuse vit dans l'entrepôt,
+`main.personne_affectations_emploi`, une ligne par personne × structure × source.
+L'employeuse courante déclarée dans la Coop = la ligne `source = 'coop'` et
+`est_active`. Un SIRET porte **plusieurs** structures administratives (siège +
+antennes) : joindre par l'id, jamais par SIRET. La seule jointure correcte :
 
 ```sql
-LEFT JOIN llm.coop_employes_structures es
-       ON es.user_id = u.id
-      AND es.suppression IS NULL
-      AND es.fin_emploi IS NULL            -- emploi en cours
+LEFT JOIN llm.personne p
+       ON p.coop_id = u.id
+LEFT JOIN main.personne_affectations_emploi pae
+       ON pae.personne_id = p.id
+      AND pae.source = 'coop'
+      AND pae.est_active               -- employeuse courante
 LEFT JOIN llm.structure_administrative sa
-       ON sa.id = es.structure_main_id      -- id canonique, jamais par SIRET
+       ON sa.id = pae.structure_administrative_id
 ```
 
 Pour un coordinateur : `llm.coop_activite_coordination.coordinateur_id` →
 `llm.coop_coordinateurs.id` → `user_id` → la jointure ci-dessus. S'il reste plus
-d'un emploi en cours, prendre le plus récent (`DISTINCT ON (u.id) … ORDER BY
-es.debut_emploi DESC`).
+d'une employeuse active (rare), prendre la plus récente (`DISTINCT ON (u.id) … ORDER
+BY pae.updated_at DESC NULLS LAST, pae.created_at DESC`). Pas de dates d'emploi ici :
+pour l'employeuse au moment d'une activité, lire
+`llm.coop_activites.structure_employeuse_main_id`.
 
 **Avant de livrer un export ligne à ligne, compter** : le résultat ne doit pas avoir
 plus de lignes que la table de base filtrée (`SELECT count(*) FROM
