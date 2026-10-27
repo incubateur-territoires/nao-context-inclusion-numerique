@@ -331,7 +331,7 @@ SELECT COUNT(*) FROM min.membre WHERE gouvernance_departement_code $filtre AND s
 -- E7 / E8 : comme E3 / E4 avec $filtre
 ```
 
-Note : « déposées » ne signifie rien de plus que « existantes » dans ces blocs (toute ligne `min.feuille_de_route` compte). Nao : `llm.membre` expose `gouvernance_departement_code`, `statut`, `is_coporteur`, `structure_id`, `date_suppression` (plus de colonne `type`, V188) ; `llm.gouvernance` expose `departement_code` ; `min.feuille_de_route`, `min.action` en accès direct.
+Note : « déposées » ne signifie rien de plus que « existantes » dans ces blocs (toute ligne `min.feuille_de_route` compte). Nao : `llm.membre` expose `gouvernance_departement_code`, `statut`, `is_coporteur`, `structure_id`, `date_suppression` (plus de colonne `type`, V191) ; `llm.gouvernance` expose `departement_code` ; `min.feuille_de_route`, `min.action` en accès direct.
 
 ### F — Financements (blocs `financements`)
 
@@ -571,7 +571,7 @@ Nao : `main.conum_labellisation` n'est pas dans `nao_config.yaml` → H2 non rec
 
 ### I — Page admin `/gouvernances` (loaders `tableauDeBord/`, composants `Gouvernances/*`)
 
-I1, I3 et I4 partent des mêmes membres (`chargerMembresConfirmes`, `src/gateways/shared/structuresMembresConfirmes.ts`) : `min.membre` **`statut = 'confirme'` et `date_suppression IS NULL`** (à la différence de E), avec la catégorie juridique de leur structure (`main.structure_administrative.categorie_juridique`, code INSEE à 4 caractères), puis agrègent en TypeScript. Plus de filtre `zzz`, plus de lecture de `min.membre.type` (colonne supprimée, V188). Un donut + liste par carte, « Données mises à jour le JJ/MM/AAAA » = date de génération.
+I1, I3 et I4 partent des mêmes membres (`chargerMembresConfirmes`, `src/gateways/shared/structuresMembresConfirmes.ts`) : `min.membre` **`statut = 'confirme'` et `date_suppression IS NULL`** (à la différence de E), avec la catégorie juridique de leur structure (`main.structure_administrative.categorie_juridique`, code INSEE à 4 caractères), puis agrègent en TypeScript. Plus de filtre `zzz`, plus de lecture de `min.membre.type` (colonne supprimée, V191). Un donut + liste par carte, « Données mises à jour le JJ/MM/AAAA » = date de génération.
 
 Classement par code de catégorie juridique (`classerParCategorieJuridique`, `src/shared/categorieJuridique.ts`), dans cet ordre :
 

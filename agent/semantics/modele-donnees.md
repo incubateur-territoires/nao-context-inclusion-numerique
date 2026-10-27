@@ -31,7 +31,7 @@ Les colonnes exactes sont dans `databases/…/columns.md` ; ici, le sens et les 
   juridique INSEE de sa structure : `llm.membre.structure_id` →
   `llm.structure_administrative.categorie_juridique` (code à 4 caractères), libellé via
   `reference.categories_juridiques.nom` (jointure sur `code`). `llm.membre` n'a plus de
-  colonne `type` (supprimée, V188). Les codes `71xx` sont les services de l'État
+  colonne `type` (supprimée, V191). Les codes `71xx` sont les services de l'État
   (préfectures, SGAR…).
 - **Préfecture départementale** = le membre dont l'`id` commence par `prefecture-`
   (`id LIKE 'prefecture-%'`, un par gouvernance), règle de MIN.
