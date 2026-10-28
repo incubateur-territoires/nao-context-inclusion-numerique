@@ -1,11 +1,15 @@
 name: tdb_i_gouvernances_sans_coporteur__mots
-prompt: "Sur la page d'administration des gouvernances, nombre de gouvernances dont le seul coporteur est la préfecture (un unique membre coporteur), tous membres comptés quel que soit leur statut, supprimés inclus."
+prompt: "Sur la page d'administration des gouvernances, nombre de gouvernances dont aucun membre confirmé non supprimé n'est coporteur, hors services de l'État (une préfecture coporteuse ne compte pas)."
 kind: scalar
 rtol: 0.005
 tags: [variante, mots, I]
 sql: |
-  SELECT count(*) AS n FROM (
-    SELECT g.departement_code
-    FROM llm.gouvernance g
-    LEFT JOIN llm.membre m ON m.gouvernance_departement_code = g.departement_code AND m.is_coporteur = true
-    GROUP BY 1 HAVING count(m.id) = 1) t
+  SELECT count(*) AS n
+  FROM llm.gouvernance g
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM llm.membre m
+    JOIN llm.structure_administrative sa ON sa.id = m.structure_id
+    WHERE m.gouvernance_departement_code = g.departement_code
+      AND m.statut = 'confirme' AND m.date_suppression IS NULL AND m.is_coporteur
+      AND COALESCE(sa.categorie_juridique, '') NOT LIKE '71%')

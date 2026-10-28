@@ -1,6 +1,6 @@
 # Tableau de bord et statistiques de MIN — définitions des indicateurs
 
-> Inventaire du 2026-10-06 depuis le code de MIN (`src/gateways/tableauDeBord/`, `PrismaStatistiquesCoopLoader`). Pour reconstruire un indicateur côté agent : remplacer `coop.<table>` par `llm.coop_<table>`, `main.adresse` → `llm.adresse`, `main.structure_administrative` → `llm.structure_administrative`, `main.lieu_inclusion` → `llm.lieu_inclusion`, `min.membre` → `llm.membre`, `min.gouvernance` → `llm.gouvernance`, `min.personne_enrichie` → `llm.personne_enrichie` ; les enums Coop deviennent `text` / `text[]`. La tranche d'âge dérivée est `llm.coop_beneficiaires.tranche_age_derivee` (V179).
+> Inventaire du 2026-10-06 depuis le code de MIN (section I mise à jour le 2026-10-27, MIN PR #2179) (`src/gateways/tableauDeBord/`, `PrismaStatistiquesCoopLoader`). Pour reconstruire un indicateur côté agent : remplacer `coop.<table>` par `llm.coop_<table>`, `main.adresse` → `llm.adresse`, `main.structure_administrative` → `llm.structure_administrative`, `main.lieu_inclusion` → `llm.lieu_inclusion`, `min.membre` → `llm.membre`, `min.gouvernance` → `llm.gouvernance`, `min.personne_enrichie` → `llm.personne_enrichie` ; les enums Coop deviennent `text` / `text[]`. La tranche d'âge dérivée est `llm.coop_beneficiaires.tranche_age_derivee` (V179).
 
 > **Note (2026-10-07, dataspace V181, MIN PR #2075)** : la gouvernance technique « zzz » a été supprimée de la base et les filtres
 > `<> 'zzz'` retirés du code MIN. Les mentions ci-dessous sont historiques : **ne plus ajouter ce filtre**, il n'exclut plus rien.
@@ -56,10 +56,10 @@ Colonne « Nao » : `oui` = toutes les tables/colonnes sont dans le périmètre 
 | G3 | idem | idem — enveloppes « Conseiller Numérique … » | `main.subvention`, `main.poste`, SA, adresse, `min.enveloppe_financement` | `adresse.departement` | non | oui |
 | H1 | Bandeau label Conum (TdB structure, bêta-testeurs) | « Votre structure est éligible au label conseiller numérique » | `main.poste` | `structure_id = id` | non | oui |
 | H2 | Bandeau label Conum | « Votre structure est labellisée conseiller numérique » | `main.conum_labellisation` | idem | non (mais `utilisateur_id`) | **non** (table hors périmètre) |
-| I1 | Page `/gouvernances` (admin) | « Gouvernances territoriales » : total (105 fixe), « dont N co-portées », ventilation par type de coporteur, « Sans coporteur » | `min.gouvernance`, `min.membre` | ≠ 'zzz' | non | oui |
+| I1 | Page `/gouvernances` (admin) | « Gouvernances territoriales » : total, « dont N co-portées », ventilation par type de coporteur, « Sans coporteur » | `min.gouvernance`, `min.membre`, SA | aucun | non | oui |
 | I2 | Page `/gouvernances` | « Feuilles de route » : total, « dont N avec demandes de subvention », ventilation par périmètre | `min.feuille_de_route`, `min.action`, `min.demande_de_subvention` | ≠ 'zzz' | non | oui |
-| I3 | Page `/gouvernances` | « Collectivités impliquées dans la gouvernance » : total, « dont N membres coporteurs », ventilation | `min.membre` | ≠ 'zzz' | non | oui |
-| I4 | Page `/gouvernances` | « Autres structures impliquées dans la gouvernance » : total, coporteurs, ventilation | `min.membre` | ≠ 'zzz' | non | oui |
+| I3 | Page `/gouvernances` | « Collectivités impliquées dans la gouvernance » : total, « dont N membres coporteurs », ventilation | `min.membre`, SA | aucun | non | oui |
+| I4 | Page `/gouvernances` | « Autres structures impliquées dans la gouvernance » : total, coporteurs, ventilation | `min.membre`, SA | aucun | non | oui |
 | S1 | Statistiques — générales | « Accompagnements » (total) + infobulle individuels / participations / ateliers | `coop.activites` (+ jointures de filtre) | `lieu_code_insee` / `coop.lieu_inclusion.code_insee` ; structure via `structure_employeuse_main_id` | non | oui |
 | S2 | Statistiques — générales | « Bénéficiaires accompagnés » | `coop.activites`, `coop.accompagnements`, `coop.beneficiaires` | idem | non | oui |
 | S3 | idem | « N bénéficiaires suivis » | idem | idem | non | oui |
@@ -331,7 +331,7 @@ SELECT COUNT(*) FROM min.membre WHERE gouvernance_departement_code $filtre AND s
 -- E7 / E8 : comme E3 / E4 avec $filtre
 ```
 
-Note : « déposées » ne signifie rien de plus que « existantes » dans ces blocs (toute ligne `min.feuille_de_route` compte). Nao : `llm.membre` expose `gouvernance_departement_code`, `statut`, `is_coporteur`, `type`, `structure_id` ; `llm.gouvernance` expose `departement_code` ; `min.feuille_de_route`, `min.action` en accès direct.
+Note : « déposées » ne signifie rien de plus que « existantes » dans ces blocs (toute ligne `min.feuille_de_route` compte). Nao : `llm.membre` expose `gouvernance_departement_code`, `statut`, `is_coporteur`, `structure_id`, `date_suppression` (plus de colonne `type`, V191) ; `llm.gouvernance` expose `departement_code` ; `min.feuille_de_route`, `min.action` en accès direct.
 
 ### F — Financements (blocs `financements`)
 
@@ -571,22 +571,74 @@ Nao : `main.conum_labellisation` n'est pas dans `nao_config.yaml` → H2 non rec
 
 ### I — Page admin `/gouvernances` (loaders `tableauDeBord/`, composants `Gouvernances/*`)
 
-Toutes ces requêtes partent de `SELECT * FROM min.membre WHERE gouvernance_departement_code <> 'zzz'` (**sans** filtre `statut`, donc membres supprimés inclus — à la différence de E) puis agrègent en TypeScript. Un donut + liste par carte, « Données mises à jour le JJ/MM/AAAA » = date de génération.
+I1, I3 et I4 partent des mêmes membres (`chargerMembresConfirmes`, `src/gateways/shared/structuresMembresConfirmes.ts`) : `min.membre` **`statut = 'confirme'` et `date_suppression IS NULL`** (à la différence de E), avec la catégorie juridique de leur structure (`main.structure_administrative.categorie_juridique`, code INSEE à 4 caractères), puis agrègent en TypeScript. Plus de filtre `zzz`, plus de lecture de `min.membre.type` (colonne supprimée, V191). Un donut + liste par carte, « Données mises à jour le JJ/MM/AAAA » = date de génération.
+
+Classement par code de catégorie juridique (`classerParCategorieJuridique`, `src/shared/categorieJuridique.ts`), dans cet ordre :
+
+| Code | Famille | Libellé |
+|------|---------|---------|
+| absent ou vide | autre structure | Autres |
+| `71xx` | **État** (préfectures, SGAR…) | Services de l'État — exclu de I3 et de I4, ne compte pas comme coporteur en I1 |
+| `7343`, `7344`, `7346`, `7347`, `7348` | collectivité | EPCI |
+| `7210` | collectivité | Communes |
+| `7220` | collectivité | Conseils départementaux |
+| `7229`, `7230` | collectivité | Régions et collectivités à statut particulier |
+| `7345`, `735x` | autre structure | Syndicats |
+| `7361` | autre structure | CCAS / CIAS |
+| `7381` | autre structure | Chambres consulaires |
+| `7410` | autre structure | GIP |
+| `92xx`, `93xx` | autre structure | Associations et fondations |
+| `81xx` | autre structure | Organismes de sécurité sociale |
+| `1xxx`, `5xxx`, `6xxx` | autre structure | Entreprises et coopératives |
+| `4xxx`, autres `73xx` | autre structure | Établissements publics |
+| tout autre code | autre structure | Autres |
+
+Ces libellés sont ceux des cartes ; la « typologie » affichée sur la fiche d'un membre est, elle, le libellé INSEE brut (`reference.categories_juridiques.nom`, `MembresGouvernance.ts`). Préfecture départementale = membre dont l'`id` commence par `prefecture-`.
+
+Transposition Nao (classement réutilisable, `llm.membre` → `llm.structure_administrative`) :
+
+```sql
+CASE
+  WHEN COALESCE(sa.categorie_juridique, '') = '' THEN 'Autres'
+  WHEN sa.categorie_juridique LIKE '71%' THEN 'Services de l''État'
+  WHEN sa.categorie_juridique IN ('7343','7344','7346','7347','7348') THEN 'EPCI'
+  WHEN sa.categorie_juridique = '7210' THEN 'Communes'
+  WHEN sa.categorie_juridique = '7220' THEN 'Conseils départementaux'
+  WHEN sa.categorie_juridique IN ('7229','7230') THEN 'Régions et collectivités à statut particulier'
+  WHEN sa.categorie_juridique = '7345' OR sa.categorie_juridique LIKE '735%' THEN 'Syndicats'
+  WHEN sa.categorie_juridique = '7361' THEN 'CCAS / CIAS'
+  WHEN sa.categorie_juridique = '7381' THEN 'Chambres consulaires'
+  WHEN sa.categorie_juridique = '7410' THEN 'GIP'
+  WHEN left(sa.categorie_juridique, 2) IN ('92','93') THEN 'Associations et fondations'
+  WHEN sa.categorie_juridique LIKE '81%' THEN 'Organismes de sécurité sociale'
+  WHEN left(sa.categorie_juridique, 1) IN ('1','5','6') THEN 'Entreprises et coopératives'
+  WHEN sa.categorie_juridique LIKE '4%' OR sa.categorie_juridique LIKE '73%' THEN 'Établissements publics'
+  ELSE 'Autres'
+END
+```
 
 I1 « Gouvernances territoriales » (`PrismaGouvernancesTerritorialesLoader`) :
 
-```sql
--- gouvernances avec leurs coporteurs (tous statuts)
-SELECT g.departement_code, m.type
-FROM min.gouvernance g
-LEFT JOIN min.membre m ON m.gouvernance_departement_code = g.departement_code AND m.is_coporteur = true
-WHERE g.departement_code <> 'zzz';
-```
+- `nombreTotal` = nombre réel de lignes de `min.gouvernance` (plus de constante 105).
+- Ventilation par type de coporteur : membres confirmés coporteurs **hors État** (`71xx`), regroupés par libellé du tableau ci-dessus ; `count` = nombre de gouvernances distinctes par libellé, tri décroissant.
+- « Sans coporteur » = gouvernances n'ayant **aucun** coporteur confirmé hors État (une préfecture coporteuse ne suffit pas) ; « dont N co-portées » = total − sans coporteur.
 
-- `nombreTotal` = **105 (constante codée)**, pas un COUNT.
-- « Sans coporteur » = nombre de gouvernances ayant **exactement 1** coporteur (la préfecture) : `HAVING COUNT(m.id) = 1`.
-- « dont N co-portées » (composant) = `105 − sansCoporteur`.
-- Ventilation par type de coporteur : pour chaque gouvernance, ensemble distinct des `m.type` hors `'Préfecture départementale'` (`NULL → 'Autre'`) ; `count` = nombre de gouvernances distinctes par type, tri décroissant. SQL : `SELECT COALESCE(type,'Autre') AS type, COUNT(DISTINCT gouvernance_departement_code) FROM min.membre WHERE is_coporteur AND type IS DISTINCT FROM 'Préfecture départementale' GROUP BY 1 ORDER BY 2 DESC`.
+```sql
+-- total, co-portées hors État, sans coporteur
+WITH coportees AS (
+  SELECT DISTINCT m.gouvernance_departement_code AS departement_code
+  FROM llm.membre m
+  JOIN llm.structure_administrative sa ON sa.id = m.structure_id
+  WHERE m.statut = 'confirme' AND m.date_suppression IS NULL AND m.is_coporteur
+    AND COALESCE(sa.categorie_juridique, '') NOT LIKE '71%')
+SELECT count(*) AS gouvernances,
+       count(c.departement_code) AS coportees,
+       count(*) - count(c.departement_code) AS sans_coporteur
+FROM llm.gouvernance g
+LEFT JOIN coportees c ON c.departement_code = g.departement_code;
+-- ventilation : SELECT <CASE ci-dessus> AS type, count(DISTINCT m.gouvernance_departement_code)
+--   avec les mêmes jointure et filtres que la CTE, GROUP BY 1 ORDER BY 2 DESC
+```
 
 I2 « Feuilles de route » (`PrismaFeuillesDeRouteDeposeesLoader`) :
 
@@ -603,14 +655,35 @@ WHERE gouvernance_departement_code <> 'zzz' GROUP BY 1 ORDER BY 2 DESC;
 
 Libellés : `departemental → « Feuilles de route départementales »`, `groupementsDeCommunes → « Feuilles de route infra-départementales »`, `regional → « Feuilles de route régionales »`.
 
-I3 « Collectivités impliquées dans la gouvernance » / I4 « Autres structures impliquées dans la gouvernance » (`PrismaCollectivitesLoader`, `PrismaAutresStructuresLoader`) :
+I3 « Collectivités impliquées dans la gouvernance » / I4 « Autres structures impliquées dans la gouvernance » (`PrismaCollectivitesLoader`, `PrismaAutresStructuresLoader`, `synthetiserStructures`) :
 
-- Liste `typesCollectivites` = {'Collectivité, commune', 'Collectivité, EPCI', 'Collectivité, intercommunalité', 'Collectivité territoriale', 'Commune', 'Conseil départemental', 'EPCI', 'Préfecture départementale', 'Préfecture régionale', 'Région'}.
-- I3 : membres dont `type` ∈ liste (NULL traité comme `''` → exclu) ; total = COUNT ; « dont N membres coporteurs » = COUNT WHERE is_coporteur ; catégories : `Conseil départemental → Conseils départementaux`, `Région → Conseils régionaux`, `EPCI | Collectivité, EPCI | Collectivité, intercommunalité → EPCI`, `Commune | Collectivité, commune → Communes`, reste → `Autres` (donc préfectures et « Collectivité territoriale » dans Autres).
-- I4 : membres dont `type IS NOT NULL` et ∉ liste ; catégories : `Association | Structure associative → Associations`, `Entreprise privée | Opérateur | Partenaire privé → Entreprises privées`, `type LIKE '%Syndicat%' → Syndicats mixtes`, `GIE → GIE`, reste → `Autres`.
-- Tri des ventilations : count décroissant.
+- Unité = **structure distincte** (`structure_id`) : une structure membre de plusieurs gouvernances compte une fois, et elle est coporteuse si elle l'est dans au moins une.
+- I3 = famille collectivité ; I4 = famille autre structure (code absent compris) ; les `71xx` ne sont dans aucune des deux.
+- Total = nombre de structures ; « dont N membres coporteurs » = structures coporteuses ; ventilation = nombre de structures par libellé, tri décroissant puis alphabétique.
 
-Annexe — page `/gouvernances/list` (`PrismaGouvernancesInfosLoader`, hors `tableauDeBord/`) : cartes « Gouvernances territoriales » (= nb départements listés, « dont N co-portées » = `coporteurCount ≥ 2`), « Feuilles de route » (« dont N actions »), « Crédits engagés par l'état » (`Σ (subvention_etp + subvention_prestation)` des demandes `statut = 'acceptee'`, « pour N demandes de subvention ») ; tableau par département : membres **`statut = 'confirme'`** (encore une autre règle), coporteurs, FDR, actions, « Dotation État » = `SUM(min.departement_enveloppe.plafond)` par département, « Montant engagé » = Σ etp+prestation, « Co-finan. » = `SUM(min.co_financement.montant)` via action→FDR, « Montant total » = engagé + co-financement. Trois définitions différentes de « membre » coexistent (E : `≠ 'supprime'` ; I : tous ; liste : `= 'confirme'`) et deux de « montant engagé » (F : `subvention_demandee` ; liste : `etp + prestation`).
+```sql
+-- I3 (pour I4 : remplacer le WHERE final par
+--   COALESCE(cj, '') NOT LIKE '71%' AND COALESCE(cj, '') NOT IN (<codes collectivités>)
+--   et le CASE par celui de la transposition ci-dessus)
+WITH s AS (
+  SELECT m.structure_id, bool_or(m.is_coporteur) AS coporteur, max(sa.categorie_juridique) AS cj
+  FROM llm.membre m
+  JOIN llm.structure_administrative sa ON sa.id = m.structure_id
+  WHERE m.statut = 'confirme' AND m.date_suppression IS NULL
+  GROUP BY m.structure_id)
+SELECT CASE
+         WHEN cj IN ('7343','7344','7346','7347','7348') THEN 'EPCI'
+         WHEN cj = '7210' THEN 'Communes'
+         WHEN cj = '7220' THEN 'Conseils départementaux'
+         ELSE 'Régions et collectivités à statut particulier' END AS categorie,
+       count(*) AS structures,
+       count(*) FILTER (WHERE coporteur) AS dont_coporteurs
+FROM s
+WHERE cj IN ('7210','7220','7229','7230','7343','7344','7346','7347','7348')
+GROUP BY ROLLUP (1) ORDER BY 2 DESC;   -- ligne NULL = total
+```
+
+Annexe — page `/gouvernances/list` (`PrismaGouvernancesInfosLoader`, hors `tableauDeBord/`) : cartes « Gouvernances territoriales » (= nb départements listés, « dont N co-portées » = `coporteurCount ≥ 2`), « Feuilles de route » (« dont N actions »), « Crédits engagés par l'état » (`Σ (subvention_etp + subvention_prestation)` des demandes `statut = 'acceptee'`, « pour N demandes de subvention ») ; tableau par département : membres **`statut = 'confirme'`** (encore une autre règle), coporteurs, FDR, actions, « Dotation État » = `SUM(min.departement_enveloppe.plafond)` par département, « Montant engagé » = Σ etp+prestation, « Co-finan. » = `SUM(min.co_financement.montant)` via action→FDR, « Montant total » = engagé + co-financement. Deux définitions différentes de « membre » coexistent (E : `≠ 'supprime'` ; I et liste : `= 'confirme'`, I ajoutant `date_suppression IS NULL`) et deux de « montant engagé » (F : `subvention_demandee` ; liste : `etp + prestation`).
 
 ### S — Page `/statistiques` (« Statistiques médiation numérique » / « Statistiques de {structure} »)
 
@@ -781,7 +854,7 @@ Périmètre `nao_ro` constaté (base locale, cohérent avec `nao_config.yaml`) :
 | `main.adresse.{departement, code_insee}` | A, C1, C2, C3-AC, D, F10–F14, G3 | `llm.adresse` | — |
 | `main.structure_administrative.{id, adresse_id}` | C2, C3, D, F, G3 | `llm.structure_administrative` | — |
 | `main.lieu_inclusion.{id, adresse_id, updated_at, deleted_at}` | A, B1, C1 | `llm.lieu_inclusion` | — |
-| `min.membre.{gouvernance_departement_code, statut, is_coporteur, type, structure_id}` | E, F15, G, I | `llm.membre` (`nom` = nom de la structure membre, conservé) | — |
+| `min.membre.{gouvernance_departement_code, statut, date_suppression, is_coporteur, structure_id}` + `main.structure_administrative.categorie_juridique` | E, F15, G, I | `llm.membre` (`nom` = nom de la structure membre, conservé) | — |
 | `min.gouvernance.departement_code` | E1, E2, I1 | `llm.gouvernance` | — |
 | `main.conum_labellisation` | H2 | **Table hors périmètre** (`utilisateur_id` = clé vers `min.utilisateur`) | Ajouter une vue `llm.conum_labellisation (id, structure_id, date_attestation)` ou l'ajouter à l'allowlist. |
 | `min.{feuille_de_route, action, demande_de_subvention, beneficiaire_subvention, enveloppe_financement, departement_enveloppe, co_financement}` | E, F, G, I | Accès direct | — |

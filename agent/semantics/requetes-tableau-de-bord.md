@@ -319,18 +319,23 @@ SELECT count(DISTINCT p.structure_id) AS n FROM main.poste p WHERE p.structure_i
 
 ### `tdb_i_collectivites_par_categorie` (table)
 
-**Question** : Sur la page d'administration des gouvernances de MIN, les « collectivités impliquées dans la gouvernance » sont les membres (tous statuts confondus, y compris supprimés,) dont le type est l'un des suivants : « Collectivité, commune », « Collectivité, EPCI », « Collectivité, intercommunalité », « Collectivité territoriale », « Commune », « Conseil départemental », « EPCI », « Préfecture départementale », « Préfecture régionale », « Région ». Donne leur ventilation en catégories : « Conseils départementaux » (type Conseil départemental), « Conseils régionaux » (type Région), « EPCI » (types EPCI, Collectivité, EPCI et Collectivité, intercommunalité), « Communes » (types Commune et Collectivité, commune), « Autres » (le reste, dont les préfectures). Tableau catégorie / nombre de membres.
+**Question** : Sur la page d'administration des gouvernances de MIN, les « collectivités impliquées dans la gouvernance » sont les structures distinctes (une structure membre de plusieurs gouvernances compte une fois) membres confirmées et non supprimées d'au moins une gouvernance, dont la catégorie juridique INSEE est celle d'une collectivité : commune (7210), département (7220), région ou collectivité à statut particulier (7229, 7230), EPCI à fiscalité propre (7343, 7344, 7346, 7347, 7348). Les services de l'État (préfectures, catégories 71xx) n'en font pas partie. Donne leur ventilation en catégories : « EPCI », « Communes », « Conseils départementaux », « Régions et collectivités à statut particulier ». Tableau catégorie / nombre de structures.
 
 ```sql
+WITH s AS (
+  SELECT m.structure_id, max(sa.categorie_juridique) AS cj
+  FROM llm.membre m
+  JOIN llm.structure_administrative sa ON sa.id = m.structure_id
+  WHERE m.statut = 'confirme' AND m.date_suppression IS NULL
+  GROUP BY m.structure_id)
 SELECT CASE
-         WHEN type = 'Conseil départemental' THEN 'Conseils départementaux'
-         WHEN type = 'Région' THEN 'Conseils régionaux'
-         WHEN type IN ('EPCI', 'Collectivité, EPCI', 'Collectivité, intercommunalité') THEN 'EPCI'
-         WHEN type IN ('Commune', 'Collectivité, commune') THEN 'Communes'
-         ELSE 'Autres' END AS categorie,
+         WHEN cj IN ('7343', '7344', '7346', '7347', '7348') THEN 'EPCI'
+         WHEN cj = '7210' THEN 'Communes'
+         WHEN cj = '7220' THEN 'Conseils départementaux'
+         ELSE 'Régions et collectivités à statut particulier' END AS categorie,
        count(*) AS n
-FROM llm.membre
-WHERE type IN ('Collectivité, commune', 'Collectivité, EPCI', 'Collectivité, intercommunalité', 'Collectivité territoriale', 'Commune', 'Conseil départemental', 'EPCI', 'Préfecture départementale', 'Préfecture régionale', 'Région')
+FROM s
+WHERE cj IN ('7210', '7220', '7229', '7230', '7343', '7344', '7346', '7347', '7348')
 GROUP BY 1 ORDER BY 2 DESC
 ```
 
@@ -363,14 +368,18 @@ GROUP BY 1 ORDER BY 2 DESC
 
 ### `tdb_i_gouvernances_sans_coporteur` (scalar)
 
-**Question** : Sur la page d'administration des gouvernances de MIN, combien de gouvernances sont « sans coporteur », c'est-à-dire n'ont qu'un seul membre coporteur (en pratique la préfecture) ? Règle de cette page : tous les membres comptent, quel que soit leur statut (y compris supprimés).
+**Question** : Sur la page d'administration des gouvernances de MIN, combien de gouvernances sont « sans coporteur », c'est-à-dire n'ont aucun membre coporteur confirmé et non supprimé en dehors des services de l'État (préfectures et autres structures de catégorie juridique INSEE 71xx, qui ne comptent pas comme coporteurs) ?
 
 ```sql
-SELECT count(*) AS n FROM (
-  SELECT g.departement_code
-  FROM llm.gouvernance g
-  LEFT JOIN llm.membre m ON m.gouvernance_departement_code = g.departement_code AND m.is_coporteur = true
-  GROUP BY 1 HAVING count(m.id) = 1) t
+SELECT count(*) AS n
+FROM llm.gouvernance g
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM llm.membre m
+  JOIN llm.structure_administrative sa ON sa.id = m.structure_id
+  WHERE m.gouvernance_departement_code = g.departement_code
+    AND m.statut = 'confirme' AND m.date_suppression IS NULL AND m.is_coporteur
+    AND COALESCE(sa.categorie_juridique, '') NOT LIKE '71%')
 ```
 
 ## S — Page Statistiques (médiation numérique)

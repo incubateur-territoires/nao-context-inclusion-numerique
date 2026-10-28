@@ -1,10 +1,14 @@
 name: tdb_i_gouvernances_sans_coporteur
-prompt: "Sur la page d'administration des gouvernances de MIN, combien de gouvernances sont « sans coporteur », c'est-à-dire n'ont qu'un seul membre coporteur (en pratique la préfecture) ? Règle de cette page : tous les membres comptent, quel que soit leur statut (y compris supprimés)."
+prompt: "Sur la page d'administration des gouvernances de MIN, combien de gouvernances sont « sans coporteur », c'est-à-dire n'ont aucun membre coporteur confirmé et non supprimé en dehors des services de l'État (préfectures et autres structures de catégorie juridique INSEE 71xx, qui ne comptent pas comme coporteurs) ?"
 kind: scalar
 tags: [tableau-de-bord, I]
 sql: |
-  SELECT count(*) AS n FROM (
-    SELECT g.departement_code
-    FROM llm.gouvernance g
-    LEFT JOIN llm.membre m ON m.gouvernance_departement_code = g.departement_code AND m.is_coporteur = true
-    GROUP BY 1 HAVING count(m.id) = 1) t
+  SELECT count(*) AS n
+  FROM llm.gouvernance g
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM llm.membre m
+    JOIN llm.structure_administrative sa ON sa.id = m.structure_id
+    WHERE m.gouvernance_departement_code = g.departement_code
+      AND m.statut = 'confirme' AND m.date_suppression IS NULL AND m.is_coporteur
+      AND COALESCE(sa.categorie_juridique, '') NOT LIKE '71%')
